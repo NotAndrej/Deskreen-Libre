@@ -1,18 +1,14 @@
-# Deskreen CE (Community Edition)
+# Deskreen Libre (UNOFFICIAL)
 
 ![platform](https://img.shields.io/badge/platform-Windows%20%7C%20MacOS%20%7C%20Linux-lightgrey)
-(Over 2M downloads during 5 years since launch)
 
 ![Deskreen Logo](https://raw.githubusercontent.com/pavlobu/deskreen/master/resources/icon.png)
 
 ## Deskreen turns any device with a web browser into a secondary screen for your computer
-
-## To learn more visit our website: [deskreen.com](https://deskreen.com)
-
+## This is a fork to remove trackers and upsells to Pro.
 ## [Donate to support Deskreen Open-Source](https://deskreen.com/#contribute)
 
 Deskreen is an `electron.js` based application that uses `WebRTC` to make a live stream of your computer screen to a web browser on any device. It is available for MacOS, Windows and Linux operating systems.
-The current open-source Community Edition version has limited features. If you need more features please consider upgrading to [Pro](https://deskreen.com/download) version for more features when it is released.
 
 ---
 
@@ -38,7 +34,7 @@ You will need to have `node>=v23` `npm>=10` installed.
 
 ## Starting with Custom Local IP
 
-You can start Deskreen CE with a custom local IP address using the `--local-ip` or `--ip` CLI flag. This is useful when you want to specify a particular network interface IP address.
+You can start Deskreen Libre with a custom local IP address using the `--local-ip` or `--ip` CLI flag. This is useful when you want to specify a particular network interface IP address.
 
 ### macOS
 
@@ -87,7 +83,8 @@ When using the `--ip` or `--local-ip` flag, the app will use the specified IP fo
 
 ## Maintainer
 
-- [Pavlo (Paul) Buidenkov](https://www.linkedin.com/in/pavlobu)
+- [Pavlo (Paul) Buidenkov](https://www.linkedin.com/in/pavlobu) (upstream)
+- [Not Andrej](https://github.com/NotAndrej) (Deskreen Libre fork)
 
 ## License
 
