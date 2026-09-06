@@ -194,7 +194,7 @@ export default class DeskreenApp {
 		});
 
 		notification.on('click', () => {
-			void shell.openExternal('https://deskreen.com/download');
+			void shell.openExternal('https://github.com/NotAndrej/Deskreen-Libre/releases');
 		});
 
 		notification.show();
@@ -217,7 +217,7 @@ export default class DeskreenApp {
 			titleBarStyle: 'hiddenInset',
 			frame: process.platform === 'darwin' ? false : true,
 			useContentSize: true,
-			title: 'Deskreen CE',
+			title: 'Deskreen Libre',
 			// useContentSize: true,
 			autoHideMenuBar: true,
 			...(process.platform === 'linux' ? { icon } : {}),

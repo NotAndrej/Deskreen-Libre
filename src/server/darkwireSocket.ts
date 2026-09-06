@@ -1,6 +1,6 @@
 /*
  * original JS code from darkwire.io
- * translated and adapted to typescript for Deskreen CE app
+ * translated and adapted to typescript for Deskreen Libre app
  * */
 
 /* eslint-disable no-async-promise-executor */

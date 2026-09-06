@@ -1,5 +1,5 @@
 appId: com.deskreen-ce.app
-productName: Deskreen CE
+productName: Deskreen Libre
 directories:
   buildResources: build
 files:
@@ -16,7 +16,7 @@ asarUnpack:
   - resources/**
 win:
   artifactName: ${name}-${version}-${arch}.${ext}
-  executableName: Deskreen CE
+  executableName: Deskreen Libre
   target:
     - portable
     - msi

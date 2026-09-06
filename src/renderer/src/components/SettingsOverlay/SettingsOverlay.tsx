@@ -74,7 +74,7 @@ const useStyles = makeStyles(() =>
 export default function SettingsOverlay(
 	props: SettingsOverlayProps,
 ): React.ReactElement {
-	const [clientViewerPort, setClientViewerPort] = useState('80'); // Default port, can be changed later
+	const [clientViewerPort, setClientViewerPort] = useState('80');
 
 	const { handleClose, isSettingsOpen } = props;
 	const [latestVersion, setLatestVersion] = useState('');
@@ -87,7 +87,7 @@ export default function SettingsOverlay(
 	const handleOpenDownload = useCallback((): void => {
 		void window.electron.ipcRenderer.invoke(
 			IpcEvents.OpenExternalLink,
-			'https://deskreen.com/download',
+			'https://github.com/NotAndrej/Deskreen-Libre/releases',
 		);
 	}, []);
 
@@ -169,12 +169,6 @@ export default function SettingsOverlay(
 				<Row middle="xs">
 					<H3 className="bp3-text-muted">{t('general-settings')}</H3>
 				</Row>
-
-				{/*<SettingRowLabelAndInput*/}
-				{/*  icon="style"*/}
-				{/*  label={t('color-theme')}*/}
-				{/*  input={<ToggleThemeBtnGroup />}*/}
-				{/*/>*/}
 				<div style={{ marginTop: '24px' }}>
 					<SettingRowLabelAndInput
 						icon="translate"
