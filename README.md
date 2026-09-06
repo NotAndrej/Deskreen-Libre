@@ -4,9 +4,11 @@
 
 ![Deskreen Logo](https://raw.githubusercontent.com/pavlobu/deskreen/master/resources/icon.png)
 
-## Deskreen turns any device with a web browser into a secondary screen for your computer
-## This is a fork to remove trackers and upsells to Pro.
-## [Donate to support Deskreen Open-Source](https://deskreen.com/#contribute)
+Deskreen turns any device with a web browser into a secondary screen for your computer
+
+**This is a fork to remove trackers and upsells to Pro.**
+
+[Donate to support Deskreen Open-Source](https://deskreen.com/#contribute)
 
 Deskreen is an `electron.js` based application that uses `WebRTC` to make a live stream of your computer screen to a web browser on any device. It is available for MacOS, Windows and Linux operating systems.
 
