@@ -42,13 +42,13 @@ You can start Deskreen Libre with a custom local IP address using the `--local-i
 
 ```bash
 # Using open command (recommended)
-open -a "Deskreen CE" --args --ip 192.168.1.100
+open -a "Deskreen Libre" --args --ip 192.168.1.100
 
 # Or using the executable directly
-/Applications/Deskreen\ CE.app/Contents/MacOS/Deskreen\ CE --ip 192.168.1.100
+/Applications/Deskreen\ Libre.app/Contents/MacOS/Deskreen\ CE --ip 192.168.1.100
 
 # Get your IP automatically and launch
-open -a "Deskreen CE" --args --ip "192.168.1.100"
+open -a "Deskreen Libre" --args --ip "192.168.1.100"
 ```
 
 ### Windows
