@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import { StepIconProps } from '@material-ui/core/StepIcon';
+import { makeStyles } from 'tss-react/mui';
+import { StepIconProps } from '@mui/material/StepIcon';
 import { Icon } from '@blueprintjs/core';
 
 export interface StepIconPropsDeskreen extends StepIconProps {
@@ -9,7 +9,7 @@ export interface StepIconPropsDeskreen extends StepIconProps {
 	isApplicationWindowSelected: boolean;
 }
 
-const useColorlibStepIconStyles = makeStyles({
+const useColorlibStepIconStyles = makeStyles()(() => ({
 	root: {
 		backgroundColor: '#BFCCD6',
 		zIndex: 1,
@@ -31,7 +31,7 @@ const useColorlibStepIconStyles = makeStyles({
 			'linear-gradient( 136deg, #3DCC91 0%, #15B371 50%, #0E5A8A 100%)',
 	},
 	stepContent: {},
-});
+}));
 
 const getDesktopOrAppIcon = (isDesktop: boolean, color: string): ReactNode => {
 	if (isDesktop) {
@@ -44,7 +44,7 @@ export default function ColorlibStepIcon(
 	props: StepIconPropsDeskreen,
 ): ReactNode {
 	const { icon } = props;
-	const classes = useColorlibStepIconStyles();
+	const { classes } = useColorlibStepIconStyles();
 	const { active, completed, isEntireScreenSelected } = props;
 
 	const color = active || completed ? '#fff' : '#5C7080';

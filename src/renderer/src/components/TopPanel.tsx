@@ -1,14 +1,13 @@
 import React from 'react';
 import { Button, H3, Icon, Position, Tag, Tooltip } from '@blueprintjs/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 import { Col, Row } from 'react-flexbox-grid';
 import SettingsOverlay from './SettingsOverlay/SettingsOverlay';
 import ConnectedDevicesListDrawer from './ConnectedDevicesListDrawer';
 import { useTranslation } from 'react-i18next';
 import { IpcEvents } from '../../../common/IpcEvents.enum';
 
-const useStyles = makeStyles(() =>
-	createStyles({
+const useStyles = makeStyles()(() => ({
 		topPanelRoot: {
 			display: 'flex',
 			flexDirection: 'column',
@@ -78,8 +77,7 @@ const useStyles = makeStyles(() =>
 			zIndex: 10,
 			lineHeight: '1',
 		},
-	}),
-);
+}));
 
 interface Props {
 	handleReset: () => void;
@@ -87,7 +85,7 @@ interface Props {
 
 export default function TopPanel({ handleReset }: Props): React.ReactElement {
 	const { t } = useTranslation();
-	const classes = useStyles();
+	const { classes } = useStyles();
 
 	const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
 	const [isConnectedDevicesDrawerOpen, setIsConnectedDevicesDrawerOpen] =

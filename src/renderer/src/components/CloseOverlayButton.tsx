@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 import { Button, Icon } from '@blueprintjs/core';
 
 class CloseOverlayButtonProps {
@@ -14,24 +14,22 @@ class CloseOverlayButtonProps {
 	className? = '';
 }
 
-const useStyles = makeStyles(() =>
-	createStyles({
-		closeButton: {
-			position: 'relative',
-			width: '40px',
-			height: '40px',
-			left: 'calc(100% - 55px)',
-			borderRadius: '100px',
-			zIndex: 9999,
-		},
-	}),
-);
+const useStyles = makeStyles()(() => ({
+	closeButton: {
+		position: 'relative',
+		width: '40px',
+		height: '40px',
+		left: 'calc(100% - 55px)',
+		borderRadius: '100px',
+		zIndex: 9999,
+	},
+}));
 
 const CloseOverlayButton: React.FC<CloseOverlayButtonProps> = (
 	props: CloseOverlayButtonProps,
 ) => {
 	const { className, isDefaultStyles, style, onClick } = props;
-	const classes = useStyles();
+	const { classes } = useStyles();
 	return (
 		<Button
 			id="close-overlay-button"

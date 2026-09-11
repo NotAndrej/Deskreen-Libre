@@ -1,9 +1,9 @@
 // import SuccessStep from '../components/StepsOfStepper/SuccessStep';
 import React, { useState, useCallback, useEffect, ReactNode } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
+import { makeStyles } from 'tss-react/mui';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
 import { Row, Col, Grid } from 'react-flexbox-grid';
 import {
 	Button,
@@ -31,23 +31,21 @@ import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { showMessageFromNewToaster } from '@renderer/utils/showMessageFromNewToaster';
 
-const useStyles = makeStyles(() =>
-	createStyles({
-		stepContent: {
-			display: 'flex',
-			flexDirection: 'column',
-			justifyContent: 'center',
-			alignItems: 'center',
-		},
-		stepLabelContent: {
-			marginTop: '10px !important',
-			height: '110px',
-		},
-		stepperComponent: {
-			paddingBottom: '0px',
-		},
-	}),
-);
+const useStyles = makeStyles()(() => ({
+	stepContent: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	stepLabelContent: {
+		marginTop: '10px !important',
+		height: '110px',
+	},
+	stepperComponent: {
+		paddingBottom: '0px',
+	},
+}));
 
 function getSteps(t: TFunction): string[] {
 	return [t('connect'), t('select'), t('confirm')];
@@ -76,7 +74,7 @@ const DeskreenStepper = ({
 	setPendingConnectionDevice,
 	handleReset,
 }: Props): ReactNode => {
-	const classes = useStyles();
+	const { classes } = useStyles();
 	const { t } = useTranslation();
 
 	const [isEntireScreenSelected, setIsEntireScreenSelected] = useState(false);
@@ -248,13 +246,13 @@ const DeskreenStepper = ({
 				<StepLabel
 					id="step-label-deskreen"
 					className={classes.stepLabelContent}
-					StepIconComponent={ColorlibStepIcon}
-					StepIconProps={
-						{
+					slots={{ stepIcon: ColorlibStepIcon }}
+					slotProps={{
+						stepIcon: {
 							isEntireScreenSelected,
 							isApplicationWindowSelected,
-						} as StepIconPropsDeskreen
-					}
+						} as StepIconPropsDeskreen,
+					}}
 				>
 					{pendingConnectionDevice && idx === 0 && isUserAllowedConnection ? (
 						<DeviceConnectedInfoButton

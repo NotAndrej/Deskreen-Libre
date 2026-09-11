@@ -9,7 +9,7 @@ import {
 	H3,
 } from '@blueprintjs/core';
 import { QRCodeSVG } from 'qrcode.react';
-import { makeStyles, createStyles } from '@material-ui/core';
+import { makeStyles } from 'tss-react/mui';
 import { Row, Col } from 'react-flexbox-grid';
 import isProduction from '../../../../common/isProduction';
 import config from '../../../../common/config';
@@ -19,39 +19,37 @@ import Logo192 from '../../assets/logo192.png';
 
 const { hostname } = config;
 
-const useStyles = makeStyles(() =>
-	createStyles({
-		smallQRCode: {
-			height: '100%',
-			border: '1px solid',
-			borderColor: 'rgba(0,0,0,0.0)',
-			padding: '10px',
-			borderRadius: '10px',
-			margin: '0 auto',
-			'&:hover': {
-				backgroundColor: 'rgba(0,0,0,0.12)',
-				border: '1px solid #8A9BA8',
-				cursor: 'zoom-in',
-			},
+const useStyles = makeStyles()(() => ({
+	smallQRCode: {
+		height: '100%',
+		border: '1px solid',
+		borderColor: 'rgba(0,0,0,0.0)',
+		padding: '10px',
+		borderRadius: '10px',
+		margin: '0 auto',
+		'&:hover': {
+			backgroundColor: 'rgba(0,0,0,0.12)',
+			border: '1px solid #8A9BA8',
+			cursor: 'zoom-in',
 		},
-		dialogQRWrapper: {
-			backgroundColor: 'white',
-			padding: '20px',
-			borderRadius: '10px',
+	},
+	dialogQRWrapper: {
+		backgroundColor: 'white',
+		padding: '20px',
+		borderRadius: '10px',
+	},
+	bigQRCodeDialogRoot: {
+		'&:hover': {
+			cursor: 'zoom-out',
 		},
-		bigQRCodeDialogRoot: {
-			'&:hover': {
-				cursor: 'zoom-out',
-			},
-			paddingBottom: '0px',
-		},
-	}),
-);
+		paddingBottom: '0px',
+	},
+}));
 
 const ScanQRStep: React.FC = () => {
 	const { t } = useTranslation();
 	const [clientViewerPort, setClientViewerPort] = useState('80'); // Default port, can be changed later
-	const classes = useStyles();
+	const { classes } = useStyles();
 
 	const [isViewerSlotAvailable, setIsViewerSlotAvailable] = useState(true);
 	const [roomID, setRoomID] = useState('');

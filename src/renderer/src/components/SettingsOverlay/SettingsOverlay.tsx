@@ -11,7 +11,7 @@ import {
 	Callout,
 } from '@blueprintjs/core';
 import { Col, Row } from 'react-flexbox-grid';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 import { LIGHT_UI_BACKGROUND } from '../../containers/SettingsProvider';
 import CloseOverlayButton from '../CloseOverlayButton';
 import SettingRowLabelAndInput from './SettingRowLabelAndInput';
@@ -37,39 +37,37 @@ type SettingsOverlayClassKey =
 
 type SettingsOverlayClassMap = Record<SettingsOverlayClassKey, string>;
 
-const useStyles = makeStyles(() =>
-	createStyles({
-		checkboxSettings: { margin: '0' },
-		overlayInnerRoot: { width: '90%' },
-		overlayInsideFade: {
-			height: '90vh',
-			backgroundColor: LIGHT_UI_BACKGROUND,
-		},
-		absoluteCloseButton: { position: 'absolute', left: 'calc(100% - 65px)' },
-		tabNavigationRowButton: {
-			fontWeight: 700,
-			padding: '6px 10px',
-			borderRadius: '100px',
-		},
-		iconInTablLeftButton: { marginRight: '5px' },
-		updateCalloutWrapper: {
-			display: 'flex',
-			justifyContent: 'center',
-			marginBottom: '16px',
-			width: '100%',
-		},
-		updateCallout: {
-			cursor: 'pointer',
-			boxShadow: 'none',
-			display: 'inline-flex',
-			flexDirection: 'column',
-			gap: '4px',
-			width: 'auto',
-			maxWidth: '420px',
-			borderRadius: '8px',
-		},
-	}),
-);
+const useStyles = makeStyles()(() => ({
+	checkboxSettings: { margin: '0' },
+	overlayInnerRoot: { width: '90%' },
+	overlayInsideFade: {
+		height: '90vh',
+		backgroundColor: LIGHT_UI_BACKGROUND,
+	},
+	absoluteCloseButton: { position: 'absolute', left: 'calc(100% - 65px)' },
+	tabNavigationRowButton: {
+		fontWeight: 700,
+		padding: '6px 10px',
+		borderRadius: '100px',
+	},
+	iconInTablLeftButton: { marginRight: '5px' },
+	updateCalloutWrapper: {
+		display: 'flex',
+		justifyContent: 'center',
+		marginBottom: '16px',
+		width: '100%',
+	},
+	updateCallout: {
+		cursor: 'pointer',
+		boxShadow: 'none',
+		display: 'inline-flex',
+		flexDirection: 'column',
+		gap: '4px',
+		width: 'auto',
+		maxWidth: '420px',
+		borderRadius: '8px',
+	},
+}));
 
 export default function SettingsOverlay(
 	props: SettingsOverlayProps,
@@ -82,7 +80,7 @@ export default function SettingsOverlay(
 
 	const { t } = useTranslation();
 
-	const classes = useStyles() as SettingsOverlayClassMap;
+	const { classes } = useStyles() as { classes: SettingsOverlayClassMap };
 
 	const handleOpenDownload = useCallback((): void => {
 		void window.electron.ipcRenderer.invoke(

@@ -10,7 +10,7 @@ import {
 	DrawerSize,
 } from '@blueprintjs/core';
 import { Row, Col } from 'react-flexbox-grid';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 import CloseOverlayButton from './CloseOverlayButton';
 import DeviceInfoCallout from './DeviceInfoCallout';
 import SharingSourcePreviewCard from './SharingSourcePreviewCard';
@@ -29,26 +29,24 @@ interface ConnectedDevicesListDrawerProps {
 	handleReset: () => void;
 }
 
-const useStyles = makeStyles(() =>
-	createStyles({
-		drawerRoot: { overflowY: 'scroll', overflowX: 'hidden' },
-		drawerInnerTopPanel: { padding: '20px 10px 0px 30px' },
-		connectedDevicesRoot: { padding: '10px 20px' },
-		topHeader: {
-			marginRight: '20px',
-			fontSize: '20px',
-			fontWeight: 900,
-		},
-		zoomFullWidth: {
-			width: '100%',
-		},
-	}),
-);
+const useStyles = makeStyles()(() => ({
+	drawerRoot: { overflowY: 'scroll', overflowX: 'hidden' },
+	drawerInnerTopPanel: { padding: '20px 10px 0px 30px' },
+	connectedDevicesRoot: { padding: '10px 20px' },
+	topHeader: {
+		marginRight: '20px',
+		fontSize: '20px',
+		fontWeight: 900,
+	},
+	zoomFullWidth: {
+		width: '100%',
+	},
+}));
 
 export default function ConnectedDevicesListDrawer(
 	props: ConnectedDevicesListDrawerProps,
 ) {
-	const classes = useStyles();
+	const { classes } = useStyles();
 	const { t } = useTranslation();
 
 	const [isAlertDisconectAllOpen, setIsAlertDisconectAllOpen] = useState(false);

@@ -1,28 +1,28 @@
-import { withStyles } from '@material-ui/core/styles';
-import StepConnector from '@material-ui/core/StepConnector';
+import { styled } from '@mui/material/styles';
+import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 
-const ColorlibConnector = withStyles({
-	alternativeLabel: {
+const ColorlibConnector = styled(StepConnector)(() => ({
+	[`&.${stepConnectorClasses.alternativeLabel}`]: {
 		top: 43,
 	},
-	active: {
-		'& $line': {
+	[`&.${stepConnectorClasses.active}`]: {
+		[`& .${stepConnectorClasses.line}`]: {
 			backgroundImage:
 				'linear-gradient( 95deg, #3DCC91 0%, #15B371 50%, #FFB366 100%)',
 		},
 	},
-	completed: {
-		'& $line': {
+	[`&.${stepConnectorClasses.completed}`]: {
+		[`& .${stepConnectorClasses.line}`]: {
 			backgroundImage:
 				'linear-gradient( 95deg, #3DCC91 0%, #15B371 50%, #3DCC91 100%)',
 		},
 	},
-	line: {
+	[`& .${stepConnectorClasses.line}`]: {
 		height: 2,
 		border: 0,
 		backgroundColor: '#CED9E0',
 		borderRadius: 1,
 	},
-})(StepConnector);
+}));
 
 export default ColorlibConnector;
