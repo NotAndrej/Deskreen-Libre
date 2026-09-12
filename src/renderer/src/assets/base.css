@@ -560,3 +560,30 @@ a:hover {
 .bp3-tab-list {
 	height: calc(100vh - 30%);
 }
+
+/* Settings pickers (Color Theme / UI Style) — pill/oval shape with thin line
+   dividers between options instead of Blueprint's default boxy grouped look. */
+.bp6-segmented-control {
+	border-radius: 9999px;
+	gap: 0;
+	padding: 3px;
+}
+
+.bp6-segmented-control > .bp6-button {
+	border-radius: 0;
+}
+
+.bp6-segmented-control > .bp6-button:not(:last-child) {
+	border-right: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+.bp6-segmented-control > .bp6-button:first-child {
+	border-top-left-radius: 9999px;
+	border-bottom-left-radius: 9999px;
+}
+
+.bp6-segmented-control > .bp6-button:last-child {
+	border-top-right-radius: 9999px;
+	border-bottom-right-radius: 9999px;
+}
+

@@ -87,7 +87,7 @@ const useStyles = makeStyles()(() => ({
 			display: 'flex',
 			alignItems: 'center',
 			width: '100%',
-			padding: '14px 20px',
+			padding: '24px 20px 14px',
 			marginBottom: '20px',
 			borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
 			boxSizing: 'border-box',

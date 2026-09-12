@@ -129,7 +129,11 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 											<img
 												src="/img/logo512.png"
 												alt="logo"
-												style={{ height: '72px', marginRight: '12px' }}
+												style={{
+													height: '72px',
+													marginRight: '12px',
+													borderRadius: '22%',
+												}}
 											/>
 											<H3 style={{ margin: 0 }}>Deskreen Libre Viewer</H3>
 										</Row>
