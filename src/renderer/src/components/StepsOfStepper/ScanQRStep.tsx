@@ -181,7 +181,7 @@ const ScanQRStep: React.FC = () => {
 				<Text>
 					<span
 						style={{
-							backgroundColor: '#00f99273',
+							backgroundColor: 'var(--banner-bg-color)',
 							fontWeight: 900,
 							paddingRight: '8px',
 							paddingLeft: '8px',

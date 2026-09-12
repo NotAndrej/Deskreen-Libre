@@ -188,11 +188,17 @@ export default function SettingsOverlay(
 						input={<ToggleUIStyleBtnGroup />}
 					/>
 				</div>
+			</div>
+		);
+	};
 
+	const AboutSettingsPanel: React.FC = () => {
+		return (
+			<div style={{ width: '100%' }}>
 				<Row
 					center="xs"
 					middle="xs"
-					style={{ marginTop: '40px', width: '100%' }}
+					style={{ marginTop: '16px', width: '100%' }}
 				>
 					<div>
 						<Col xs={12}>
@@ -257,6 +263,15 @@ export default function SettingsOverlay(
 		);
 	};
 
+	const getTabNavAboutButton = (): React.ReactElement => {
+		return (
+			<Row middle="xs" className={classes.tabNavigationRowButton}>
+				<Icon icon="info-sign" className={classes.iconInTablLeftButton} />
+				<Text className="bp3-text-large">{t('about')}</Text>
+			</Row>
+		);
+	};
+
 	return (
 		<Overlay2
 			onClose={handleClose}
@@ -286,9 +301,7 @@ export default function SettingsOverlay(
 					<Tabs
 						animate
 						id="TabsExample"
-						key="vertical"
 						renderActiveTabPanelOnly
-						vertical
 					>
 						<Tab
 							id="rx"
@@ -297,6 +310,14 @@ export default function SettingsOverlay(
 							panelClassName={'tab-panel-wide-custom-style'}
 						>
 							{getTabNavGeneralSettingsButton()}
+						</Tab>
+						<Tab
+							id="about"
+							title=""
+							panel={<AboutSettingsPanel />}
+							panelClassName={'tab-panel-wide-custom-style'}
+						>
+							{getTabNavAboutButton()}
 						</Tab>
 						<TabsExpander />
 					</Tabs>
