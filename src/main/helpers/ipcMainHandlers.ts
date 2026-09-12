@@ -6,6 +6,7 @@ import {
 	clipboard,
 	shell,
 	app,
+	nativeTheme,
 } from 'electron';
 import i18n from '../configs/i18next.config';
 import { ConnectedDevicesService } from '../../features/ConnectedDevicesService';
@@ -25,6 +26,19 @@ import isLinuxWaylandSession from '../utils/isLinuxWaylandSession';
 import { checkScreenRecordingPermission } from './checkScreenRecordingPermission';
 
 export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
+	const persistedTheme = store.has(ElectronStoreKeys.Theme)
+		? (store.get(ElectronStoreKeys.Theme) as 'system' | 'light' | 'dark')
+		: 'system';
+	nativeTheme.themeSource = persistedTheme;
+
+	nativeTheme.on('updated', () => {
+		if (mainWindow === null || mainWindow.isDestroyed()) return;
+		mainWindow.webContents.send(IpcEvents.ThemeUpdated, {
+			themeSource: nativeTheme.themeSource,
+			shouldUseDarkColors: nativeTheme.shouldUseDarkColors,
+		});
+	});
+
 	ipcMain.on('client-changed-language', async (_, newLangCode) => {
 		i18n.changeLanguage(newLangCode);
 		if (store.has(ElectronStoreKeys.AppLanguage)) {
@@ -466,6 +480,46 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		}
 		return 'en';
 	});
+
+	ipcMain.handle(IpcEvents.GetUIStyle, () => {
+		if (store.has(ElectronStoreKeys.UIStyle)) {
+			return store.get(ElectronStoreKeys.UIStyle);
+		}
+		return 'legacy';
+	});
+
+	ipcMain.handle(
+		IpcEvents.SetUIStyle,
+		(_, newUIStyle: 'legacy' | 'legacy-modern' | 'modern') => {
+			if (store.has(ElectronStoreKeys.UIStyle)) {
+				store.delete(ElectronStoreKeys.UIStyle);
+			}
+			store.set(ElectronStoreKeys.UIStyle, newUIStyle);
+			return newUIStyle;
+		},
+	);
+
+	ipcMain.handle(IpcEvents.GetThemeSource, () => {
+		return {
+			themeSource: nativeTheme.themeSource,
+			shouldUseDarkColors: nativeTheme.shouldUseDarkColors,
+		};
+	});
+
+	ipcMain.handle(
+		IpcEvents.SetThemeSource,
+		(_, newThemeSource: 'system' | 'light' | 'dark') => {
+			nativeTheme.themeSource = newThemeSource;
+			if (store.has(ElectronStoreKeys.Theme)) {
+				store.delete(ElectronStoreKeys.Theme);
+			}
+			store.set(ElectronStoreKeys.Theme, newThemeSource);
+			return {
+				themeSource: nativeTheme.themeSource,
+				shouldUseDarkColors: nativeTheme.shouldUseDarkColors,
+			};
+		},
+	);
 
 	ipcMain.handle(IpcEvents.DestroySharingSessionById, (_, id) => {
 		if (

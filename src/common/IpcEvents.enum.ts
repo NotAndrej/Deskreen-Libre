@@ -33,4 +33,9 @@ export enum IpcEvents {
 	WriteTextToClipboard = 'write-text-to-clipboard',
 	CheckScreenRecordingPermission = 'check-screen-recording-permission',
 	RelaunchApp = 'relaunch-app',
+	GetThemeSource = 'get-theme-source',
+	SetThemeSource = 'set-theme-source',
+	ThemeUpdated = 'theme-updated',
+	GetUIStyle = 'get-ui-style',
+	SetUIStyle = 'set-ui-style',
 }

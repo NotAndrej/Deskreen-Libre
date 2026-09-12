@@ -78,7 +78,31 @@
 
 :root {
 	--light-bg-color: rgba(240, 248, 250, 1);
-	--light-btn-no-intent-color: rgb(218, 238, 243);
+	--dark-bg-color: rgba(28, 33, 39, 1);
+	--stepper-active-gradient: linear-gradient(
+		136deg,
+		#ffb366 0%,
+		#f29d49 50%,
+		#a66321 100%
+	);
+	--stepper-completed-gradient: linear-gradient(
+		136deg,
+		#3dcc91 0%,
+		#15b371 50%,
+		#0e5a8a 100%
+	);
+	--connector-active-gradient: linear-gradient(
+		95deg,
+		#3dcc91 0%,
+		#15b371 50%,
+		#ffb366 100%
+	);
+	--connector-completed-gradient: linear-gradient(
+		95deg,
+		#3dcc91 0%,
+		#15b371 50%,
+		#3dcc91 100%
+	);
 	--custom-scrollbar-webkit-scrollbar-thumb-border-radius: 10px;
 	--custom-scrollbar-webkit-scrollbar-thumb-background-color: #8a9ba8;
 	--custom-scrollbar-webkit-scrollbar_background-color: rgba(0, 0, 0, 0);
@@ -99,7 +123,50 @@ body {
 	background-color: var(--light-bg-color);
 }
 
-.bp3-alert-footer > button {
+/* Blueprint's .bp6-dark class only sets CSS custom properties and themes its
+   own components via descendant selectors — it never touches raw body/html
+   background, so the app has to supply its own dark counterpart here. */
+body.bp6-dark {
+	background-color: var(--dark-bg-color);
+}
+
+/* "Legacy Modern" / "Modern" UI style — a refined dark-first palette applied
+   on top of the same layout. Placed after .bp6-dark so it wins when both are
+   present (Legacy Modern always forces dark, see SettingsProvider.tsx).
+   Overriding Blueprint's own intent tokens re-colors every primary-intent
+   button/element app-wide for free, instead of chasing each component. */
+body.ui-legacy-modern {
+	background-color: #14161a;
+	--bp-intent-primary-rest: #7f77dd;
+	--bp-intent-primary-hover: #6a62c9;
+	--bp-intent-primary-active: #5951b0;
+	--stepper-active-gradient: linear-gradient(
+		136deg,
+		#a89bf5 0%,
+		#7f77dd 50%,
+		#5951b0 100%
+	);
+	--stepper-completed-gradient: linear-gradient(
+		136deg,
+		#5dcaa5 0%,
+		#3aa984 50%,
+		#2a7a63 100%
+	);
+	--connector-active-gradient: linear-gradient(
+		95deg,
+		#3aa984 0%,
+		#5dcaa5 50%,
+		#7f77dd 100%
+	);
+	--connector-completed-gradient: linear-gradient(
+		95deg,
+		#3aa984 0%,
+		#5dcaa5 50%,
+		#3aa984 100%
+	);
+}
+
+.bp6-alert-footer > button {
 	border-radius: 100px;
 }
 
@@ -111,35 +178,13 @@ body {
 	height: 0%;
 }
 
-/* UI colors START */
-.bp3-button:not([class*="bp3-intent-"]) {
-	background-color: var(--light-btn-no-intent-color);
-}
-
-.bp3-dialog {
-	background-color: var(--light-bg-color) !important;
-}
-
-.bp3-popover .bp3-popover-arrow-fill {
-	fill: var(--light-bg-color);
-}
-
-.bp3-popover .bp3-popover-content {
-	background-color: var(--light-bg-color);
-	color: black;
-}
-
-.bp3-html-select > select {
-	background-color: var(--light-btn-no-intent-color);
-}
-
-.bp3-drawer {
-	background-color: var(--light-bg-color);
-}
-
-.bp3-card {
-	background-color: var(--light-bg-color);
-}
+/* NOTE: the app previously carried a block of .bp3-* overrides here
+   (button/dialog/popover/html-select/drawer/card backgrounds) left over from
+   an old Blueprint 3 skin. Blueprint 6 now themes every one of those
+   components natively and correctly in both light and dark mode via its own
+   .bp6-dark descendant selectors, so those overrides were both non-matching
+   (wrong class prefix) and redundant. Removed rather than "fixed" to avoid
+   fighting Blueprint's own color choices. */
 
 /* for really small screen sizes (ex. Raspberry PI display etc. */
 @media screen and (max-height: 419px) {
@@ -311,14 +356,18 @@ div.class-allow-device-to-connect-alert > div.bp3-alert-body
 
 /* Connected Device Info Button pulse animation END */
 
-#settings-overlay-inner > div > div.bp3-tab-panel {
+#settings-overlay-inner > div > div.bp6-tab-panel {
 	width: 100% !important;
 }
 
 /* settings panel tabs button left styles */
-#settings-overlay-inner > div > div.bp3-tab-list {
+#settings-overlay-inner > div > div.bp6-tab-list {
 	background-color: rgba(0, 0, 0, 0.1);
 	padding: 8px;
+}
+
+body.bp6-dark #settings-overlay-inner > div > div.bp6-tab-list {
+	background-color: rgba(255, 255, 255, 0.06);
 }
 
 /* settings inner 100% height regardless tab content height */

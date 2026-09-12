@@ -12,10 +12,11 @@ import {
 } from '@blueprintjs/core';
 import { Col, Row } from 'react-flexbox-grid';
 import { makeStyles } from 'tss-react/mui';
-import { LIGHT_UI_BACKGROUND } from '../../containers/SettingsProvider';
 import CloseOverlayButton from '../CloseOverlayButton';
 import SettingRowLabelAndInput from './SettingRowLabelAndInput';
 import LanguageSelector from '../LanguageSelector';
+import ToggleThemeBtnGroup from '../ToggleThemeBtnGroup';
+import ToggleUIStyleBtnGroup from '../ToggleUIStyleBtnGroup';
 import { IpcEvents } from '../../../../common/IpcEvents.enum';
 import { useTranslation } from 'react-i18next';
 import './settings-overlay.css';
@@ -42,7 +43,6 @@ const useStyles = makeStyles()(() => ({
 	overlayInnerRoot: { width: '90%' },
 	overlayInsideFade: {
 		height: '90vh',
-		backgroundColor: LIGHT_UI_BACKGROUND,
 	},
 	absoluteCloseButton: { position: 'absolute', left: 'calc(100% - 65px)' },
 	tabNavigationRowButton: {
@@ -172,6 +172,20 @@ export default function SettingsOverlay(
 						icon="translate"
 						label={t('language')}
 						input={<LanguageSelector />}
+					/>
+				</div>
+				<div style={{ marginTop: '24px' }}>
+					<SettingRowLabelAndInput
+						icon="contrast"
+						label={t('color-theme')}
+						input={<ToggleThemeBtnGroup />}
+					/>
+				</div>
+				<div style={{ marginTop: '24px' }}>
+					<SettingRowLabelAndInput
+						icon="layout-grid"
+						label={t('ui-style')}
+						input={<ToggleUIStyleBtnGroup />}
 					/>
 				</div>
 

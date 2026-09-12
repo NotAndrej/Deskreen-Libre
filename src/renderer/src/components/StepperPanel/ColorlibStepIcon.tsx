@@ -22,13 +22,11 @@ const useColorlibStepIconStyles = makeStyles()(() => ({
 		alignItems: 'center',
 	},
 	active: {
-		backgroundImage:
-			'linear-gradient( 136deg, #FFB366 0%, #F29D49 50%, #A66321 100%)',
+		backgroundImage: 'var(--stepper-active-gradient)',
 		boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
 	},
 	completed: {
-		backgroundImage:
-			'linear-gradient( 136deg, #3DCC91 0%, #15B371 50%, #0E5A8A 100%)',
+		backgroundImage: 'var(--stepper-completed-gradient)',
 	},
 	stepContent: {},
 }));
