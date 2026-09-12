@@ -1,9 +1,18 @@
 // import SuccessStep from '../components/StepsOfStepper/SuccessStep';
-import React, { useState, useCallback, useEffect, ReactNode } from 'react';
+import React, {
+	useState,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	ReactNode,
+} from 'react';
 import { makeStyles } from 'tss-react/mui';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
+import { SettingsContext } from '@renderer/contexts/SettingsContext';
 import { Row, Col, Grid } from 'react-flexbox-grid';
 import {
 	Button,
@@ -76,6 +85,20 @@ const DeskreenStepper = ({
 }: Props): ReactNode => {
 	const { classes } = useStyles();
 	const { t } = useTranslation();
+	const { effectiveDarkMode } = useContext(SettingsContext);
+
+	// MUI's Stepper/Step/StepLabel style themselves via MUI's own theme system,
+	// entirely separate from Blueprint's CSS — without this they silently stay
+	// on MUI's light-mode defaults (near-black label text) no matter what the
+	// rest of the app is doing, which is why the active step label was
+	// unreadable against a dark background.
+	const muiTheme = useMemo(
+		() =>
+			createTheme({
+				palette: { mode: effectiveDarkMode ? 'dark' : 'light' },
+			}),
+		[effectiveDarkMode],
+	);
 
 	const [isEntireScreenSelected, setIsEntireScreenSelected] = useState(false);
 	const [isApplicationWindowSelected, setIsApplicationWindowSelected] =
@@ -280,17 +303,21 @@ const DeskreenStepper = ({
 			<>
 				<Row style={{ width: '100%' }}>
 					<Col xs={12}>
-						<Stepper
-							className={classes.stepperComponent}
-							activeStep={activeStep}
-							alternativeLabel
-							style={{ background: 'transparent' }}
-							connector={<ColorlibConnector />}
-						>
-							{steps.map((label, idx) => (
-								<Step key={label}>{renderStepLabelContent(label, idx)}</Step>
-							))}
-						</Stepper>
+						<ThemeProvider theme={muiTheme}>
+							<Stepper
+								className={classes.stepperComponent}
+								activeStep={activeStep}
+								alternativeLabel
+								style={{ background: 'transparent' }}
+								connector={<ColorlibConnector />}
+							>
+								{steps.map((label, idx) => (
+									<Step key={label}>
+										{renderStepLabelContent(label, idx)}
+									</Step>
+								))}
+							</Stepper>
+						</ThemeProvider>
 					</Col>
 					<Col className={classes.stepContent} xs={12}>
 						{renderIntermediateOrSuccessStepContent()}

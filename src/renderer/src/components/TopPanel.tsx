@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, H3, Icon, Position, Tag, Tooltip } from '@blueprintjs/core';
 import { makeStyles } from 'tss-react/mui';
 import { Col, Row } from 'react-flexbox-grid';
@@ -6,6 +6,7 @@ import SettingsOverlay from './SettingsOverlay/SettingsOverlay';
 import ConnectedDevicesListDrawer from './ConnectedDevicesListDrawer';
 import { useTranslation } from 'react-i18next';
 import { IpcEvents } from '../../../common/IpcEvents.enum';
+import { SettingsContext } from '@renderer/contexts/SettingsContext';
 
 const useStyles = makeStyles()(() => ({
 		topPanelRoot: {
@@ -77,6 +78,35 @@ const useStyles = makeStyles()(() => ({
 			zIndex: 10,
 			lineHeight: '1',
 		},
+		// "Legacy Modern" / "Modern" header — flat row, monotone icons, no
+		// colored button fills. Only ever shown while dark mode is forced (see
+		// SettingsProvider's effectiveDarkMode), so these dark-only colors are
+		// fine for now; they'll need light-mode counterparts when Legacy
+		// Modern / Modern get proper light variants.
+		modernHeaderRoot: {
+			display: 'flex',
+			alignItems: 'center',
+			width: '100%',
+			padding: '14px 20px',
+			marginBottom: '20px',
+			borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+			boxSizing: 'border-box',
+		},
+		modernHeaderAppName: {
+			flex: 1,
+			fontSize: '15px',
+			fontWeight: 500,
+			cursor: 'default',
+		},
+		modernHeaderIconsRoot: {
+			display: 'flex',
+			alignItems: 'center',
+			gap: '6px',
+		},
+		modernHeaderIconButton: {
+			cursor: 'default !important',
+			color: 'rgba(255, 255, 255, 0.6) !important',
+		},
 }));
 
 interface Props {
@@ -86,6 +116,7 @@ interface Props {
 export default function TopPanel({ handleReset }: Props): React.ReactElement {
 	const { t } = useTranslation();
 	const { classes } = useStyles();
+	const { uiStyle } = useContext(SettingsContext);
 
 	const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
 	const [isConnectedDevicesDrawerOpen, setIsConnectedDevicesDrawerOpen] =
@@ -262,40 +293,123 @@ export default function TopPanel({ handleReset }: Props): React.ReactElement {
 		</div>
 	);
 
+	const renderModernHeader = (
+		<div className={classes.modernHeaderRoot}>
+			<span className={classes.modernHeaderAppName}>Deskreen Libre</span>
+			<div className={classes.modernHeaderIconsRoot}>
+				<div style={{ position: 'relative' }}>
+					<Tooltip content={t('connected-devices')} position={Position.BOTTOM}>
+						<Button
+							id="top-panel-connected-devices-list-button"
+							minimal
+							className={classes.modernHeaderIconButton}
+							onClick={handleToggleConnectedDevicesListDrawer}
+						>
+							<Icon icon="th-list" size={18} />
+						</Button>
+					</Tooltip>
+					{connectedDevicesCount > 0 && (
+						<span className={classes.connectedDevicesBadge}>
+							{connectedDevicesCount}
+						</span>
+					)}
+				</div>
+				<Tooltip content={t('fix-reset-tooltip')} position={Position.BOTTOM}>
+					<Button
+						id="top-panel-help-button"
+						minimal
+						className={classes.modernHeaderIconButton}
+						onClick={() => {
+							Promise.resolve(handleReset()).then(() => {
+								window.electron.ipcRenderer.invoke(
+									IpcEvents.CreateWaitingForConnectionSharingSession,
+								);
+							});
+						}}
+					>
+						<Icon icon="lifesaver" size={18} />
+					</Button>
+				</Tooltip>
+				<Tooltip content={t('tutorial')} position={Position.BOTTOM}>
+					<Button
+						id="top-panel-tutorial-button"
+						minimal
+						className={classes.modernHeaderIconButton}
+						onClick={handleTutorialButtonClick}
+					>
+						<Icon icon="learning" size={18} />
+					</Button>
+				</Tooltip>
+				<Tooltip content={t('settings')} position={Position.BOTTOM}>
+					<Button
+						id="top-panel-settings-button"
+						minimal
+						className={classes.modernHeaderIconButton}
+						onClick={handleSettingsOpen}
+					>
+						<Icon icon="cog" size={18} />
+					</Button>
+				</Tooltip>
+				{hasUpdate ? (
+					<Tag
+						minimal
+						intent="success"
+						round
+						role="button"
+						onClick={handleOpenDownloadPage}
+						onKeyDown={(event) => {
+							if (event.key === 'Enter' || event.key === ' ') {
+								event.preventDefault();
+								handleOpenDownloadPage();
+							}
+						}}
+						tabIndex={0}
+					>
+						{t('new-version-available')}
+					</Tag>
+				) : null}
+			</div>
+		</div>
+	);
+
 	return (
 		<>
-			<div className={classes.topPanelRoot}>
-				<Row middle="xs" center="xs" style={{ width: '100%' }}>
-					<Col>{renderLogoWithAppName}</Col>
-				</Row>
-				<div className={classes.topPanelControlsWrapper}>
-					<div className={classes.topPanelControlButtonsRoot}>
-						{renderConnectedDevicesListButton}
-						{renderHelpButton}
-						{renderTutorialButton}
-						{renderSettingsButton}
+			{uiStyle !== 'legacy' ? (
+				renderModernHeader
+			) : (
+				<div className={classes.topPanelRoot}>
+					<Row middle="xs" center="xs" style={{ width: '100%' }}>
+						<Col>{renderLogoWithAppName}</Col>
+					</Row>
+					<div className={classes.topPanelControlsWrapper}>
+						<div className={classes.topPanelControlButtonsRoot}>
+							{renderConnectedDevicesListButton}
+							{renderHelpButton}
+							{renderTutorialButton}
+							{renderSettingsButton}
+						</div>
+						{hasUpdate ? (
+							<Tag
+								minimal
+								intent="success"
+								round
+								className={classes.updateBadge}
+								role="button"
+								onClick={handleOpenDownloadPage}
+								onKeyDown={(event) => {
+									if (event.key === 'Enter' || event.key === ' ') {
+										event.preventDefault();
+										handleOpenDownloadPage();
+									}
+								}}
+								tabIndex={0}
+							>
+								{t('new-version-available')}
+							</Tag>
+						) : null}
 					</div>
-					{hasUpdate ? (
-						<Tag
-							minimal
-							intent="success"
-							round
-							className={classes.updateBadge}
-							role="button"
-							onClick={handleOpenDownloadPage}
-							onKeyDown={(event) => {
-								if (event.key === 'Enter' || event.key === ' ') {
-									event.preventDefault();
-									handleOpenDownloadPage();
-								}
-							}}
-							tabIndex={0}
-						>
-							{t('new-version-available')}
-						</Tag>
-					) : null}
 				</div>
-			</div>
+			)}
 			{isSettingsOpen ? (
 				<SettingsOverlay
 					isSettingsOpen={isSettingsOpen}

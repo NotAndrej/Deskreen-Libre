@@ -227,7 +227,7 @@ const ScanQRStep: React.FC = () => {
 											<QRCodeSVG
 												value={shareUrl}
 												level="H"
-												bgColor="rgba(0,0,0,0.0)"
+												bgColor="#FFFFFF"
 												fgColor="#000000"
 												imageSettings={{
 													// src: `http://127.0.0.1${portString}/logo192.png`,
