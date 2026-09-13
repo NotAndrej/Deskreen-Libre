@@ -87,7 +87,7 @@ const useStyles = makeStyles()(() => ({
 			display: 'flex',
 			alignItems: 'center',
 			width: '100%',
-			padding: '24px 20px 14px',
+			padding: '34px 20px 14px',
 			marginBottom: '20px',
 			borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
 			boxSizing: 'border-box',
@@ -111,9 +111,13 @@ const useStyles = makeStyles()(() => ({
 
 interface Props {
 	handleReset: () => void;
+	children?: React.ReactNode;
 }
 
-export default function TopPanel({ handleReset }: Props): React.ReactElement {
+export default function TopPanel({
+	handleReset,
+	children,
+}: Props): React.ReactElement {
 	const { t } = useTranslation();
 	const { classes } = useStyles();
 	const { uiStyle } = useContext(SettingsContext);
@@ -372,44 +376,45 @@ export default function TopPanel({ handleReset }: Props): React.ReactElement {
 		</div>
 	);
 
+	const renderLegacyHeader = (
+		<div className={classes.topPanelRoot}>
+			<Row middle="xs" center="xs" style={{ width: '100%' }}>
+				<Col>{renderLogoWithAppName}</Col>
+			</Row>
+			<div className={classes.topPanelControlsWrapper}>
+				<div className={classes.topPanelControlButtonsRoot}>
+					{renderConnectedDevicesListButton}
+					{renderHelpButton}
+					{renderTutorialButton}
+					{renderSettingsButton}
+				</div>
+				{hasUpdate ? (
+					<Tag
+						minimal
+						intent="success"
+						round
+						className={classes.updateBadge}
+						role="button"
+						onClick={handleOpenDownloadPage}
+						onKeyDown={(event) => {
+							if (event.key === 'Enter' || event.key === ' ') {
+								event.preventDefault();
+								handleOpenDownloadPage();
+							}
+						}}
+						tabIndex={0}
+					>
+						{t('new-version-available')}
+					</Tag>
+				) : null}
+			</div>
+		</div>
+	);
+
 	return (
 		<>
-			{uiStyle !== 'legacy' ? (
-				renderModernHeader
-			) : (
-				<div className={classes.topPanelRoot}>
-					<Row middle="xs" center="xs" style={{ width: '100%' }}>
-						<Col>{renderLogoWithAppName}</Col>
-					</Row>
-					<div className={classes.topPanelControlsWrapper}>
-						<div className={classes.topPanelControlButtonsRoot}>
-							{renderConnectedDevicesListButton}
-							{renderHelpButton}
-							{renderTutorialButton}
-							{renderSettingsButton}
-						</div>
-						{hasUpdate ? (
-							<Tag
-								minimal
-								intent="success"
-								round
-								className={classes.updateBadge}
-								role="button"
-								onClick={handleOpenDownloadPage}
-								onKeyDown={(event) => {
-									if (event.key === 'Enter' || event.key === ' ') {
-										event.preventDefault();
-										handleOpenDownloadPage();
-									}
-								}}
-								tabIndex={0}
-							>
-								{t('new-version-available')}
-							</Tag>
-						) : null}
-					</div>
-				</div>
-			)}
+			{uiStyle === 'modern' ? renderModernHeader : renderLegacyHeader}
+			{children}
 			{isSettingsOpen ? (
 				<SettingsOverlay
 					isSettingsOpen={isSettingsOpen}

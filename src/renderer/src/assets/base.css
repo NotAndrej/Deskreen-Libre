@@ -104,6 +104,7 @@
 		#3dcc91 100%
 	);
 	--banner-bg-color: #00f99273;
+	--qr-panel-radius: 10px;
 	--custom-scrollbar-webkit-scrollbar-thumb-border-radius: 10px;
 	--custom-scrollbar-webkit-scrollbar-thumb-background-color: #8a9ba8;
 	--custom-scrollbar-webkit-scrollbar_background-color: rgba(0, 0, 0, 0);
@@ -131,17 +132,19 @@ body.bp6-dark {
 	background-color: var(--dark-bg-color);
 }
 
-/* "Legacy Modern" / "Modern" UI style — a refined dark-first palette applied
-   on top of the same layout. Placed after .bp6-dark so it wins when both are
-   present (Legacy Modern always forces dark, see SettingsProvider.tsx).
-   Overriding Blueprint's own intent tokens re-colors every primary-intent
+/* "Modern" UI style — a refined dark-first palette applied on top of the
+   same layout. Placed after .bp6-dark so it wins when both are present
+   (Modern always forces dark, see SettingsProvider.tsx). Overriding
+   Blueprint's own intent tokens re-colors every primary-intent
    button/element app-wide for free, instead of chasing each component. */
-body.ui-legacy-modern {
+body.ui-modern {
 	background-color: #14161a;
 	--bp-intent-primary-rest: #7f77dd;
 	--bp-intent-primary-hover: #6a62c9;
 	--bp-intent-primary-active: #5951b0;
+	--bp-surface-border-radius: 16px;
 	--banner-bg-color: #7f77dd4d;
+	--qr-panel-radius: 18px;
 	--stepper-active-gradient: linear-gradient(
 		136deg,
 		#a89bf5 0%,

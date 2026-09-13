@@ -13,15 +13,17 @@ export default function ToggleUIStyleBtnGroup(): React.ReactElement {
 	};
 
 	return (
-		<SegmentedControl
-			value={uiStyle}
-			onValueChange={handleValueChange}
-			options={[
-				{ label: t('ui-style-legacy'), value: 'legacy' },
-				{ label: t('ui-style-legacy-modern'), value: 'legacy-modern' },
-				{ label: t('ui-style-modern'), value: 'modern' },
-			]}
-			small
-		/>
+		<div style={{ width: '220px' }}>
+			<SegmentedControl
+				value={uiStyle}
+				onValueChange={handleValueChange}
+				options={[
+					{ label: t('ui-style-legacy'), value: 'legacy' },
+					{ label: t('ui-style-modern'), value: 'modern' },
+				]}
+				small
+				fill
+			/>
+		</div>
 	);
 }

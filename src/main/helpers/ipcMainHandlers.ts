@@ -490,7 +490,7 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 
 	ipcMain.handle(
 		IpcEvents.SetUIStyle,
-		(_, newUIStyle: 'legacy' | 'legacy-modern' | 'modern') => {
+		(_, newUIStyle: 'legacy' | 'modern') => {
 			if (store.has(ElectronStoreKeys.UIStyle)) {
 				store.delete(ElectronStoreKeys.UIStyle);
 			}

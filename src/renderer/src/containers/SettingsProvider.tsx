@@ -88,7 +88,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 	// Legacy Modern / Modern are dark-first designs — force Blueprint's (and
 	// MUI's) own dark component theming regardless of the separate Color
 	// Theme setting, so the systems can't disagree on what's on screen.
-	const effectiveDarkMode = uiStyle !== 'legacy' ? true : isDarkMode;
+	const effectiveDarkMode = uiStyle === 'modern' ? true : isDarkMode;
 
 	useEffect(() => {
 		if (effectiveDarkMode) {
@@ -99,12 +99,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 	}, [effectiveDarkMode]);
 
 	useEffect(() => {
-		// 'modern' shares the same refined dark theme as 'legacy-modern' for now —
-		// the distinct sidebar/dashboard layout is a separate, larger follow-up.
-		document.body.classList.toggle(
-			'ui-legacy-modern',
-			uiStyle === 'legacy-modern' || uiStyle === 'modern',
-		);
+		document.body.classList.toggle('ui-modern', uiStyle === 'modern');
 	}, [uiStyle]);
 
 	const value = {

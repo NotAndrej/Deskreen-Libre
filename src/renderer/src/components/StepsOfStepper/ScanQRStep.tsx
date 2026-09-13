@@ -25,7 +25,7 @@ const useStyles = makeStyles()(() => ({
 		border: '1px solid',
 		borderColor: 'rgba(0,0,0,0.0)',
 		padding: '10px',
-		borderRadius: '10px',
+		borderRadius: 'var(--qr-panel-radius)',
 		margin: '0 auto',
 		'&:hover': {
 			backgroundColor: 'rgba(0,0,0,0.12)',
@@ -36,7 +36,7 @@ const useStyles = makeStyles()(() => ({
 	dialogQRWrapper: {
 		backgroundColor: 'white',
 		padding: '20px',
-		borderRadius: '10px',
+		borderRadius: 'var(--qr-panel-radius)',
 	},
 	bigQRCodeDialogRoot: {
 		'&:hover': {

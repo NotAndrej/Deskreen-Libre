@@ -1,7 +1,7 @@
 import React from 'react';
 
 export type ThemeSource = 'system' | 'light' | 'dark';
-export type UIStyle = 'legacy' | 'legacy-modern' | 'modern';
+export type UIStyle = 'legacy' | 'modern';
 
 export interface SettingsContextInterface {
 	currentLanguage: string;
@@ -11,10 +11,10 @@ export interface SettingsContextInterface {
 	setThemeSourceHook: (newTheme: ThemeSource) => void;
 	uiStyle: UIStyle;
 	setUIStyleHook: (newStyle: UIStyle) => void;
-	/** isDarkMode, but forced true whenever uiStyle isn't 'legacy' — since
-	 * Legacy Modern / Modern are dark-first and ignore the separate Color
-	 * Theme setting. Use this (not isDarkMode) for anything that needs to
-	 * match what's actually rendered on screen right now. */
+	/** isDarkMode, but forced true whenever uiStyle is 'modern' — since Modern
+	 * is a dark-first design and ignores the separate Color Theme setting.
+	 * Use this (not isDarkMode) for anything that needs to match what's
+	 * actually rendered on screen right now. */
 	effectiveDarkMode: boolean;
 }
 

@@ -13,15 +13,18 @@ export default function ToggleThemeBtnGroup(): React.ReactElement {
 	};
 
 	return (
-		<SegmentedControl
-			value={themeSource}
-			onValueChange={handleValueChange}
-			options={[
-				{ label: t('light'), value: 'light', icon: 'flash' },
-				{ label: t('dark'), value: 'dark', icon: 'moon' },
-				{ label: t('auto'), value: 'system', icon: 'desktop' },
-			]}
-			small
-		/>
+		<div style={{ width: '220px' }}>
+			<SegmentedControl
+				value={themeSource}
+				onValueChange={handleValueChange}
+				options={[
+					{ label: t('light'), value: 'light', icon: 'flash' },
+					{ label: t('dark'), value: 'dark', icon: 'moon' },
+					{ label: t('auto'), value: 'system', icon: 'desktop' },
+				]}
+				small
+				fill
+			/>
+		</div>
 	);
 }
