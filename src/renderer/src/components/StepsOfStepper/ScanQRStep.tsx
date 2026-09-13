@@ -248,7 +248,6 @@ const ScanQRStep: React.FC = () => {
 												alt={t('deskreen-logo')}
 												width={64}
 												height={64}
-												style={{ borderRadius: '22%' }}
 											/>
 										</div>
 									)}

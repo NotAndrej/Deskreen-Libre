@@ -132,7 +132,6 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 												style={{
 													height: '72px',
 													marginRight: '12px',
-													borderRadius: '22%',
 												}}
 											/>
 											<H3 style={{ margin: 0 }}>Deskreen Libre Viewer</H3>

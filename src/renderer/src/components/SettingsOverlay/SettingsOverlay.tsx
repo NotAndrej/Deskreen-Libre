@@ -205,7 +205,7 @@ export default function SettingsOverlay(
 							<img
 								src={`http://127.0.0.1:${clientViewerPort}/logo512.png`}
 								alt="logo"
-								style={{ width: '100px', borderRadius: '22%' }}
+								style={{ width: '100px' }}
 							/>
 						</Col>
 						<Col xs={12}>
