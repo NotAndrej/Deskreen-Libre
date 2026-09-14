@@ -269,7 +269,9 @@ const ScanQRStep: React.FC = () => {
 						? t(
 								'enter-the-following-address-in-browser-address-bar-on-any-device',
 							)
-						: t('one-viewing-client-is-connected-already')}
+						: isViewerSlotAvailable
+							? t('waiting-for-connection')
+							: t('one-viewing-client-is-connected-already')}
 				</Text>
 			</Row>
 
@@ -295,7 +297,11 @@ const ScanQRStep: React.FC = () => {
 								);
 							}}
 						>
-							{isQrInteractive ? shareUrl : t('viewing-client-connected-label')}
+							{isQrInteractive
+								? shareUrl
+								: isViewerSlotAvailable
+									? t('waiting-for-connection')
+									: t('viewing-client-connected-label')}
 						</Button>
 					</span>
 				</Tooltip>
