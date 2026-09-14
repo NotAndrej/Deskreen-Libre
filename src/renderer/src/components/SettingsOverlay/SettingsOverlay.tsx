@@ -1,16 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-	Overlay2,
-	Classes,
-	H3,
-	Tabs,
-	Tab,
-	Icon,
-	Text,
-	TabsExpander,
-	Callout,
-} from '@blueprintjs/core';
-import { Col, Row } from 'react-flexbox-grid';
+import { Overlay2, Classes, H3, Text, Callout } from '@blueprintjs/core';
+import { Row } from 'react-flexbox-grid';
 import { makeStyles } from 'tss-react/mui';
 import CloseOverlayButton from '../CloseOverlayButton';
 import SettingRowLabelAndInput from './SettingRowLabelAndInput';
@@ -19,7 +9,6 @@ import ToggleThemeBtnGroup from '../ToggleThemeBtnGroup';
 import ToggleUIStyleBtnGroup from '../ToggleUIStyleBtnGroup';
 import { IpcEvents } from '../../../../common/IpcEvents.enum';
 import { useTranslation } from 'react-i18next';
-import './settings-overlay.css';
 
 interface SettingsOverlayProps {
 	isSettingsOpen: boolean;
@@ -27,30 +16,20 @@ interface SettingsOverlayProps {
 }
 
 type SettingsOverlayClassKey =
-	| 'checkboxSettings'
 	| 'overlayInnerRoot'
 	| 'overlayInsideFade'
 	| 'absoluteCloseButton'
-	| 'tabNavigationRowButton'
-	| 'iconInTablLeftButton'
 	| 'updateCalloutWrapper'
 	| 'updateCallout';
 
 type SettingsOverlayClassMap = Record<SettingsOverlayClassKey, string>;
 
 const useStyles = makeStyles()(() => ({
-	checkboxSettings: { margin: '0' },
 	overlayInnerRoot: { width: '90%' },
 	overlayInsideFade: {
-		height: '90vh',
+		padding: '20px',
 	},
 	absoluteCloseButton: { position: 'absolute', left: 'calc(100% - 65px)' },
-	tabNavigationRowButton: {
-		fontWeight: 700,
-		padding: '6px 10px',
-		borderRadius: '100px',
-	},
-	iconInTablLeftButton: { marginRight: '5px' },
 	updateCalloutWrapper: {
 		display: 'flex',
 		justifyContent: 'center',
@@ -72,8 +51,6 @@ const useStyles = makeStyles()(() => ({
 export default function SettingsOverlay(
 	props: SettingsOverlayProps,
 ): React.ReactElement {
-	const [clientViewerPort, setClientViewerPort] = useState('80');
-
 	const { handleClose, isSettingsOpen } = props;
 	const [latestVersion, setLatestVersion] = useState('');
 	const [currentVersion, setCurrentVersion] = useState('');
@@ -100,15 +77,6 @@ export default function SettingsOverlay(
 	);
 
 	useEffect(() => {
-		window.electron.ipcRenderer
-			.invoke(IpcEvents.GetPort)
-			.then((port) => {
-				return setClientViewerPort(port);
-			})
-			.catch((error) => {
-				console.error('Error getting port:', error);
-			});
-
 		return () => {
 			window.electron.ipcRenderer.removeListener(
 				'settings-overlay-close',
@@ -142,136 +110,6 @@ export default function SettingsOverlay(
 		currentVersion !== '' &&
 		latestVersion !== currentVersion;
 
-	const GeneralSettingsPanel: React.FC = () => {
-		return (
-			<div style={{ width: '100%' }}>
-				{hasUpdate ? (
-					<div className={classes.updateCalloutWrapper}>
-						<Callout
-							className={classes.updateCallout}
-							icon="automatic-updates"
-							intent="success"
-							role="button"
-							tabIndex={0}
-							onClick={handleOpenDownload}
-							onKeyDown={handleUpdateCalloutKeyDown}
-						>
-							<Text style={{ fontWeight: 600 }}>
-								{t('deskreen-ce-update-is-available')}
-							</Text>
-							<Text>{`${t('your-current-version-is')} ${currentVersion}`}</Text>
-							<Text>{`${t('click-to-download-new-updated-version')} ${latestVersion}`}</Text>
-						</Callout>
-					</div>
-				) : null}
-				<Row middle="xs">
-					<H3 className="bp3-text-muted">{t('general-settings')}</H3>
-				</Row>
-				<div style={{ marginTop: '24px' }}>
-					<SettingRowLabelAndInput
-						icon="translate"
-						label={t('language')}
-						input={<LanguageSelector />}
-					/>
-				</div>
-				<div style={{ marginTop: '24px' }}>
-					<SettingRowLabelAndInput
-						icon="contrast"
-						label={t('color-theme')}
-						input={<ToggleThemeBtnGroup />}
-					/>
-				</div>
-				<div style={{ marginTop: '24px' }}>
-					<SettingRowLabelAndInput
-						icon="layout-grid"
-						label={t('ui-style')}
-						input={<ToggleUIStyleBtnGroup />}
-					/>
-				</div>
-			</div>
-		);
-	};
-
-	const AboutSettingsPanel: React.FC = () => {
-		return (
-			<div style={{ width: '100%' }}>
-				<Row
-					center="xs"
-					middle="xs"
-					style={{ marginTop: '16px', width: '100%' }}
-				>
-					<div>
-						<Col xs={12}>
-							<img
-								src={`http://127.0.0.1:${clientViewerPort}/logo512.png`}
-								alt="logo"
-								style={{ width: '100px' }}
-							/>
-						</Col>
-						<Col xs={12}>
-							<H3>{t('about-deskreen')}</H3>
-						</Col>
-						<Col xs={12}>
-							<Text>{`${t('version')}: ${currentVersion} (${currentVersion})`}</Text>
-						</Col>
-						<Col xs={12}>
-							<Text>
-								{`${t('copyright')} © ${new Date().getFullYear()} `}
-								<a
-									href="https://www.linkedin.com/in/pavlobu/"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="bp3-link"
-									style={{
-										color: '#106ba3',
-										textDecoration: 'none',
-									}}
-								>
-									Pavlo Buidenkov
-								</a>
-							</Text>
-						</Col>
-						<Col xs={12}>
-							<Text>
-								{`${t('website')}: `}
-								<a
-									href="https://www.deskreen.com"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="bp3-link"
-									style={{
-										color: '#106ba3',
-										textDecoration: 'none',
-									}}
-								>
-									https://www.deskreen.com
-								</a>
-							</Text>
-						</Col>
-					</div>
-				</Row>
-			</div>
-		);
-	};
-
-	const getTabNavGeneralSettingsButton = (): React.ReactElement => {
-		return (
-			<Row middle="xs" className={classes.tabNavigationRowButton}>
-				<Icon icon="wrench" className={classes.iconInTablLeftButton} />
-				<Text className="bp3-text-large">{t('general')}</Text>
-			</Row>
-		);
-	};
-
-	const getTabNavAboutButton = (): React.ReactElement => {
-		return (
-			<Row middle="xs" className={classes.tabNavigationRowButton}>
-				<Icon icon="info-sign" className={classes.iconInTablLeftButton} />
-				<Text className="bp3-text-large">{t('about')}</Text>
-			</Row>
-		);
-	};
-
 	return (
 		<Overlay2
 			onClose={handleClose}
@@ -298,29 +136,51 @@ export default function SettingsOverlay(
 						onClick={handleClose}
 						isDefaultStyles
 					/>
-					<Tabs
-						animate
-						id="TabsExample"
-						renderActiveTabPanelOnly
-					>
-						<Tab
-							id="rx"
-							title=""
-							panel={<GeneralSettingsPanel />}
-							panelClassName={'tab-panel-wide-custom-style'}
-						>
-							{getTabNavGeneralSettingsButton()}
-						</Tab>
-						<Tab
-							id="about"
-							title=""
-							panel={<AboutSettingsPanel />}
-							panelClassName={'tab-panel-wide-custom-style'}
-						>
-							{getTabNavAboutButton()}
-						</Tab>
-						<TabsExpander />
-					</Tabs>
+					<div style={{ width: '100%' }}>
+						{hasUpdate ? (
+							<div className={classes.updateCalloutWrapper}>
+								<Callout
+									className={classes.updateCallout}
+									icon="automatic-updates"
+									intent="success"
+									role="button"
+									tabIndex={0}
+									onClick={handleOpenDownload}
+									onKeyDown={handleUpdateCalloutKeyDown}
+								>
+									<Text style={{ fontWeight: 600 }}>
+										{t('deskreen-ce-update-is-available')}
+									</Text>
+									<Text>{`${t('your-current-version-is')} ${currentVersion}`}</Text>
+									<Text>{`${t('click-to-download-new-updated-version')} ${latestVersion}`}</Text>
+								</Callout>
+							</div>
+						) : null}
+						<Row middle="xs">
+							<H3 className="bp3-text-muted">{t('general-settings')}</H3>
+						</Row>
+						<div style={{ marginTop: '24px' }}>
+							<SettingRowLabelAndInput
+								icon="translate"
+								label={t('language')}
+								input={<LanguageSelector />}
+							/>
+						</div>
+						<div style={{ marginTop: '24px' }}>
+							<SettingRowLabelAndInput
+								icon="contrast"
+								label={t('color-theme')}
+								input={<ToggleThemeBtnGroup />}
+							/>
+						</div>
+						<div style={{ marginTop: '24px' }}>
+							<SettingRowLabelAndInput
+								icon="layout-grid"
+								label={t('ui-style')}
+								input={<ToggleUIStyleBtnGroup />}
+							/>
+						</div>
+					</div>
 				</div>
 			</div>
 		</Overlay2>

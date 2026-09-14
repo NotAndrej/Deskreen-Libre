@@ -3,6 +3,7 @@ import { Button, H3, Icon, Position, Tag, Tooltip } from '@blueprintjs/core';
 import { makeStyles } from 'tss-react/mui';
 import { Col, Row } from 'react-flexbox-grid';
 import SettingsOverlay from './SettingsOverlay/SettingsOverlay';
+import AboutOverlay from './AboutOverlay';
 import ConnectedDevicesListDrawer from './ConnectedDevicesListDrawer';
 import { useTranslation } from 'react-i18next';
 import { IpcEvents } from '../../../common/IpcEvents.enum';
@@ -123,6 +124,7 @@ export default function TopPanel({
 	const { uiStyle } = useContext(SettingsContext);
 
 	const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
+	const [isAboutOpen, setIsAboutOpen] = React.useState(false);
 	const [isConnectedDevicesDrawerOpen, setIsConnectedDevicesDrawerOpen] =
 		React.useState(false);
 	const [latestVersion, setLatestVersion] = React.useState('');
@@ -135,6 +137,14 @@ export default function TopPanel({
 
 	const handleSettingsClose = React.useCallback(() => {
 		setIsSettingsOpen(false);
+	}, []);
+
+	const handleAboutOpen = React.useCallback(() => {
+		setIsAboutOpen(true);
+	}, []);
+
+	const handleAboutClose = React.useCallback(() => {
+		setIsAboutOpen(false);
 	}, []);
 
 	const handleToggleConnectedDevicesListDrawer = React.useCallback(() => {
@@ -270,6 +280,24 @@ export default function TopPanel({
 		</div>
 	);
 
+	const renderAboutButton = (
+		<div className={classes.topPanelControlButtonMargin}>
+			<Tooltip content={t('about')} position={Position.BOTTOM}>
+				<Button
+					id="top-panel-about-button"
+					onClick={handleAboutOpen}
+					className={classes.topPanelControlButton}
+				>
+					<Icon
+						className={classes.topPanelIconOfControlButton}
+						icon="info-sign"
+						size={22}
+					/>
+				</Button>
+			</Tooltip>
+		</div>
+	);
+
 	const renderSettingsButton = (
 		<div className={classes.topPanelControlButtonMargin}>
 			<Tooltip content={t('settings')} position={Position.BOTTOM}>
@@ -344,6 +372,16 @@ export default function TopPanel({
 						<Icon icon="learning" size={18} />
 					</Button>
 				</Tooltip>
+				<Tooltip content={t('about')} position={Position.BOTTOM}>
+					<Button
+						id="top-panel-about-button"
+						minimal
+						className={classes.modernHeaderIconButton}
+						onClick={handleAboutOpen}
+					>
+						<Icon icon="info-sign" size={18} />
+					</Button>
+				</Tooltip>
 				<Tooltip content={t('settings')} position={Position.BOTTOM}>
 					<Button
 						id="top-panel-settings-button"
@@ -386,6 +424,7 @@ export default function TopPanel({
 					{renderConnectedDevicesListButton}
 					{renderHelpButton}
 					{renderTutorialButton}
+					{renderAboutButton}
 					{renderSettingsButton}
 				</div>
 				{hasUpdate ? (
@@ -420,6 +459,11 @@ export default function TopPanel({
 					isSettingsOpen={isSettingsOpen}
 					handleClose={handleSettingsClose}
 				/>
+			) : (
+				<></>
+			)}
+			{isAboutOpen ? (
+				<AboutOverlay isAboutOpen={isAboutOpen} handleClose={handleAboutClose} />
 			) : (
 				<></>
 			)}

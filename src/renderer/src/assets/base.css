@@ -103,7 +103,6 @@
 		#15b371 50%,
 		#3dcc91 100%
 	);
-	--banner-bg-color: #00f99273;
 	--qr-panel-radius: 10px;
 	--custom-scrollbar-webkit-scrollbar-thumb-border-radius: 10px;
 	--custom-scrollbar-webkit-scrollbar-thumb-background-color: #8a9ba8;
@@ -143,7 +142,6 @@ body.ui-modern {
 	--bp-intent-primary-hover: #6a62c9;
 	--bp-intent-primary-active: #5951b0;
 	--bp-surface-border-radius: 16px;
-	--banner-bg-color: #7f77dd4d;
 	--qr-panel-radius: 18px;
 	--stepper-active-gradient: linear-gradient(
 		136deg,
