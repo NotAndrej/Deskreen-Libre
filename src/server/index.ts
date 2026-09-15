@@ -5,7 +5,6 @@
  * */
 
 import http from 'http';
-import os from 'os';
 import Koa from 'koa';
 import crypto from 'crypto';
 import { Server } from 'socket.io';
@@ -24,8 +23,6 @@ import getStore from './store';
 import { getDeskreenGlobal } from '../main/helpers/getDeskreenGlobal';
 import getMyLocalIpV4 from '../main/helpers/getMyLocalIpV4';
 import { getClientViewerDistPath } from './getClientViewerDistPath';
-import { MDNS_HOSTNAME, MDNS_SERVICE_NAME } from '../common/mdns';
-import { virtualInterfaces, virtualPrefixes } from '../main/helpers/getMyLocalIpV4';
 
 const { hostname, primaryPort, backupPort } = config;
 
@@ -92,13 +89,6 @@ class DeskreenSignalingServer {
 	app: Koa | undefined;
 
 	clientDistDirectory: string;
-
-	mdnsAdvertisements: { stop: () => void }[] = [];
-
-	mdnsResponders: {
-		unpublishAll: () => void;
-		destroy: () => void;
-	}[] = [];
 
 	constructor() {
 		const localIp = getMyLocalIpV4();
@@ -169,90 +159,7 @@ class DeskreenSignalingServer {
 	async start(): Promise<http.Server> {
 		startPollForInactiveRooms();
 		this.server = await this.callListenOnHttpServer();
-		this.publishMdnsService();
 		return this.server;
-	}
-
-	/**
-	 * Advertise the viewer over mDNS so it is reachable at
-	 * http://dsl.local:<port> without looking up the LAN IP.
-	 * One responder per local interface: with VPNs (e.g. Tailscale) the OS
-	 * routes all multicast out a single interface, so a single responder
-	 * would only be visible there. Best-effort: if publishing fails the
-	 * IP-based URL keeps working.
-	 */
-	publishMdnsService(): void {
-		try {
-			// Imported lazily so a missing/broken dependency can never take
-			// the signaling server down with it.
-			// eslint-disable-next-line @typescript-eslint/no-require-imports
-			const { Bonjour } = require('bonjour-service') as {
-				Bonjour: new (opts?: Record<string, unknown>) => {
-					publish: (opts: Record<string, unknown>) => {
-						stop: () => void;
-					};
-					unpublishAll: () => void;
-					destroy: () => void;
-				};
-			};
-			const addresses = this.getMdnsBindAddresses();
-			for (const address of addresses) {
-				try {
-					const responder = new Bonjour({ interface: address });
-					const advertisement = responder.publish({
-						name: MDNS_SERVICE_NAME,
-						host: MDNS_HOSTNAME,
-						type: 'http',
-						port: this.port,
-					});
-					this.mdnsResponders.push(responder);
-					this.mdnsAdvertisements.push(advertisement);
-				} catch (error) {
-					this.log.error(
-						`mDNS publish failed on ${address}, skipping interface:`,
-						error,
-					);
-				}
-			}
-			if (this.mdnsAdvertisements.length > 0) {
-				this.log.info(
-					`mDNS: viewer advertised at http://${MDNS_HOSTNAME}:${this.port}`,
-				);
-			} else {
-				this.log.error('mDNS publish failed on all interfaces');
-			}
-		} catch (error) {
-			this.log.error(
-				'mDNS publish failed, .local URL will be unavailable:',
-				error,
-			);
-		}
-	}
-
-	/**
-	 * Local IPv4 addresses worth answering mDNS on: loopback (same-machine
-	 * browsers), real LAN interfaces, and VPN/tunnel interfaces. Virtual
-	 * machine/container bridges are skipped to keep announcements sane.
-	 */
-	getMdnsBindAddresses(): string[] {
-		const addresses = new Set<string>();
-		for (const [name, networks] of Object.entries(os.networkInterfaces())) {
-			if (!networks) continue;
-			if (
-				virtualInterfaces.some(
-					(pattern) => name.startsWith(pattern) || name === pattern,
-				) ||
-				virtualPrefixes.some((pattern) => name.startsWith(pattern))
-			) {
-				continue;
-			}
-			for (const network of networks) {
-				if (network.family !== 'IPv4') continue;
-				if (network.internal && network.address !== '127.0.0.1') continue;
-				addresses.add(network.address);
-			}
-		}
-		return [...addresses];
 	}
 
 	listenCallback() {
@@ -325,20 +232,6 @@ class DeskreenSignalingServer {
 	}
 
 	stop(): void {
-		try {
-			for (const advertisement of this.mdnsAdvertisements) {
-				advertisement.stop();
-			}
-			for (const responder of this.mdnsResponders) {
-				responder.unpublishAll();
-				responder.destroy();
-			}
-		} catch (error) {
-			this.log.error('Failed to tear down mDNS advertisements:', error);
-		} finally {
-			this.mdnsAdvertisements = [];
-			this.mdnsResponders = [];
-		}
 		this.server.close();
 	}
 }
