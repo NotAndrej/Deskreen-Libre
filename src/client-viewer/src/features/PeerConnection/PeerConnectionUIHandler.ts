@@ -14,6 +14,8 @@ export default class PeerConnectionUIHandler {
 
 	setAppThemeCallback: (theme: 'dark' | 'light') => void;
 
+	setAppUiStyleCallback: (uiStyle: 'legacy' | 'modern') => void;
+
 	setDialogErrorMessageCallback: (message: ErrorMessageType) => void;
 
 	setIsErrorDialogOpen: (val: boolean) => void;
@@ -28,6 +30,7 @@ export default class PeerConnectionUIHandler {
 		setDialogErrorMessageCallback: (message: ErrorMessageType) => void,
 		setIsErrorDialogOpen: (val: boolean) => void,
 		setAppThemeCallback: (theme: 'dark' | 'light') => void,
+		setAppUiStyleCallback: (uiStyle: 'legacy' | 'modern') => void,
 	) {
 		this.hostAllowedToConnectCallback = hostAllowedToConnectCallback;
 		this.setMyDeviceDetails = setMyDeviceDetails;
@@ -37,5 +40,6 @@ export default class PeerConnectionUIHandler {
 		this.setDialogErrorMessageCallback = setDialogErrorMessageCallback;
 		this.setIsErrorDialogOpen = setIsErrorDialogOpen;
 		this.setAppThemeCallback = setAppThemeCallback;
+		this.setAppUiStyleCallback = setAppUiStyleCallback;
 	}
 }

@@ -32,5 +32,8 @@ export default async (
 		peerConnection.UIHandler.setAppThemeCallback(
 			message.payload.value === 'dark' ? 'dark' : 'light',
 		);
+		peerConnection.UIHandler.setAppUiStyleCallback(
+			message.payload.uiStyle === 'modern' ? 'modern' : 'legacy',
+		);
 	}
 };

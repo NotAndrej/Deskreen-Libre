@@ -37,11 +37,18 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		return nativeTheme.shouldUseDarkColors;
 	};
 
+	const getUiStyle = (): string => {
+		return store.has(ElectronStoreKeys.UIStyle)
+			? String(store.get(ElectronStoreKeys.UIStyle))
+			: 'legacy';
+	};
+
 	const notifySharingSessionsOfAppTheme = (): void => {
 		const isDarkMode = getEffectiveDarkMode();
+		const uiStyle = getUiStyle();
 		getDeskreenGlobal().sharingSessionService.sharingSessions.forEach(
 			(sharingSession) => {
-				sharingSession?.appThemeChanged(isDarkMode);
+				sharingSession?.appThemeChanged(isDarkMode, uiStyle);
 			},
 		);
 	};
@@ -554,7 +561,10 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 	);
 
 	ipcMain.handle(IpcEvents.GetAppTheme, () => {
-		return getEffectiveDarkMode();
+		return {
+			isDarkMode: getEffectiveDarkMode(),
+			uiStyle: getUiStyle(),
+		};
 	});
 
 	ipcMain.handle(IpcEvents.DestroySharingSessionById, (_, id) => {

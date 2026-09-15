@@ -120,10 +120,10 @@ export default class SharingSession {
 		this.peerConnectionHelperRenderer?.webContents.send('app-language-changed');
 	}
 
-	appThemeChanged(isDarkMode: boolean): void {
+	appThemeChanged(isDarkMode: boolean, uiStyle: string): void {
 		this.peerConnectionHelperRenderer?.webContents.send(
 			'app-theme-changed',
-			isDarkMode,
+			{ isDarkMode, uiStyle },
 		);
 	}
 

@@ -47,6 +47,7 @@ export type AppThemeMessageWithPayload = {
 	type: 'APP_THEME';
 	payload: {
 		value: string;
+		uiStyle?: string;
 	};
 };
 
@@ -135,13 +136,14 @@ export const handleRecieveEncryptedMessage = async (
 		});
 	}
 	if (message.type === 'GET_APP_THEME') {
-		const isDarkMode = await window.electron.ipcRenderer.invoke(
+		const appTheme = await window.electron.ipcRenderer.invoke(
 			IpcEvents.GetAppTheme,
 		);
 		peerConnection.sendEncryptedMessage({
 			type: 'APP_THEME',
 			payload: {
-				value: isDarkMode ? 'dark' : 'light',
+				value: appTheme.isDarkMode ? 'dark' : 'light',
+				uiStyle: appTheme.uiStyle,
 			},
 		});
 	}

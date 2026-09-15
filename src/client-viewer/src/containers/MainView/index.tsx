@@ -26,7 +26,7 @@ import ConnectionIcon from './ConnectionIconEnum';
 import { LoadingSharingIconEnum } from './LoadingSharingIconEnum';
 
 function MainView() {
-	const { setAppThemeHook } = useContext(AppContext);
+	const { setAppThemeHook, setAppUiStyleHook } = useContext(AppContext);
 	const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false);
 
 	const [promptStep, setPromptStep] = useState(1);
@@ -90,6 +90,7 @@ function MainView() {
 			setUrl,
 			setPeer,
 			setAppTheme: setAppThemeHook,
+			setAppUiStyle: setAppUiStyleHook,
 		}),
 		[connectionRoomId],
 	);

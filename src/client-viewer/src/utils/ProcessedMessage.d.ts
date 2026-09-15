@@ -43,6 +43,7 @@ type AppThemeMessageWithPayload = {
 	type: 'APP_THEME';
 	payload: {
 		value: string;
+		uiStyle?: string;
 	};
 };
 

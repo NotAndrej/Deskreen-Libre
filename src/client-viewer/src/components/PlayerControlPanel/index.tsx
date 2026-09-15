@@ -144,6 +144,7 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 					<Col xs={12} md={5}>
 						<Row center="xs" style={{ height: '42px' }}>
 							<ButtonGroup
+								className="player-controls-group"
 								style={{
 									borderRadius: '20px',
 									backgroundColor: '#137CBD',

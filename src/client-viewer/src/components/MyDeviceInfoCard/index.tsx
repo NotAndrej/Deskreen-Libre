@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import {
 	LIGHT_UI_BACKGROUND,
 	DARK_UI_BACKGROUND,
+	MODERN_LIGHT_UI_BACKGROUND,
+	MODERN_DARK_UI_BACKGROUND,
 } from '../../constants/styleConstants';
 import { AppContext } from '../../providers/AppContextProvider';
 
@@ -13,7 +15,15 @@ interface MyDeviceDetailsCardProps {
 
 function MyDeviceInfoCard(props: MyDeviceDetailsCardProps) {
 	const { t } = useTranslation();
-	const { appTheme } = useContext(AppContext);
+	const { appTheme, appUiStyle } = useContext(AppContext);
+	const backgroundColor =
+		appUiStyle === 'modern'
+			? appTheme === 'dark'
+				? MODERN_DARK_UI_BACKGROUND
+				: MODERN_LIGHT_UI_BACKGROUND
+			: appTheme === 'dark'
+				? DARK_UI_BACKGROUND
+				: LIGHT_UI_BACKGROUND;
 
 	const { deviceDetails } = props;
 	const { myIP, myOS, myDeviceType, myBrowser, myRoomId } = deviceDetails;
@@ -22,8 +32,7 @@ function MyDeviceInfoCard(props: MyDeviceDetailsCardProps) {
 		<Card
 			elevation={3}
 			style={{
-				backgroundColor:
-					appTheme === 'dark' ? DARK_UI_BACKGROUND : LIGHT_UI_BACKGROUND,
+				backgroundColor,
 				marginBottom: '30px',
 			}}
 		>

@@ -23,6 +23,33 @@ body.bp6-dark {
 	color-scheme: dark;
 }
 
+/* "Modern" UI style — mirrors the host app's Modern reskin, applied only
+   when the host runs Modern (signalled via APP_THEME). Same layout, refined
+   palette: purple primary intent, rounder surfaces, per-theme background. */
+body.ui-modern {
+	--bp-intent-primary-rest: #7f77dd;
+	--bp-intent-primary-hover: #6a62c9;
+	--bp-intent-primary-active: #5951b0;
+	--bp-surface-border-radius: 16px;
+}
+
+body.ui-modern.bp6-dark {
+	background-color: #14161a;
+}
+
+body.ui-modern:not(.bp6-dark) {
+	background-color: #eef0f7;
+}
+
+/* Player control pill (inline Blueprint-blue style) goes purple in Modern. */
+body.ui-modern .player-controls-group {
+	background-color: #7f77dd !important;
+}
+
+body.ui-modern .play-pause-button-glow {
+	box-shadow: 0 0 20px rgba(127, 119, 221, 0.8), 0 0 40px rgba(127, 119, 221, 0.6) !important;
+}
+
 /*:root {*/
 /*  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;*/
 /*  line-height: 1.5;*/
