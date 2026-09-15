@@ -420,6 +420,11 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 			roomIDService.unmarkRoomIDAsTaken(sharingSession.roomID);
 		}
 
+		// Clear the consumed session BEFORE occupying a slot: addDevice
+		// notifies the availability listener, which mints the next waiting
+		// session — but it bails out while one is still present.
+		sharingSessionService.waitingForConnectionSharingSession = null;
+
 		try {
 			connectedDevicesService.addDevice(pendingDevice);
 		} catch (error) {
@@ -427,7 +432,6 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 			if (sharingSession !== null) {
 				sharingSession.setStatus(SharingSessionStatusEnum.ERROR);
 				sharingSession.denyConnectionForPartner();
-				sharingSessionService.waitingForConnectionSharingSession = null;
 			}
 			connectedDevicesService.resetPendingConnectionDevice();
 			return;
@@ -436,7 +440,6 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		if (sharingSession !== null) {
 			sharingSession.callPeer();
 			sharingSession.setStatus(SharingSessionStatusEnum.SHARING);
-			sharingSessionService.waitingForConnectionSharingSession = null;
 		}
 
 		connectedDevicesService.resetPendingConnectionDevice();
