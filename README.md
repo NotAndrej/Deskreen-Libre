@@ -13,7 +13,6 @@ Deskreen turns any device with a web browser into a secondary screen for your co
 | | Deskreen CE (upstream, free) | Deskreen Libre ($0) | Deskreen Pro ($24.99/yr) | Deskreen Pro Teams ($139.99/yr) |
 |---|---|---|---|---|
 | Connected viewing devices | 1 | Unlimited | Up to 5 | Unlimited |
-| Quick access via local hostname | — | — (QR + LAN IP, zero setup) | `deskreen.local` | `deskreen.local` |
 | Dark theme | — | ✅ (Light / Dark / OS Auto, Legacy + Modern) | ✅ | ✅ |
 | Advanced viewer controls | — (Flip is Pro-gated) | ✅ (quality, fullscreen, flip) | ✅ | ✅ |
 | Trusted devices + stronger security | — | ✅ (trust per device, auto-allow on reconnect) | ✅ | ✅ |
