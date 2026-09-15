@@ -180,6 +180,11 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		deskreenGlobal.roomIDService.unmarkRoomIDAsTaken(roomID);
 	});
 
+	// Last screen source the host user picked. Every freshly minted waiting
+	// session inherits it, so viewers 2..10 share the same source without
+	// the host having to re-pick it for each of them.
+	let lastChosenDesktopCapturerSourceID = '';
+
 	async function createWaitingForConnectionSharingSession(
 		roomID?: string,
 	): Promise<void> {
@@ -196,6 +201,11 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 					roomID,
 				);
 			waitingSession.setOnDeviceConnectedCallback(onDeviceConnectedCallback);
+			if (lastChosenDesktopCapturerSourceID !== '') {
+				waitingSession.setDesktopCapturerSourceID(
+					lastChosenDesktopCapturerSourceID,
+				);
+			}
 		} catch (error) {
 			console.error('Failed to create waiting sharing session', error);
 		}
@@ -413,7 +423,7 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		try {
 			connectedDevicesService.addDevice(pendingDevice);
 		} catch (error) {
-			console.error('failed to occupy single viewer slot', error);
+			console.error('failed to add viewer device', error);
 			if (sharingSession !== null) {
 				sharingSession.setStatus(SharingSessionStatusEnum.ERROR);
 				sharingSession.denyConnectionForPartner();
@@ -475,6 +485,7 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 	);
 
 	ipcMain.handle(IpcEvents.SetDesktopCapturerSourceId, (_, id) => {
+		lastChosenDesktopCapturerSourceID = id;
 		getDeskreenGlobal().sharingSessionService.waitingForConnectionSharingSession?.setDesktopCapturerSourceID(
 			id,
 		);

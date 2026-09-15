@@ -12,50 +12,49 @@ export const nullDevice: Device = {
 	deviceRoomId: '',
 };
 
-const SLOT_VIOLATION_MESSAGE = 'single viewer slot is already occupied';
+export const MAX_CONNECTED_VIEWERS = 10;
+
+const SLOTS_VIOLATION_MESSAGE = `viewer slots are already fully occupied (${MAX_CONNECTED_VIEWERS}/${MAX_CONNECTED_VIEWERS})`;
 
 type ViewerConnectionAvailability = 'available' | 'occupied';
 
-class SingleViewerSlot {
-	private device: Readonly<Device> | null = null;
+class ViewerSlots {
+	private devices = new Map<string, Readonly<Device>>();
 
 	occupy(device: Device): void {
-		if (this.device && this.device.id !== device.id) {
-			throw new Error(SLOT_VIOLATION_MESSAGE);
+		if (this.devices.has(device.id)) {
+			this.devices.set(device.id, Object.freeze({ ...device }));
+			return;
 		}
-		this.device = Object.freeze({ ...device });
+		if (this.devices.size >= MAX_CONNECTED_VIEWERS) {
+			throw new Error(SLOTS_VIOLATION_MESSAGE);
+		}
+		this.devices.set(device.id, Object.freeze({ ...device }));
 	}
 
 	releaseById(deviceIDToRemove: string): boolean {
-		if (!this.device) return false;
-		if (this.device.id !== deviceIDToRemove) {
-			return false;
-		}
-		this.device = null;
-		return true;
+		return this.devices.delete(deviceIDToRemove);
 	}
 
 	release(): void {
-		this.device = null;
+		this.devices.clear();
 	}
 
 	isAvailable(): boolean {
-		return this.device === null;
+		return this.devices.size < MAX_CONNECTED_VIEWERS;
 	}
 
 	snapshot(): Device[] {
-		if (!this.device) return [];
-		return [{ ...this.device }];
+		return [...this.devices.values()].map((device) => ({ ...device }));
 	}
 
 	isOccupiedBy(deviceID: string): boolean {
-		if (!this.device) return false;
-		return this.device.id === deviceID;
+		return this.devices.has(deviceID);
 	}
 }
 
 export class ConnectedDevicesService {
-	private readonly slot = new SingleViewerSlot();
+	private readonly slots = new ViewerSlots();
 
 	pendingConnectionDevice: Device = nullDevice;
 
@@ -68,11 +67,11 @@ export class ConnectedDevicesService {
 	}
 
 	getDevices(): Device[] {
-		return this.slot.snapshot();
+		return this.slots.snapshot();
 	}
 
 	isSlotAvailable(): boolean {
-		return this.slot.isAvailable();
+		return this.slots.isAvailable();
 	}
 
 	addAvailabilityListener(
@@ -86,13 +85,13 @@ export class ConnectedDevicesService {
 	}
 
 	disconnectAllDevices(): void {
-		this.slot.release();
+		this.slots.release();
 		this.notifyAvailabilityListeners();
 	}
 
 	disconnectDeviceByID(deviceIDToRemove: string): Promise<undefined> {
 		return new Promise<undefined>((resolve) => {
-			this.slot.releaseById(deviceIDToRemove);
+			this.slots.releaseById(deviceIDToRemove);
 			this.notifyAvailabilityListeners();
 			resolve(undefined);
 		});
@@ -100,9 +99,9 @@ export class ConnectedDevicesService {
 
 	addDevice(device: Device): void {
 		try {
-			this.slot.occupy(device);
+			this.slots.occupy(device);
 		} catch (error) {
-			if (error instanceof Error && error.message === SLOT_VIOLATION_MESSAGE) {
+			if (error instanceof Error && error.message === SLOTS_VIOLATION_MESSAGE) {
 				throw error;
 			}
 			throw error;
@@ -115,7 +114,7 @@ export class ConnectedDevicesService {
 	}
 
 	private getAvailabilityState(): ViewerConnectionAvailability {
-		return this.slot.isAvailable() ? 'available' : 'occupied';
+		return this.slots.isAvailable() ? 'available' : 'occupied';
 	}
 
 	private notifyAvailabilityListeners(): void {

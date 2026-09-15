@@ -355,7 +355,7 @@ const ScanQRStep: React.FC = () => {
 						}}
 					>
 						<Text className="bp3-text-muted">
-							{t('deskreen-ce-allows-only-one-client-at-same-time')}
+							{t('deskreen-libre-allows-up-to-ten-clients-at-same-time')}
 						</Text>
 					</Row>
 				</>
