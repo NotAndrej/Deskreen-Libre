@@ -254,7 +254,6 @@ class DeskreenSignalingServer {
 		}
 		return [...addresses];
 	}
-	}
 
 	listenCallback() {
 		return () => {

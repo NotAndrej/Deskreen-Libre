@@ -5,8 +5,15 @@ export function getTrustedDeviceIds(): string[] {
 	if (!store.has(ElectronStoreKeys.TrustedDeviceIds)) {
 		return [];
 	}
-	const ids = store.get(ElectronStoreKeys.TrustedDeviceIds);
-	return Array.isArray(ids) ? ids.filter((id) => typeof id === 'string') : [];
+	try {
+		const raw = store.get(ElectronStoreKeys.TrustedDeviceIds);
+		const ids: unknown = JSON.parse(raw ?? '[]');
+		return Array.isArray(ids)
+			? ids.filter((id): id is string => typeof id === 'string')
+			: [];
+	} catch {
+		return [];
+	}
 }
 
 export function isDeviceTrusted(trustedDeviceId: string): boolean {
@@ -19,7 +26,7 @@ export function trustDeviceId(trustedDeviceId: string): void {
 	const ids = getTrustedDeviceIds();
 	if (!ids.includes(trustedDeviceId)) {
 		ids.push(trustedDeviceId);
-		store.set(ElectronStoreKeys.TrustedDeviceIds, ids);
+		store.set(ElectronStoreKeys.TrustedDeviceIds, JSON.stringify(ids));
 	}
 }
 
@@ -27,6 +34,8 @@ export function untrustDeviceId(trustedDeviceId: string): void {
 	if (!trustedDeviceId) return;
 	store.set(
 		ElectronStoreKeys.TrustedDeviceIds,
-		getTrustedDeviceIds().filter((id) => id !== trustedDeviceId),
+		JSON.stringify(
+			getTrustedDeviceIds().filter((id) => id !== trustedDeviceId),
+		),
 	);
 }
