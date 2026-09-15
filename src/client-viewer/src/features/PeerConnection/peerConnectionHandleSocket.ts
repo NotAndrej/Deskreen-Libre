@@ -117,6 +117,11 @@ export default (peerConnection: PeerConnection) => {
 			payload: {},
 		});
 
+		peerConnection.sendEncryptedMessage({
+			type: 'GET_APP_THEME',
+			payload: {},
+		});
+
 		// clear any existing timeout
 		if (peerConnection.setMyDeviceDetailsTimeout) {
 			clearTimeout(peerConnection.setMyDeviceDetailsTimeout);

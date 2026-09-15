@@ -120,6 +120,13 @@ export default class SharingSession {
 		this.peerConnectionHelperRenderer?.webContents.send('app-language-changed');
 	}
 
+	appThemeChanged(isDarkMode: boolean): void {
+		this.peerConnectionHelperRenderer?.webContents.send(
+			'app-theme-changed',
+			isDarkMode,
+		);
+	}
+
 	addStatusChangeListener(callback: SharingSessionStatusChangeListener): void {
 		this.statusChangeListeners.push(callback);
 	}

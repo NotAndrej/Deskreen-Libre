@@ -25,6 +25,7 @@ export enum IpcEvents {
 	GetDesktopSharingSourceIds = 'get-desktop-sharing-source-ids',
 	SetDesktopCapturerSourceId = 'set-desktop-capturer-source-id',
 	GetAppLanguage = 'get-app-language',
+	GetAppTheme = 'get-app-theme',
 	GetIsFirstTimeAppStart = 'get-is-not-first-time-app-start',
 	SetAppStartedOnce = 'set-app-started-once',
 	DestroySharingSessionById = 'destroy-sharing-session-by-id',

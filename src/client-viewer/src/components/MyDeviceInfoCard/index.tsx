@@ -1,6 +1,11 @@
 import { Callout, Card, H3, Text, Tooltip, Position } from '@blueprintjs/core';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LIGHT_UI_BACKGROUND } from '../../constants/styleConstants';
+import {
+	LIGHT_UI_BACKGROUND,
+	DARK_UI_BACKGROUND,
+} from '../../constants/styleConstants';
+import { AppContext } from '../../providers/AppContextProvider';
 
 interface MyDeviceDetailsCardProps {
 	deviceDetails: DeviceDetails;
@@ -8,6 +13,7 @@ interface MyDeviceDetailsCardProps {
 
 function MyDeviceInfoCard(props: MyDeviceDetailsCardProps) {
 	const { t } = useTranslation();
+	const { appTheme } = useContext(AppContext);
 
 	const { deviceDetails } = props;
 	const { myIP, myOS, myDeviceType, myBrowser, myRoomId } = deviceDetails;
@@ -16,7 +22,8 @@ function MyDeviceInfoCard(props: MyDeviceDetailsCardProps) {
 		<Card
 			elevation={3}
 			style={{
-				backgroundColor: LIGHT_UI_BACKGROUND,
+				backgroundColor:
+					appTheme === 'dark' ? DARK_UI_BACKGROUND : LIGHT_UI_BACKGROUND,
 				marginBottom: '30px',
 			}}
 		>

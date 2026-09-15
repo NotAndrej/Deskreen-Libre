@@ -31,12 +31,32 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		: 'system';
 	nativeTheme.themeSource = persistedTheme;
 
+	// Single source of truth for what the host UI is actually rendering:
+	// Modern is dark-first and forces dark regardless of Color Theme.
+	const getEffectiveDarkMode = (): boolean => {
+		const uiStyle = store.has(ElectronStoreKeys.UIStyle)
+			? String(store.get(ElectronStoreKeys.UIStyle))
+			: 'legacy';
+		if (uiStyle === 'modern') return true;
+		return nativeTheme.shouldUseDarkColors;
+	};
+
+	const notifySharingSessionsOfAppTheme = (): void => {
+		const isDarkMode = getEffectiveDarkMode();
+		getDeskreenGlobal().sharingSessionService.sharingSessions.forEach(
+			(sharingSession) => {
+				sharingSession?.appThemeChanged(isDarkMode);
+			},
+		);
+	};
+
 	nativeTheme.on('updated', () => {
 		if (mainWindow === null || mainWindow.isDestroyed()) return;
 		mainWindow.webContents.send(IpcEvents.ThemeUpdated, {
 			themeSource: nativeTheme.themeSource,
 			shouldUseDarkColors: nativeTheme.shouldUseDarkColors,
 		});
+		notifySharingSessionsOfAppTheme();
 	});
 
 	ipcMain.on('client-changed-language', async (_, newLangCode) => {
@@ -495,6 +515,7 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 				store.delete(ElectronStoreKeys.UIStyle);
 			}
 			store.set(ElectronStoreKeys.UIStyle, newUIStyle);
+			notifySharingSessionsOfAppTheme();
 			return newUIStyle;
 		},
 	);
@@ -514,12 +535,17 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 				store.delete(ElectronStoreKeys.Theme);
 			}
 			store.set(ElectronStoreKeys.Theme, newThemeSource);
+			notifySharingSessionsOfAppTheme();
 			return {
 				themeSource: nativeTheme.themeSource,
 				shouldUseDarkColors: nativeTheme.shouldUseDarkColors,
 			};
 		},
 	);
+
+	ipcMain.handle(IpcEvents.GetAppTheme, () => {
+		return getEffectiveDarkMode();
+	});
 
 	ipcMain.handle(IpcEvents.DestroySharingSessionById, (_, id) => {
 		if (

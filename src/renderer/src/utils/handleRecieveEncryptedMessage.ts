@@ -38,6 +38,18 @@ export type AppLanguageMessageWithPayload = {
 	};
 };
 
+export type GetAppThemeMessageWithPayload = {
+	type: 'GET_APP_THEME';
+	payload: Record<string, unknown>;
+};
+
+export type AppThemeMessageWithPayload = {
+	type: 'APP_THEME';
+	payload: {
+		value: string;
+	};
+};
+
 export type DenyToConnectMessageWithPayload = {
 	type: 'DENY_TO_CONNECT';
 	payload: Record<string, unknown>;
@@ -59,6 +71,8 @@ export type ProcessedMessage =
 	| DeviceDetailsMessageWithPayload
 	| GetAppLanguageMessageWithPayload
 	| AppLanguageMessageWithPayload
+	| GetAppThemeMessageWithPayload
+	| AppThemeMessageWithPayload
 	| DenyToConnectMessageWithPayload
 	| AllowedToConnectMessageWithPayload
 	| DisconnectByHostMachineUserMessageWithPayload;
@@ -117,6 +131,17 @@ export const handleRecieveEncryptedMessage = async (
 			type: 'APP_LANGUAGE',
 			payload: {
 				value: appLanguage,
+			},
+		});
+	}
+	if (message.type === 'GET_APP_THEME') {
+		const isDarkMode = await window.electron.ipcRenderer.invoke(
+			IpcEvents.GetAppTheme,
+		);
+		peerConnection.sendEncryptedMessage({
+			type: 'APP_THEME',
+			payload: {
+				value: isDarkMode ? 'dark' : 'light',
 			},
 		});
 	}

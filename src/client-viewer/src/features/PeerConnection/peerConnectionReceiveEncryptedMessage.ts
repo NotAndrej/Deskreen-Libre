@@ -28,4 +28,9 @@ export default async (
 	if (message.type === 'APP_LANGUAGE') {
 		peerConnection.UIHandler.setAppLanguageCallback(message.payload.value);
 	}
+	if (message.type === 'APP_THEME') {
+		peerConnection.UIHandler.setAppThemeCallback(
+			message.payload.value === 'dark' ? 'dark' : 'light',
+		);
+	}
 };

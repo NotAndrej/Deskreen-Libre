@@ -100,6 +100,15 @@ export function handleIpcRenderer(): void {
 				peerConnection.notifyClientWithNewLanguage();
 			}
 		});
+
+		window.electron.ipcRenderer.on(
+			'app-theme-changed',
+			(_, isDarkMode: boolean) => {
+				if (peerConnection) {
+					peerConnection.notifyClientWithNewTheme(isDarkMode);
+				}
+			},
+		);
 	});
 }
 

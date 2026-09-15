@@ -39,10 +39,18 @@ type AppLanguageMessageWithPayload = {
 	};
 };
 
+type AppThemeMessageWithPayload = {
+	type: 'APP_THEME';
+	payload: {
+		value: string;
+	};
+};
+
 type ProcessedMessage =
 	| CallUserMessageWithPayload
 	| DeviceDetailsMessageWithPayload
 	| DenyToConnectMessageWithPayload
 	| DisconnectByHostMachineUserMessageWithPayload
 	| AllowedToConnectMessageWithPayload
-	| AppLanguageMessageWithPayload;
+	| AppLanguageMessageWithPayload
+	| AppThemeMessageWithPayload;

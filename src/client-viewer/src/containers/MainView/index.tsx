@@ -1,7 +1,8 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { Grid } from 'react-flexbox-grid';
 import screenfull from 'screenfull';
 import './index.css';
+import { AppContext } from '../../providers/AppContextProvider';
 import PeerConnection from '../../features/PeerConnection';
 import {
 	VideoQuality,
@@ -25,6 +26,7 @@ import ConnectionIcon from './ConnectionIconEnum';
 import { LoadingSharingIconEnum } from './LoadingSharingIconEnum';
 
 function MainView() {
+	const { setAppThemeHook } = useContext(AppContext);
 	const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false);
 
 	const [promptStep, setPromptStep] = useState(1);
@@ -87,6 +89,7 @@ function MainView() {
 			setIsErrorDialogOpen,
 			setUrl,
 			setPeer,
+			setAppTheme: setAppThemeHook,
 		}),
 		[connectionRoomId],
 	);

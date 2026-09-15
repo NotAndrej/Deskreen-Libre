@@ -91,6 +91,15 @@ export default class PeerConnection {
 		}, 1000);
 	}
 
+	notifyClientWithNewTheme(isDarkMode: boolean): void {
+		this.sendEncryptedMessage({
+			type: 'APP_THEME',
+			payload: {
+				value: isDarkMode ? 'dark' : 'light',
+			},
+		});
+	}
+
 	async setDesktopCapturerSourceID(id: string): Promise<void> {
 		this.desktopCapturerSourceID = id;
 		if (process.env.RUN_MODE === 'test') return;

@@ -16,6 +16,13 @@ code {
 		source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+/* Blueprint's .bp6-dark only themes Blueprint components — the page
+   background itself needs an explicit rule, same as the host app. */
+body.bp6-dark {
+	background-color: rgba(28, 33, 39, 1);
+	color-scheme: dark;
+}
+
 /*:root {*/
 /*  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;*/
 /*  line-height: 1.5;*/

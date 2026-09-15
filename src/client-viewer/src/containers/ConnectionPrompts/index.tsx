@@ -1,6 +1,11 @@
 import { Row, Col } from 'react-flexbox-grid';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LIGHT_UI_BACKGROUND } from '../../constants/styleConstants';
+import {
+	LIGHT_UI_BACKGROUND,
+	DARK_UI_BACKGROUND,
+} from '../../constants/styleConstants';
+import { AppContext } from '../../providers/AppContextProvider';
 import MyDeviceInfoCard from '../../components/MyDeviceInfoCard';
 import type { TFunction } from 'i18next';
 import { Button, H3 } from '@blueprintjs/core';
@@ -55,6 +60,7 @@ function ConnectionPropmpts(props: ConnectionPropmptsProps) {
 	} = props;
 
 	const { t } = useTranslation();
+	const { appTheme } = useContext(AppContext);
 
 	const handleReinitiateConnection = () => {
 		window.location.reload();
@@ -70,7 +76,8 @@ function ConnectionPropmpts(props: ConnectionPropmptsProps) {
 				width: '100%',
 				height: '100vh',
 				boxShadow: '0 0 0 5px #A7B6C2',
-				backgroundColor: LIGHT_UI_BACKGROUND,
+				backgroundColor:
+					appTheme === 'dark' ? DARK_UI_BACKGROUND : LIGHT_UI_BACKGROUND,
 			}}
 		>
 			<Row

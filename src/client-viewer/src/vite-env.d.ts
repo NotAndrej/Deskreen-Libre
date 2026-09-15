@@ -20,6 +20,7 @@ type CreatePeerConnectionUseEffectParams = {
 	setIsErrorDialogOpen: (_: boolean) => void;
 	setUrl: (_: MediaStream | null) => void;
 	setPeer: (_: undefined | PeerConnection) => void;
+	setAppTheme: (_: 'dark' | 'light') => void;
 };
 type handleDisplayingLoadingSharingIconLoopParams = {
 	promptStep: number;
