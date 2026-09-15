@@ -115,9 +115,14 @@ const ScanQRStep: React.FC = () => {
 	useEffect(() => {
 		let cancelled = false;
 		const fetchRoomId = async (): Promise<void> => {
-			const roomId = await window.electron.ipcRenderer.invoke(
-				IpcEvents.GetWaitingForConnectionSharingSessionRoomId,
-			);
+			let roomId: unknown = '';
+			try {
+				roomId = await window.electron.ipcRenderer.invoke(
+					IpcEvents.GetWaitingForConnectionSharingSessionRoomId,
+				);
+			} catch (error) {
+				console.error('Failed to get waiting session room id:', error);
+			}
 			if (cancelled) return;
 			if (
 				typeof roomId === 'string' &&
@@ -131,10 +136,15 @@ const ScanQRStep: React.FC = () => {
 		};
 
 		const fetchLocalIp = async (): Promise<void> => {
-			const gotIP =
-				await window.electron.ipcRenderer.invoke('get-local-lan-ip');
+			let gotIP: unknown = '';
+			try {
+				gotIP =
+					await window.electron.ipcRenderer.invoke('get-local-lan-ip');
+			} catch (error) {
+				console.error('Failed to get local LAN IP:', error);
+			}
 			if (!cancelled && gotIP) {
-				setLocalLanIP(gotIP);
+				setLocalLanIP(gotIP as string);
 			}
 		};
 
@@ -167,6 +177,12 @@ const ScanQRStep: React.FC = () => {
 		return `http://${LOCAL_LAN_IP}${portString}${roomPath}`;
 	}, [LOCAL_LAN_IP, portString, roomPath, isViewerSlotAvailable]);
 	const isQrInteractive = shareUrl !== '';
+	const waitingHint =
+		!isViewerSlotAvailable || isQrInteractive
+			? null
+			: LOCAL_LAN_IP === ''
+				? t('qr-waiting-no-local-ip')
+				: t('qr-waiting-no-room');
 	const connectionLimitTooltip = t('connection-limit-reached-tooltip');
 	const qrTooltipContent = isQrInteractive
 		? t('click-to-make-bigger')
@@ -274,6 +290,20 @@ const ScanQRStep: React.FC = () => {
 							: t('one-viewing-client-is-connected-already')}
 				</Text>
 			</Row>
+			{waitingHint && (
+				<Row
+					style={{
+						marginBottom: '10px',
+						display: 'flex',
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'center',
+						textAlign: 'center',
+					}}
+				>
+					<Text className="bp3-text-muted">{waitingHint}</Text>
+				</Row>
+			)}
 
 			<Row
 				style={{

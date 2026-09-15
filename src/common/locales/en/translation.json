@@ -168,6 +168,8 @@
 	"no-wifi-and-lan-connection": "No WiFi and LAN connection.",
 	"deskreen-ce-works-only-with-wifi-and-lan-networks": "Deskreen Libre works only with WiFi and LAN networks.",
 	"waiting-for-connection": "Waiting for connection.",
+	"qr-waiting-no-local-ip": "Could not detect this computer's local network address. Make sure Wi-Fi is on and connected.",
+	"qr-waiting-no-room": "Preparing the connection session…",
 	"currently-sharing-to-all": "Currently sharing to all",
 	"click-to-select-another-source-to-share": "Click to select another source to share",
 	"click-to-select-what-new-clients-will-see": "Click to select what new clients will see",
