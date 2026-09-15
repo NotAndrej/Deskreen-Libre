@@ -12,7 +12,16 @@ interface AboutOverlayProps {
 }
 
 const useStyles = makeStyles()(() => ({
-	overlayInnerRoot: { width: '90%', maxWidth: '420px' },
+	// Blueprint's scroll-container overlay leaves .bp6-overlay-content
+	// absolutely positioned with no centering, so center it ourselves.
+	overlayInnerRoot: {
+		position: 'fixed',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		width: '90%',
+		maxWidth: '420px',
+	},
 	overlayInsideFade: {
 		padding: '32px 20px',
 	},
