@@ -32,12 +32,8 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 	nativeTheme.themeSource = persistedTheme;
 
 	// Single source of truth for what the host UI is actually rendering:
-	// Modern is dark-first and forces dark regardless of Color Theme.
+	// the Color Theme setting (via nativeTheme), in every UI style.
 	const getEffectiveDarkMode = (): boolean => {
-		const uiStyle = store.has(ElectronStoreKeys.UIStyle)
-			? String(store.get(ElectronStoreKeys.UIStyle))
-			: 'legacy';
-		if (uiStyle === 'modern') return true;
 		return nativeTheme.shouldUseDarkColors;
 	};
 

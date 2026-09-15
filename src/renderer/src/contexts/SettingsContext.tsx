@@ -11,8 +11,8 @@ export interface SettingsContextInterface {
 	setThemeSourceHook: (newTheme: ThemeSource) => void;
 	uiStyle: UIStyle;
 	setUIStyleHook: (newStyle: UIStyle) => void;
-	/** isDarkMode, but forced true whenever uiStyle is 'modern' — since Modern
-	 * is a dark-first design and ignores the separate Color Theme setting.
+	/** Resolved dark mode from the Color Theme setting (Light / Dark / OS
+	 * Auto). Both Legacy and Modern have full light and dark variants.
 	 * Use this (not isDarkMode) for anything that needs to match what's
 	 * actually rendered on screen right now. */
 	effectiveDarkMode: boolean;

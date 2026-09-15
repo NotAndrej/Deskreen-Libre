@@ -85,10 +85,10 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 		};
 	}, []);
 
-	// Legacy Modern / Modern are dark-first designs — force Blueprint's (and
-	// MUI's) own dark component theming regardless of the separate Color
-	// Theme setting, so the systems can't disagree on what's on screen.
-	const effectiveDarkMode = uiStyle === 'modern' ? true : isDarkMode;
+	// Effective dark mode is purely the Color Theme setting (Light / Dark /
+	// OS Auto) — both Legacy and Modern fully support light and dark, so
+	// nothing is forced anymore.
+	const effectiveDarkMode = isDarkMode;
 
 	useEffect(() => {
 		if (effectiveDarkMode) {

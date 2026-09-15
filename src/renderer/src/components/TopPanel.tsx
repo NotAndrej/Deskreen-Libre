@@ -79,11 +79,9 @@ const useStyles = makeStyles()(() => ({
 			zIndex: 10,
 			lineHeight: '1',
 		},
-		// "Legacy Modern" / "Modern" header — flat row, monotone icons, no
-		// colored button fills. Only ever shown while dark mode is forced (see
-		// SettingsProvider's effectiveDarkMode), so these dark-only colors are
-		// fine for now; they'll need light-mode counterparts when Legacy
-		// Modern / Modern get proper light variants.
+		// "Modern" header — flat row, monotone icons, no colored button
+		// fills. Base colors assume dark; the *Light companions below
+		// override them when Modern runs in light mode.
 		modernHeaderRoot: {
 			display: 'flex',
 			alignItems: 'center',
@@ -108,6 +106,12 @@ const useStyles = makeStyles()(() => ({
 			cursor: 'default !important',
 			color: 'rgba(255, 255, 255, 0.6) !important',
 		},
+		modernHeaderRootLight: {
+			borderBottom: '1px solid rgba(20, 22, 26, 0.12)',
+		},
+		modernHeaderIconButtonLight: {
+			color: 'rgba(20, 22, 26, 0.55) !important',
+		},
 }));
 
 interface Props {
@@ -120,8 +124,9 @@ export default function TopPanel({
 	children,
 }: Props): React.ReactElement {
 	const { t } = useTranslation();
-	const { classes } = useStyles();
-	const { uiStyle } = useContext(SettingsContext);
+	const { classes, cx } = useStyles();
+	const { uiStyle, effectiveDarkMode } = useContext(SettingsContext);
+	const isModernLight = uiStyle === 'modern' && !effectiveDarkMode;
 
 	const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
 	const [isAboutOpen, setIsAboutOpen] = React.useState(false);
@@ -326,7 +331,12 @@ export default function TopPanel({
 	);
 
 	const renderModernHeader = (
-		<div className={classes.modernHeaderRoot}>
+		<div
+			className={cx(
+				classes.modernHeaderRoot,
+				isModernLight && classes.modernHeaderRootLight,
+			)}
+		>
 			<span className={classes.modernHeaderAppName}>Deskreen Libre</span>
 			<div className={classes.modernHeaderIconsRoot}>
 				<div style={{ position: 'relative' }}>
@@ -334,7 +344,10 @@ export default function TopPanel({
 						<Button
 							id="top-panel-connected-devices-list-button"
 							minimal
-							className={classes.modernHeaderIconButton}
+							className={cx(
+								classes.modernHeaderIconButton,
+								isModernLight && classes.modernHeaderIconButtonLight,
+							)}
 							onClick={handleToggleConnectedDevicesListDrawer}
 						>
 							<Icon icon="th-list" size={18} />
@@ -350,7 +363,10 @@ export default function TopPanel({
 					<Button
 						id="top-panel-help-button"
 						minimal
-						className={classes.modernHeaderIconButton}
+						className={cx(
+								classes.modernHeaderIconButton,
+								isModernLight && classes.modernHeaderIconButtonLight,
+							)}
 						onClick={() => {
 							Promise.resolve(handleReset()).then(() => {
 								window.electron.ipcRenderer.invoke(
@@ -366,7 +382,10 @@ export default function TopPanel({
 					<Button
 						id="top-panel-tutorial-button"
 						minimal
-						className={classes.modernHeaderIconButton}
+						className={cx(
+								classes.modernHeaderIconButton,
+								isModernLight && classes.modernHeaderIconButtonLight,
+							)}
 						onClick={handleTutorialButtonClick}
 					>
 						<Icon icon="learning" size={18} />
@@ -376,7 +395,10 @@ export default function TopPanel({
 					<Button
 						id="top-panel-about-button"
 						minimal
-						className={classes.modernHeaderIconButton}
+						className={cx(
+								classes.modernHeaderIconButton,
+								isModernLight && classes.modernHeaderIconButtonLight,
+							)}
 						onClick={handleAboutOpen}
 					>
 						<Icon icon="info-sign" size={18} />
@@ -386,7 +408,10 @@ export default function TopPanel({
 					<Button
 						id="top-panel-settings-button"
 						minimal
-						className={classes.modernHeaderIconButton}
+						className={cx(
+								classes.modernHeaderIconButton,
+								isModernLight && classes.modernHeaderIconButtonLight,
+							)}
 						onClick={handleSettingsOpen}
 					>
 						<Icon icon="cog" size={18} />

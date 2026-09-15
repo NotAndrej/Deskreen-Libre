@@ -131,13 +131,12 @@ body.bp6-dark {
 	background-color: var(--dark-bg-color);
 }
 
-/* "Modern" UI style — a refined dark-first palette applied on top of the
-   same layout. Placed after .bp6-dark so it wins when both are present
-   (Modern always forces dark, see SettingsProvider.tsx). Overriding
+/* "Modern" UI style — same layout, refined palette. The shared tokens below
+   (purple primary intent, rounder surfaces, stepper gradients) apply in both
+   color themes; only the page background differs per theme. Overriding
    Blueprint's own intent tokens re-colors every primary-intent
    button/element app-wide for free, instead of chasing each component. */
 body.ui-modern {
-	background-color: #14161a;
 	--bp-intent-primary-rest: #7f77dd;
 	--bp-intent-primary-hover: #6a62c9;
 	--bp-intent-primary-active: #5951b0;
@@ -167,6 +166,14 @@ body.ui-modern {
 		#5dcaa5 50%,
 		#3aa984 100%
 	);
+}
+
+body.ui-modern.bp6-dark {
+	background-color: #14161a;
+}
+
+body.ui-modern:not(.bp6-dark) {
+	background-color: #eef0f7;
 }
 
 .bp6-alert-footer > button {
