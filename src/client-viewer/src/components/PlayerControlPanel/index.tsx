@@ -115,7 +115,7 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 
 	return (
 		<>
-			<Card elevation={4}>
+			<Card elevation={4} style={{ padding: '6px 12px' }}>
 				<Row between="xs" middle="xs">
 					<Col xs={12} md={3}>
 						<Row middle="xs" start="xs">
@@ -130,11 +130,13 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 												src="/img/logo512.png"
 												alt="logo"
 												style={{
-													height: '72px',
-													marginRight: '12px',
+													height: '30px',
+													marginRight: '8px',
 												}}
 											/>
-											<H3 style={{ margin: 0 }}>Deskreen Libre Viewer</H3>
+											<H3 style={{ margin: 0, fontSize: '16px' }}>
+												Deskreen Libre Viewer
+											</H3>
 										</Row>
 									</Button>
 								</Tooltip>
@@ -142,13 +144,13 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 						</Row>
 					</Col>
 					<Col xs={12} md={5}>
-						<Row center="xs" style={{ height: '42px' }}>
+						<Row center="xs" style={{ height: '30px' }}>
 							<ButtonGroup
 								className="player-controls-group"
 								style={{
-									borderRadius: '20px',
+									borderRadius: '15px',
 									backgroundColor: '#137CBD',
-									height: '42px',
+									height: '30px',
 								}}
 							>
 								<Tooltip content={isPlaying ? t('Click to Pause Video') : t('Click to Play Video')} position={Position.BOTTOM}>
@@ -163,11 +165,11 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 											border: 'none',
 											outline: 'none',
 											boxSizing: 'border-box',
-											padding: '0 20px',
-											borderRadius: '20px 0 0 20px',
-											width: '120px',
-											minWidth: '120px',
-											maxWidth: '120px',
+											padding: '0 12px',
+											borderRadius: '15px 0 0 15px',
+											width: '92px',
+											minWidth: '92px',
+											maxWidth: '92px',
 										}}
 										className={!isPlaying ? 'play-pause-button play-pause-button-glow' : 'play-pause-button'}
 									>
@@ -250,7 +252,7 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 												outline: 'none',
 												boxShadow: 'none',
 												borderRadius: '0',
-												padding: '0 20px',
+												padding: '0 10px',
 											}}
 											className="settings-button-separator"
 										>
@@ -270,8 +272,8 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 											border: 'none',
 											outline: 'none',
 											boxShadow: 'none',
-											borderRadius: '0 20px 20px 0',
-											padding: '0 20px',
+											borderRadius: '0 15px 15px 0',
+											padding: '0 10px',
 										}}
 									>
 										<img
@@ -302,7 +304,7 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 									checked={isDefaultPlayerTurnedOn}
 									disabled={!isFullScreenAPIAvailable}
 									style={{
-										marginBottom: '12px',
+										marginBottom: '0',
 									}}
 								/>
 							</Col>
