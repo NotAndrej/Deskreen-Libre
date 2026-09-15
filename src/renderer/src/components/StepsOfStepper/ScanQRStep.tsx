@@ -286,14 +286,26 @@ const ScanQRStep: React.FC = () => {
 						marginTop: '10px',
 						display: 'flex',
 						flexDirection: 'row',
-						alignItems: 'center',
 						justifyContent: 'center',
-						textAlign: 'center',
 					}}
 				>
-					<Text className="bp3-text-muted">
-						{t('qr-mdns-alternative', { url: mdnsUrl })}
-					</Text>
+					<Tooltip content={copyTooltipContent} position={Position.TOP}>
+						<span>
+							<Button
+								intent="primary"
+								icon="duplicate"
+								style={{ borderRadius: '100px' }}
+								onClick={() => {
+									window.electron.ipcRenderer.invoke(
+										IpcEvents.WriteTextToClipboard,
+										mdnsUrl,
+									);
+								}}
+							>
+								{mdnsUrl}
+							</Button>
+						</span>
+					</Tooltip>
 				</Row>
 			)}
 
