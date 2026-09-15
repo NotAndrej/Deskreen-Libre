@@ -8,16 +8,19 @@ Deskreen turns any device with a web browser into a secondary screen for your co
 
 **A fork of [Deskreen CE](https://github.com/pavlobu/deskreen) with trackers and Pro upsells removed — and active development.**
 
-## Deskreen Pro ($24.99/yr) vs Deskreen Libre ($0)
+## Deskreen CE vs Deskreen Pro vs Teams vs Deskreen Libre
 
-| | Deskreen Pro | Deskreen Libre |
-|---|---|---|
-| Connected viewing devices | Up to 5 | Unlimited |
-| Quick access via local hostname | `deskreen.local` | — (QR + LAN IP, zero setup) |
-| Dark theme | ✅ | ✅ (Light / Dark / OS Auto, Legacy + Modern) |
-| Advanced viewer controls | ✅ | ✅ (quality, fullscreen, flip) |
-| Trusted devices + stronger security | ✅ | ✅ (trust per device from the Connected Devices drawer, auto-allow on reconnect) |
-| Trackers / upsells | — | None. Ever. |
+| | Deskreen CE (upstream, free) | Deskreen Libre ($0) | Deskreen Pro ($24.99/yr) | Deskreen Pro Teams ($139.99/yr) |
+|---|---|---|---|---|
+| Connected viewing devices | 1 | Unlimited | Up to 5 | Unlimited |
+| Quick access via local hostname | — | — (QR + LAN IP, zero setup) | `deskreen.local` | `deskreen.local` |
+| Dark theme | — | ✅ (Light / Dark / OS Auto, Legacy + Modern) | ✅ | ✅ |
+| Advanced viewer controls | — (Flip is Pro-gated) | ✅ (quality, fullscreen, flip) | ✅ | ✅ |
+| Trusted devices + stronger security | — | ✅ (trust per device, auto-allow on reconnect) | ✅ | ✅ |
+| Team seats and shared management | — | — | — | ✅ |
+| Switch streams without reconnecting | — | — | — | ✅ |
+| Support | Community | Community | Priority | Priority |
+| Trackers / upsells | Google Analytics + Pro upsell | None. Ever. | — | — |
 
 ## How Deskreen Libre differs from Deskreen CE
 
