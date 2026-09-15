@@ -2,13 +2,23 @@
 
 ![platform](https://img.shields.io/badge/platform-Windows%20%7C%20MacOS%20%7C%20Linux-lightgrey)
 
-![Deskreen Logo](https://raw.githubusercontent.com/pavlobu/deskreen/master/resources/icon.png)
+![Deskreen Logo](https://raw.githubusercontent.com/NotAndrej/Deskreen-Libre/master/resources/icon.png)
 
 Deskreen turns any device with a web browser into a secondary screen for your computer
 
-**This is a fork to remove trackers and upsells to Pro.**
+**A fork of [Deskreen CE](https://github.com/pavlobu/deskreen) with trackers and Pro upsells removed — and active development.**
 
-[Donate to support Deskreen Open-Source](https://deskreen.com/#contribute)
+## How Deskreen Libre differs from Deskreen CE
+
+- **No tracking.** Google Analytics (host + viewer), consent dialogs, and unused telemetry packages are gone.
+- **No "Pro" upsell.** No upgrade buttons, no "available only in Pro version" screens. Every feature in the app is the whole app.
+- **Unlimited viewers.** CE allows one viewing device at a time; Libre lets you connect as many as you like. Each viewer gets its own session and shares the same selected screen source.
+- **Color Theme: Light / Dark / Auto.** Auto follows your OS theme live, including changes while the app is open.
+- **UI Styles: Legacy / Modern.** Modern is a refined reskin (purple accent, rounder surfaces) with full light **and** dark variants — same layout, both themes.
+- **The web viewer follows the host.** Dark/light mode and Legacy/Modern styling sync live from the app to every connected viewer, including mid-session changes.
+- **Fresh branding.** New icon everywhere: desktop app, installer, viewer, favicon, and the logo embedded in the QR code.
+- **Modernized dependencies.** Unmaintained `@material-ui/core` v4 replaced with `@mui/material` + `tss-react`; `npm audit` reports 0 production vulnerabilities in both packages.
+- **Fixed along the way.** Scannable QR on dark backgrounds, MUI components actually following dark mode, stale "viewer already connected" states after manual disconnects, and more.
 
 Deskreen is an `electron.js` based application that uses `WebRTC` to make a live stream of your computer screen to a web browser on any device. It is available for MacOS, Windows and Linux operating systems.
 
@@ -29,8 +39,10 @@ You will need to have `node>=v23` `npm>=10` installed.
 
 1. git clone this repo
 2. `npm i`
-3. `cd ./src/client-viewer && npm i && cd ../..`
+3. `cd ./src/client-viewer && npm i && cd ../..` (the web viewer is a separate package — don't skip this)
 4. `npm run clean && npm run build && npm run start` -- run in prod like mode
+
+Commit before testing: files that have never been committed are invisible to git's safety net.
 
 #### for more npm scripts look at `package.json`
 
@@ -45,7 +57,7 @@ You can start Deskreen Libre with a custom local IP address using the `--local-i
 open -a "Deskreen Libre" --args --ip 192.168.1.100
 
 # Or using the executable directly
-/Applications/Deskreen\ Libre.app/Contents/MacOS/Deskreen\ CE --ip 192.168.1.100
+/Applications/Deskreen\ Libre.app/Contents/MacOS/Deskreen\ Libre --ip 192.168.1.100
 
 # Get your IP automatically and launch
 open -a "Deskreen Libre" --args --ip "192.168.1.100"
@@ -55,26 +67,26 @@ open -a "Deskreen Libre" --args --ip "192.168.1.100"
 
 ```powershell
 # Using Start-Process (PowerShell)
-Start-Process "Deskreen CE" -ArgumentList "--ip", "192.168.1.100"
+Start-Process "Deskreen Libre" -ArgumentList "--ip", "192.168.1.100"
 
 # Or using the executable directly
-"C:\Program Files\Deskreen CE\Deskreen CE.exe" --ip 192.168.1.100
+"C:\Program Files\Deskreen Libre\Deskreen Libre.exe" --ip 192.168.1.100
 
 # Or from Command Prompt
-start "" "C:\Program Files\Deskreen CE\Deskreen CE.exe" --ip 192.168.1.100
+start "" "C:\Program Files\Deskreen Libre\Deskreen Libre.exe" --ip 192.168.1.100
 ```
 
 ### Linux
 
 ```bash
 # If installed via AppImage
-./Deskreen\ CE-*.AppImage --ip 192.168.1.100
+./Deskreen\ Libre-*.AppImage --ip 192.168.1.100
 
 # If installed via .deb/.rpm package (usually in /usr/bin or /opt)
-deskreen-ce --ip 192.168.1.100
+deskreen-libre --ip 192.168.1.100
 
 # Or using full path
-/opt/Deskreen\ CE/deskreen-ce --ip 192.168.1.100
+/opt/Deskreen\ Libre/deskreen-libre --ip 192.168.1.100
 ```
 
 **Note:** Replace `192.168.1.100` with your actual local IP address. You can find your IP using:
