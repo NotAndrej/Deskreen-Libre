@@ -8,6 +8,17 @@ Deskreen turns any device with a web browser into a secondary screen for your co
 
 **A fork of [Deskreen CE](https://github.com/pavlobu/deskreen) with trackers and Pro upsells removed — and active development.**
 
+## Deskreen Pro ($24.99/yr) vs Deskreen Libre ($0)
+
+| | Deskreen Pro | Deskreen Libre |
+|---|---|---|
+| Connected viewing devices | Up to 5 | Unlimited |
+| Quick access via local hostname | `deskreen.local` | 🔄 In development |
+| Dark theme | ✅ | ✅ (Light / Dark / OS Auto, Legacy + Modern) |
+| Advanced viewer controls | ✅ | ✅ (quality, fullscreen, flip) |
+| Trusted devices + stronger security | ✅ | 🔄 In development |
+| Trackers / upsells | — | None. Ever. |
+
 ## How Deskreen Libre differs from Deskreen CE
 
 - **No tracking.** Google Analytics (host + viewer), consent dialogs, and unused telemetry packages are gone.
