@@ -184,12 +184,17 @@ const ScanQRStep: React.FC = () => {
 				? t('qr-waiting-no-local-ip')
 				: t('qr-waiting-no-room');
 	const connectionLimitTooltip = t('connection-limit-reached-tooltip');
+	const waitingTooltip = t('waiting-for-connection');
 	const qrTooltipContent = isQrInteractive
 		? t('click-to-make-bigger')
-		: connectionLimitTooltip;
+		: isViewerSlotAvailable
+			? waitingTooltip
+			: connectionLimitTooltip;
 	const copyTooltipContent = isQrInteractive
 		? t('click-to-copy')
-		: connectionLimitTooltip;
+		: isViewerSlotAvailable
+			? waitingTooltip
+			: connectionLimitTooltip;
 
 	return (
 		<>
