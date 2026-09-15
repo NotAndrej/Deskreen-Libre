@@ -134,6 +134,39 @@ export default function AboutOverlay(
 									</a>
 								</Text>
 							</Col>
+							<Col xs={12}>
+								<Text>
+									{`${t('license')}: `}
+									<a
+										href="https://www.gnu.org/licenses/agpl-3.0.html"
+										target="_blank"
+										rel="noopener noreferrer"
+										className="bp3-link"
+										style={{
+											color: '#106ba3',
+											textDecoration: 'none',
+										}}
+									>
+										GNU AGPL v3.0
+									</a>
+								</Text>
+							</Col>
+							<Col xs={12}>
+								<Text>
+									<a
+										href="https://github.com/NotAndrej/Deskreen-Libre"
+										target="_blank"
+										rel="noopener noreferrer"
+										className="bp3-link"
+										style={{
+											color: '#106ba3',
+											textDecoration: 'none',
+										}}
+									>
+										Deskreen Libre fork by NotAndrej
+									</a>
+								</Text>
+							</Col>
 						</div>
 					</Row>
 				</div>
