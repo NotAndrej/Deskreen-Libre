@@ -13,10 +13,10 @@ Deskreen turns any device with a web browser into a secondary screen for your co
 | | Deskreen Pro | Deskreen Libre |
 |---|---|---|
 | Connected viewing devices | Up to 5 | Unlimited |
-| Quick access via local hostname | `deskreen.local` | 🔄 In development |
+| Quick access via local hostname | `deskreen.local` | `deskreen-libre.local` (QR keeps the LAN IP for devices without mDNS) |
 | Dark theme | ✅ | ✅ (Light / Dark / OS Auto, Legacy + Modern) |
 | Advanced viewer controls | ✅ | ✅ (quality, fullscreen, flip) |
-| Trusted devices + stronger security | ✅ | 🔄 In development |
+| Trusted devices + stronger security | ✅ | ✅ (trust per device from the Connected Devices drawer, auto-allow on reconnect) |
 | Trackers / upsells | — | None. Ever. |
 
 ## How Deskreen Libre differs from Deskreen CE
