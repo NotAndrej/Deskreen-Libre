@@ -493,7 +493,7 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		if (store.has(ElectronStoreKeys.UIStyle)) {
 			return store.get(ElectronStoreKeys.UIStyle);
 		}
-		return 'legacy';
+		return 'modern';
 	});
 
 	ipcMain.handle(

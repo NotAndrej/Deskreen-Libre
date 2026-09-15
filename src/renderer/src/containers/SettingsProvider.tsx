@@ -19,7 +19,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [currentLanguage, setCurrentLanguage] = useState('en');
 	const [themeSource, setThemeSource] = useState<ThemeSource>('system');
 	const [isDarkMode, setIsDarkMode] = useState(false);
-	const [uiStyle, setUIStyle] = useState<UIStyle>('legacy');
+	const [uiStyle, setUIStyle] = useState<UIStyle>('modern');
 
 	const setCurrentLanguageHook = (newLang: string): void => {
 		setCurrentLanguage(newLang);

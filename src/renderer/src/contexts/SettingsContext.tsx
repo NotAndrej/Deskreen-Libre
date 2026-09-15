@@ -28,7 +28,7 @@ export const defaultSettingsContextValue: SettingsContextInterface = {
 	setThemeSourceHook: () => {
 		// noop default
 	},
-	uiStyle: 'legacy',
+	uiStyle: 'modern',
 	setUIStyleHook: () => {
 		// noop default
 	},
