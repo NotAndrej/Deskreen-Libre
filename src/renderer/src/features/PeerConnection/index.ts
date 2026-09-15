@@ -242,8 +242,8 @@ export default class PeerConnection {
 			type: 'DISCONNECT_BY_HOST_MACHINE_USER',
 			payload: {},
 		});
-		this.disconnectPartner();
 		this.selfDestroy();
+		this.disconnectPartner();
 	}
 
 	disconnectPartner(): void {
