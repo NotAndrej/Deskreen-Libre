@@ -10,6 +10,7 @@ export const nullDevice: Device = {
 	deviceScreenWidth: -1,
 	deviceScreenHeight: -1,
 	deviceRoomId: '',
+	trustedDeviceId: '',
 };
 
 type ViewerConnectionAvailability = 'available' | 'occupied';

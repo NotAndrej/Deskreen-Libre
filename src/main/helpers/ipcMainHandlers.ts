@@ -24,6 +24,12 @@ import { store } from '../../common/deskreen-electron-store';
 import DesktopCapturerSourceType from '../../common/DesktopCapturerSourceType';
 import isLinuxWaylandSession from '../utils/isLinuxWaylandSession';
 import { checkScreenRecordingPermission } from './checkScreenRecordingPermission';
+import startSharingOnWaitingSession from './startSharingOnWaitingForConnectionSharingSession';
+import {
+	getTrustedDeviceIds,
+	trustDeviceId,
+	untrustDeviceId,
+} from './trustedDevices';
 
 export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 	const persistedTheme = store.has(ElectronStoreKeys.Theme)
@@ -398,66 +404,31 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		},
 	);
 
-	function startSharingOnWaitingForConnectionSharingSession(): void {
-		const deskreenGlobal = getDeskreenGlobal();
-		const { connectedDevicesService, sharingSessionService, roomIDService } =
-			deskreenGlobal;
-		if (!connectedDevicesService.isSlotAvailable()) {
-			const waitingSession =
-				sharingSessionService.waitingForConnectionSharingSession;
-			waitingSession?.denyConnectionForPartner();
-			waitingSession?.setStatus(SharingSessionStatusEnum.NOT_CONNECTED);
-			sharingSessionService.waitingForConnectionSharingSession = null;
-			connectedDevicesService.resetPendingConnectionDevice();
-			return;
-		}
-
-		const pendingDevice = connectedDevicesService.pendingConnectionDevice;
-		if (!pendingDevice.id) {
-			return;
-		}
-
-		const sharingSession =
-			sharingSessionService.waitingForConnectionSharingSession;
-		if (sharingSession !== null) {
-			roomIDService.unmarkRoomIDAsTaken(sharingSession.roomID);
-		}
-
-		// Clear the consumed session BEFORE occupying a slot: addDevice
-		// notifies the availability listener, which mints the next waiting
-		// session — but it bails out while one is still present.
-		sharingSessionService.waitingForConnectionSharingSession = null;
-
-		try {
-			connectedDevicesService.addDevice(pendingDevice);
-		} catch (error) {
-			console.error('failed to add viewer device', error);
-			if (sharingSession !== null) {
-				sharingSession.setStatus(SharingSessionStatusEnum.ERROR);
-				sharingSession.denyConnectionForPartner();
-			}
-			connectedDevicesService.resetPendingConnectionDevice();
-			return;
-		}
-
-		if (sharingSession !== null) {
-			sharingSession.callPeer();
-			sharingSession.setStatus(SharingSessionStatusEnum.SHARING);
-		}
-
-		connectedDevicesService.resetPendingConnectionDevice();
-	}
-
 	ipcMain.handle(
 		IpcEvents.StartSharingOnWaitingForConnectionSharingSession,
 		() => {
-			startSharingOnWaitingForConnectionSharingSession();
+			startSharingOnWaitingSession();
 		},
 	);
 
 	ipcMain.handle(IpcEvents.GetPendingConnectionDevice, () => {
 		return getDeskreenGlobal().connectedDevicesService.pendingConnectionDevice;
 	});
+
+	ipcMain.handle(IpcEvents.GetTrustedDeviceIds, () => {
+		return getTrustedDeviceIds();
+	});
+
+	ipcMain.handle(IpcEvents.TrustDeviceById, (_, trustedDeviceId: string) => {
+		trustDeviceId(trustedDeviceId);
+	});
+
+	ipcMain.handle(
+		IpcEvents.UntrustDeviceById,
+		(_, trustedDeviceId: string) => {
+			untrustDeviceId(trustedDeviceId);
+		},
+	);
 
 	ipcMain.handle(IpcEvents.GetWaitingForConnectionSharingSessionRoomId, () => {
 		if (

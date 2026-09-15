@@ -216,13 +216,31 @@ const DeskreenStepper = ({
 			handlePendingConnectionDevice,
 		);
 
+		const handleTrustedDeviceAutoAllowed = (
+			_: unknown,
+			device: Device,
+		): void => {
+			void showMessageFromNewToaster(
+				`${t('trusted-device-auto-connected')}: ${device.deviceIP}`,
+			);
+		};
+
+		window.electron.ipcRenderer.on(
+			IpcEvents.TrustedDeviceAutoAllowed,
+			handleTrustedDeviceAutoAllowed,
+		);
+
 		return () => {
 			window.electron.ipcRenderer.removeListener(
 				IpcEvents.SetPendingConnectionDevice,
 				handlePendingConnectionDevice,
 			);
+			window.electron.ipcRenderer.removeListener(
+				IpcEvents.TrustedDeviceAutoAllowed,
+				handleTrustedDeviceAutoAllowed,
+			);
 		};
-	}, [setIsAllowDeviceAlertOpen, setPendingConnectionDevice]);
+	}, [setIsAllowDeviceAlertOpen, setPendingConnectionDevice, t]);
 
 	const handleUserClickedDeviceDisconnectButton =
 		useCallback(async (): Promise<void> => {

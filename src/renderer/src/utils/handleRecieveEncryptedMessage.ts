@@ -23,6 +23,7 @@ export type DeviceDetailsMessageWithPayload = {
 		browser: string;
 		deviceScreenWidth: number;
 		deviceScreenHeight: number;
+		deviceId?: string;
 	};
 };
 
@@ -94,6 +95,10 @@ export function handleDeviceIPMessage(
 		deviceScreenHeight: message.payload.deviceScreenHeight,
 		sharingSessionID: peerConnection.sharingSessionID,
 		deviceRoomId: peerConnection.roomID,
+		trustedDeviceId:
+			typeof message.payload.deviceId === 'string'
+				? message.payload.deviceId
+				: '',
 	};
 	peerConnection.partnerDeviceDetails = device;
 	peerConnection.onDeviceConnectedCallback(device);

@@ -54,6 +54,7 @@ export default function ConnectedDevicesListDrawer(
 		DeviceWithDesktopCapturerSourceId[]
 	>([]);
 	const [devicesDisplayed, setDevicesDisplayed] = useState(new Map());
+	const [trustedDeviceIds, setTrustedDeviceIds] = useState<string[]>([]);
 
 	useEffect(() => {
 		function getConnectedDevicesCallback() {
@@ -86,6 +87,13 @@ export default function ConnectedDevicesListDrawer(
 
 		getConnectedDevicesCallback();
 
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetTrustedDeviceIds)
+			.then((ids: string[]) => {
+				setTrustedDeviceIds(ids ?? []);
+			})
+			.catch((e) => console.error(e));
+
 		const connectedDevicesInterval = setInterval(
 			getConnectedDevicesCallback,
 			4000,
@@ -111,6 +119,22 @@ export default function ConnectedDevicesListDrawer(
 			setConnectedDevices(connectedDevices.filter((d: Device) => d.id !== id));
 		},
 		[connectedDevices, setConnectedDevices],
+	);
+
+	const handleToggleTrustDevice = useCallback(
+		async (trustedDeviceId: string, isTrusted: boolean) => {
+			if (!trustedDeviceId) return;
+			await window.electron.ipcRenderer.invoke(
+				isTrusted ? IpcEvents.UntrustDeviceById : IpcEvents.TrustDeviceById,
+				trustedDeviceId,
+			);
+			setTrustedDeviceIds((prev) =>
+				isTrusted
+					? prev.filter((id) => id !== trustedDeviceId)
+					: [...prev, trustedDeviceId],
+			);
+		},
+		[],
 	);
 
 	const handleDisconnectAll = useCallback(() => {
@@ -232,6 +256,44 @@ export default function ConnectedDevicesListDrawer(
 												</Col>
 											</Row>
 											<Row center="xs">
+												{device.trustedDeviceId !== '' &&
+													(trustedDeviceIds.includes(
+														device.trustedDeviceId,
+													) ? (
+														<Button
+															intent="none"
+															onClick={(): void => {
+																void handleToggleTrustDevice(
+																	device.trustedDeviceId,
+																	true,
+																);
+															}}
+															icon="delete"
+															style={{
+																borderRadius: '100px',
+																marginRight: '8px',
+															}}
+														>
+															{t('untrust-device')}
+														</Button>
+													) : (
+														<Button
+															intent="success"
+															onClick={(): void => {
+																void handleToggleTrustDevice(
+																	device.trustedDeviceId,
+																	false,
+																);
+															}}
+															icon="shield"
+															style={{
+																borderRadius: '100px',
+																marginRight: '8px',
+															}}
+														>
+															{t('trust-device')}
+														</Button>
+													))}
 												<Button
 													id={`disconnect-device-${device.deviceIP}`}
 													intent="danger"

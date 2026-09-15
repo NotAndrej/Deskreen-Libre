@@ -23,6 +23,7 @@ import getStore from './store';
 import { getDeskreenGlobal } from '../main/helpers/getDeskreenGlobal';
 import getMyLocalIpV4 from '../main/helpers/getMyLocalIpV4';
 import { getClientViewerDistPath } from './getClientViewerDistPath';
+import { MDNS_HOSTNAME, MDNS_SERVICE_NAME } from '../common/mdns';
 
 const { hostname, primaryPort, backupPort } = config;
 
@@ -89,6 +90,11 @@ class DeskreenSignalingServer {
 	app: Koa | undefined;
 
 	clientDistDirectory: string;
+
+	mdnsAdvertisement: { stop: () => void } | null = null;
+
+	mdnsBonjour: { unpublishAll: () => void; destroy: () => void } | null =
+		null;
 
 	constructor() {
 		const localIp = getMyLocalIpV4();
@@ -159,7 +165,45 @@ class DeskreenSignalingServer {
 	async start(): Promise<http.Server> {
 		startPollForInactiveRooms();
 		this.server = await this.callListenOnHttpServer();
+		this.publishMdnsService();
 		return this.server;
+	}
+
+	/**
+	 * Advertise the viewer over mDNS so it is reachable at
+	 * http://deskreen-libre.local:<port> without looking up the LAN IP.
+	 * Best-effort: if publishing fails the IP-based URL keeps working.
+	 */
+	publishMdnsService(): void {
+		try {
+			// Imported lazily so a missing/broken dependency can never take
+			// the signaling server down with it.
+			// eslint-disable-next-line @typescript-eslint/no-require-imports
+			const { Bonjour } = require('bonjour-service') as {
+				Bonjour: new () => {
+					publish: (opts: Record<string, unknown>) => {
+						stop: () => void;
+					};
+					unpublishAll: () => void;
+					destroy: () => void;
+				};
+			};
+			this.mdnsBonjour = new Bonjour();
+			this.mdnsAdvertisement = this.mdnsBonjour.publish({
+				name: MDNS_SERVICE_NAME,
+				host: MDNS_HOSTNAME,
+				type: 'http',
+				port: this.port,
+			});
+			this.log.info(
+				`mDNS: viewer advertised at http://${MDNS_HOSTNAME}:${this.port}`,
+			);
+		} catch (error) {
+			this.log.error(
+				'mDNS publish failed, .local URL will be unavailable:',
+				error,
+			);
+		}
 	}
 
 	listenCallback() {
@@ -232,6 +276,16 @@ class DeskreenSignalingServer {
 	}
 
 	stop(): void {
+		try {
+			this.mdnsAdvertisement?.stop();
+			this.mdnsBonjour?.unpublishAll();
+			this.mdnsBonjour?.destroy();
+		} catch (error) {
+			this.log.error('Failed to tear down mDNS advertisement:', error);
+		} finally {
+			this.mdnsAdvertisement = null;
+			this.mdnsBonjour = null;
+		}
 		this.server.close();
 	}
 }

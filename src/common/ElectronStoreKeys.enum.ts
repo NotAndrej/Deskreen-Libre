@@ -3,4 +3,5 @@ export enum ElectronStoreKeys {
 	IsNotFirstTimeAppStart = 'isNotFirstTimeAppStart',
 	Theme = 'theme',
 	UIStyle = 'uiStyle',
+	TrustedDeviceIds = 'trustedDeviceIds',
 }

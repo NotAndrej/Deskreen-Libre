@@ -14,6 +14,7 @@ type DeviceDetailsMessageWithPayload = {
 		browser: { name: string; version: string; major: string };
 		deviceScreenWidth: number;
 		deviceScreenHeight: number;
+		deviceId?: string;
 	};
 };
 

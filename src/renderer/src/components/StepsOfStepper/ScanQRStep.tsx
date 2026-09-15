@@ -16,6 +16,7 @@ import config from '../../../../common/config';
 import { IpcEvents } from '../../../../common/IpcEvents.enum';
 import { useTranslation } from 'react-i18next';
 import Logo192 from '../../assets/logo192.png';
+import { MDNS_HOSTNAME } from '../../../../common/mdns';
 
 const { hostname } = config;
 
@@ -126,6 +127,7 @@ const ScanQRStep: React.FC = () => {
 		return `http://${LOCAL_LAN_IP}${portString}${roomPath}`;
 	}, [LOCAL_LAN_IP, portString, roomPath]);
 	const isQrInteractive = shareUrl !== '';
+	const mdnsUrl = `http://${MDNS_HOSTNAME}${portString}${roomPath}`;
 	const waitingHint = isQrInteractive
 		? null
 		: LOCAL_LAN_IP === ''
@@ -278,6 +280,22 @@ const ScanQRStep: React.FC = () => {
 					</span>
 				</Tooltip>
 			</Row>
+			{isQrInteractive && (
+				<Row
+					style={{
+						marginTop: '10px',
+						display: 'flex',
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'center',
+						textAlign: 'center',
+					}}
+				>
+					<Text className="bp3-text-muted">
+						{t('qr-mdns-alternative', { url: mdnsUrl })}
+					</Text>
+				</Row>
+			)}
 
 			<Dialog
 				className={classes.bigQRCodeDialogRoot}
