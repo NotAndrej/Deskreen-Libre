@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { OverlayToaster, Position } from '@blueprintjs/core';
 import { useTranslation } from 'react-i18next';
 import VideoJSPlayer from '../../components/VideoJSPlayer';
@@ -48,6 +48,25 @@ function PlayerView(props: PlayerViewProps) {
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const toasterRef = useRef<Awaited<ReturnType<typeof OverlayToaster.create>> | null>(null);
 	// no external player ref needed for video.js variant
+
+	const [isFlipped, setIsFlipped] = useState(false);
+
+	// Mirror the live video element horizontally when flipped. Covers both
+	// the native <video> and the one video.js creates imperatively.
+	useEffect(() => {
+		const transform = isFlipped ? 'scaleX(-1)' : '';
+		if (videoRef.current) {
+			videoRef.current.style.transform = transform;
+		}
+		const container = document.getElementById(PLAYER_WRAPPER_ID);
+		container?.querySelectorAll('video').forEach((video) => {
+			video.style.transform = transform;
+		});
+	}, [isFlipped, streamUrl, isWithControls]);
+
+	const handleToggleFlip = useCallback(() => {
+		setIsFlipped((prev) => !prev);
+	}, []);
 
 	useEffect(() => {
 		if (!streamUrl) return;
@@ -223,6 +242,8 @@ function PlayerView(props: PlayerViewProps) {
 				setVideoQuality={setVideoQuality}
 				selectedVideoQuality={videoQuality}
 				screenSharingSourceType={screenSharingSourceType}
+				isFlipped={isFlipped}
+				onToggleFlip={handleToggleFlip}
 			/>
 			<div
 				id="video-container"
