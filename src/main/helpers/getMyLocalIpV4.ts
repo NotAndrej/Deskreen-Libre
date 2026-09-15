@@ -12,7 +12,7 @@ const windowsWifiInterfaces = [
 ]; // Windows Wi-Fi interface patterns
 
 // Virtualization interface patterns
-const virtualPrefixes = [
+export const virtualPrefixes = [
   "docker", // Docker Bridge
   "veth", // Linux Virtual Ethernet (Containers)
   "virbr", // Linux KVM/QEMU/Libvirt
@@ -23,7 +23,7 @@ const virtualPrefixes = [
   "VMware", // Windows VMware
 ];
 
-const virtualInterfaces = [
+export const virtualInterfaces = [
   "awdl0", // macOS peer-to-peer (AirDrop)
   "bridge100", // macOS bridge (virtual interface)
   "vEthernet", // Windows Ethernet Hyper-V
