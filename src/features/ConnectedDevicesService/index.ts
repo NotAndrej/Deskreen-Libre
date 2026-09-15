@@ -12,23 +12,12 @@ export const nullDevice: Device = {
 	deviceRoomId: '',
 };
 
-export const MAX_CONNECTED_VIEWERS = 10;
-
-const SLOTS_VIOLATION_MESSAGE = `viewer slots are already fully occupied (${MAX_CONNECTED_VIEWERS}/${MAX_CONNECTED_VIEWERS})`;
-
 type ViewerConnectionAvailability = 'available' | 'occupied';
 
 class ViewerSlots {
 	private devices = new Map<string, Readonly<Device>>();
 
 	occupy(device: Device): void {
-		if (this.devices.has(device.id)) {
-			this.devices.set(device.id, Object.freeze({ ...device }));
-			return;
-		}
-		if (this.devices.size >= MAX_CONNECTED_VIEWERS) {
-			throw new Error(SLOTS_VIOLATION_MESSAGE);
-		}
 		this.devices.set(device.id, Object.freeze({ ...device }));
 	}
 
@@ -41,7 +30,7 @@ class ViewerSlots {
 	}
 
 	isAvailable(): boolean {
-		return this.devices.size < MAX_CONNECTED_VIEWERS;
+		return true;
 	}
 
 	snapshot(): Device[] {
@@ -98,14 +87,7 @@ export class ConnectedDevicesService {
 	}
 
 	addDevice(device: Device): void {
-		try {
-			this.slots.occupy(device);
-		} catch (error) {
-			if (error instanceof Error && error.message === SLOTS_VIOLATION_MESSAGE) {
-				throw error;
-			}
-			throw error;
-		}
+		this.slots.occupy(device);
 		this.notifyAvailabilityListeners();
 	}
 

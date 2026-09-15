@@ -51,7 +51,6 @@ const ScanQRStep: React.FC = () => {
 	const [clientViewerPort, setClientViewerPort] = useState('80'); // Default port, can be changed later
 	const { classes } = useStyles();
 
-	const [isViewerSlotAvailable, setIsViewerSlotAvailable] = useState(true);
 	const [roomID, setRoomID] = useState('');
 	const [LOCAL_LAN_IP, setLocalLanIP] = useState('');
 	const [isQRCodeMagnified, setIsQRCodeMagnified] = useState(false);
@@ -69,51 +68,6 @@ const ScanQRStep: React.FC = () => {
 
 	useEffect(() => {
 		let cancelled = false;
-
-		const handleAvailabilityChange = (
-			_: unknown,
-			payload: { isAvailable: boolean },
-		): void => {
-			if (cancelled) return;
-			const isAvailable = Boolean(payload?.isAvailable);
-			setIsViewerSlotAvailable(isAvailable);
-			if (!isAvailable) {
-				setRoomID('');
-				setIsQRCodeMagnified(false);
-			}
-		};
-
-		window.electron.ipcRenderer
-			.invoke(IpcEvents.GetViewerConnectionAvailability)
-			.then((availability) => {
-				if (cancelled) return;
-				const isAvailable = Boolean(availability);
-				setIsViewerSlotAvailable(isAvailable);
-				if (!isAvailable) {
-					setRoomID('');
-					setIsQRCodeMagnified(false);
-				}
-			})
-			.catch((error) => {
-				console.error('Failed to get viewer slot availability:', error);
-			});
-
-		window.electron.ipcRenderer.on(
-			IpcEvents.ViewerConnectionAvailabilityChanged,
-			handleAvailabilityChange,
-		);
-
-		return () => {
-			cancelled = true;
-			window.electron.ipcRenderer.removeListener(
-				IpcEvents.ViewerConnectionAvailabilityChanged,
-				handleAvailabilityChange,
-			);
-		};
-	}, []);
-
-	useEffect(() => {
-		let cancelled = false;
 		const fetchRoomId = async (): Promise<void> => {
 			let roomId: unknown = '';
 			try {
@@ -124,11 +78,7 @@ const ScanQRStep: React.FC = () => {
 				console.error('Failed to get waiting session room id:', error);
 			}
 			if (cancelled) return;
-			if (
-				typeof roomId === 'string' &&
-				roomId !== '' &&
-				isViewerSlotAvailable
-			) {
+			if (typeof roomId === 'string' && roomId !== '') {
 				setRoomID(roomId);
 			} else {
 				setRoomID('');
@@ -162,7 +112,7 @@ const ScanQRStep: React.FC = () => {
 			clearInterval(roomInterval);
 			clearInterval(ipInterval);
 		};
-	}, [isViewerSlotAvailable]);
+	}, []);
 
 	const portString = useMemo(() => {
 		return `:${clientViewerPort}`;
@@ -171,30 +121,23 @@ const ScanQRStep: React.FC = () => {
 		return roomID !== '' ? `/${roomID}` : '';
 	}, [roomID]);
 	const shareUrl = useMemo(() => {
-		if (!isViewerSlotAvailable) return '';
 		if (LOCAL_LAN_IP === '') return '';
 		if (roomPath === '') return '';
 		return `http://${LOCAL_LAN_IP}${portString}${roomPath}`;
-	}, [LOCAL_LAN_IP, portString, roomPath, isViewerSlotAvailable]);
+	}, [LOCAL_LAN_IP, portString, roomPath]);
 	const isQrInteractive = shareUrl !== '';
-	const waitingHint =
-		!isViewerSlotAvailable || isQrInteractive
-			? null
-			: LOCAL_LAN_IP === ''
-				? t('qr-waiting-no-local-ip')
-				: t('qr-waiting-no-room');
-	const connectionLimitTooltip = t('connection-limit-reached-tooltip');
+	const waitingHint = isQrInteractive
+		? null
+		: LOCAL_LAN_IP === ''
+			? t('qr-waiting-no-local-ip')
+			: t('qr-waiting-no-room');
 	const waitingTooltip = t('waiting-for-connection');
 	const qrTooltipContent = isQrInteractive
 		? t('click-to-make-bigger')
-		: isViewerSlotAvailable
-			? waitingTooltip
-			: connectionLimitTooltip;
+		: waitingTooltip;
 	const copyTooltipContent = isQrInteractive
 		? t('click-to-copy')
-		: isViewerSlotAvailable
-			? waitingTooltip
-			: connectionLimitTooltip;
+		: waitingTooltip;
 
 	return (
 		<>
@@ -290,9 +233,7 @@ const ScanQRStep: React.FC = () => {
 						? t(
 								'enter-the-following-address-in-browser-address-bar-on-any-device',
 							)
-						: isViewerSlotAvailable
-							? t('waiting-for-connection')
-							: t('one-viewing-client-is-connected-already')}
+						: t('waiting-for-connection')}
 				</Text>
 			</Row>
 			{waitingHint && (
@@ -332,34 +273,11 @@ const ScanQRStep: React.FC = () => {
 								);
 							}}
 						>
-							{isQrInteractive
-								? shareUrl
-								: isViewerSlotAvailable
-									? t('waiting-for-connection')
-									: t('viewing-client-connected-label')}
+							{isQrInteractive ? shareUrl : t('waiting-for-connection')}
 						</Button>
 					</span>
 				</Tooltip>
 			</Row>
-			{!isViewerSlotAvailable && (
-				<>
-					<Row
-						style={{
-							marginTop: '12px',
-							marginBottom: '6px',
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-							justifyContent: 'center',
-							textAlign: 'center',
-						}}
-					>
-						<Text className="bp3-text-muted">
-							{t('deskreen-libre-allows-up-to-ten-clients-at-same-time')}
-						</Text>
-					</Row>
-				</>
-			)}
 
 			<Dialog
 				className={classes.bigQRCodeDialogRoot}
