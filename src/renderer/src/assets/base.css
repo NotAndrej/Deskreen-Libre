@@ -176,6 +176,32 @@ body.ui-modern:not(.bp6-dark) {
 	background-color: #eef0f7;
 }
 
+/* "Classic" UI style — the 2021 look, ported verbatim from v1.0.9's
+   app.global.css: default Blueprint blue primary, light blue-gray surfaces
+   in light mode, and the slate #293742 family in dark mode (dialogs, cards,
+   drawers and plain buttons all tinted to match the page background). */
+body.ui-classic:not(.bp6-dark) {
+	background-color: var(--light-bg-color);
+}
+
+body.ui-classic:not(.bp6-dark) .bp6-button:not([class*='bp6-intent-']) {
+	background-color: rgb(218, 238, 243);
+}
+
+body.ui-classic.bp6-dark {
+	background-color: #293742;
+}
+
+body.ui-classic.bp6-dark .bp6-button:not([class*='bp6-intent-']) {
+	background-color: #394b59;
+}
+
+body.ui-classic.bp6-dark .bp6-dialog,
+body.ui-classic.bp6-dark .bp6-drawer,
+body.ui-classic.bp6-dark .bp6-card {
+	background-color: #293742;
+}
+
 .bp6-alert-footer > button {
 	border-radius: 100px;
 }

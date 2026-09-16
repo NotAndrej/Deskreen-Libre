@@ -84,6 +84,7 @@
 	"ui-style": "UI Style",
 	"ui-style-legacy": "Legacy",
 	"ui-style-modern": "Modern",
+	"ui-style-classic": "Classic",
 	"automatic-updates": "Automatic Updates",
 	"general-settings": "General Settings",
 	"disabled": "Disabled",

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export type ThemeSource = 'system' | 'light' | 'dark';
-export type UIStyle = 'legacy' | 'modern';
+export type UIStyle = 'legacy' | 'modern' | 'classic';
 
 export interface SettingsContextInterface {
 	currentLanguage: string;

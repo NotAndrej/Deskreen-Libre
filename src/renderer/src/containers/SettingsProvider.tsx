@@ -122,6 +122,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	useEffect(() => {
 		document.body.classList.toggle('ui-modern', uiStyle === 'modern');
+		document.body.classList.toggle('ui-classic', uiStyle === 'classic');
 	}, [uiStyle]);
 
 	const value = {
