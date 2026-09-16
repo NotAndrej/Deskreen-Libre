@@ -20,11 +20,8 @@ win:
   target:
     - portable
     - msi
-  azureSignOptions:
-    publisherName: "SERVICES DE DÉVELOPPEMENT DE LOGICIELS EFFICACES"
-    endpoint: "https://eus.codesigning.azure.net/"
-    codeSigningAccountName: "deskreen-web-app"
-    certificateProfileName: "DeskreenPro"
+  # No code signing in this fork (no Azure Trusted Signing account):
+  # unsigned exe/msi, like the unsigned macOS dmg.
 nsis: null
 mac:
   artifactName: ${name}-${version}-${arch}.${ext}

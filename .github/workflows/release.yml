@@ -123,15 +123,9 @@ jobs:
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
         run: |
-          # 1. Pre-install the Azure Trusted Signing module
-          # This prevents electron-builder from running the buggy 'install' sub-routine
-          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-          Install-Module -Name TrustedSigning -AllowPrerelease -Force -Scope CurrentUser
-          
+          # No Azure Trusted Signing in this fork: unsigned exe/msi, and no
+          # TrustedSigning module install (it hangs without credentials).
           $ErrorActionPreference = 'Stop'
           $attempts = 3
           for ($i = 1; $i -le $attempts; $i++) {
