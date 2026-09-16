@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import {
 	Alignment,
 	Button,
@@ -26,6 +26,7 @@ import {
 } from '../../features/VideoAutoQualityOptimizer/VideoQualityEnum';
 import { handlePlayerToggleFullscreen } from './handlePlayerToggleFullscreen';
 import initScreenfullOnChange from './initScreenfullOnChange';
+import { AppContext } from '../../providers/AppContextProvider';
 import { ScreenSharingSource } from '../../features/PeerConnection/ScreenSharingSourceEnum';
 import './index.css';
 
@@ -54,6 +55,7 @@ interface PlayerControlPanelProps {
 
 function PlayerControlPanel(props: PlayerControlPanelProps) {
 	const { t } = useTranslation();
+	const { appBrand } = useContext(AppContext);
 	const {
 		onSwitchChangedCallback,
 		isPlaying,
@@ -143,7 +145,7 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 												}}
 											/>
 											<H3 style={{ margin: 0, fontSize: '16px' }}>
-												Deskreen Libre Viewer
+												{`${appBrand} Viewer`}
 											</H3>
 										</Row>
 									</Button>

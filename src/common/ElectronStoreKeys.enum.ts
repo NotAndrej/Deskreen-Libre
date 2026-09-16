@@ -9,4 +9,5 @@ export enum ElectronStoreKeys {
 	PreventAccidentalQuit = 'preventAccidentalQuit',
 	CustomServerPort = 'customServerPort',
 	NetworkInterfaceIP = 'networkInterfaceIP',
+	BrandName = 'brandName',
 }

@@ -125,7 +125,7 @@ export default function TopPanel({
 }: Props): React.ReactElement {
 	const { t } = useTranslation();
 	const { classes, cx } = useStyles();
-	const { uiStyle, effectiveDarkMode } = useContext(SettingsContext);
+	const { uiStyle, effectiveDarkMode, brandName } = useContext(SettingsContext);
 	const isModernLight = uiStyle === 'modern' && !effectiveDarkMode;
 
 	const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
@@ -326,7 +326,7 @@ export default function TopPanel({
 			id="logo-with-popover-visit-website"
 			className={classes.logoWithAppName}
 		>
-			<H3>Deskreen Libre</H3>
+			<H3>{brandName}</H3>
 		</div>
 	);
 
@@ -337,7 +337,7 @@ export default function TopPanel({
 				isModernLight && classes.modernHeaderRootLight,
 			)}
 		>
-			<span className={classes.modernHeaderAppName}>Deskreen Libre</span>
+			<span className={classes.modernHeaderAppName}>{brandName}</span>
 			<div className={classes.modernHeaderIconsRoot}>
 				<div style={{ position: 'relative' }}>
 					<Tooltip content={t('connected-devices')} position={Position.BOTTOM}>

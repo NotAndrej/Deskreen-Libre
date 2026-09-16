@@ -27,6 +27,7 @@ type CreatePeerConnectionUseEffectParams = {
 	setAppTheme: (_: 'dark' | 'light') => void;
 	setAppUiStyle: (_: 'legacy' | 'modern') => void;
 	setCursorPosition: (_: CursorPosition | null) => void;
+	setAppBrand: (_: string) => void;
 };
 type handleDisplayingLoadingSharingIconLoopParams = {
 	promptStep: number;

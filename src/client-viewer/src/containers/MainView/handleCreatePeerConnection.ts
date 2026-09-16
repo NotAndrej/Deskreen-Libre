@@ -20,6 +20,7 @@ export default (params: CreatePeerConnectionUseEffectParams) => {
 		setAppTheme,
 		setAppUiStyle,
 		setCursorPosition,
+		setAppBrand,
 	} = params;
 
 	// return the effect function
@@ -50,6 +51,7 @@ export default (params: CreatePeerConnectionUseEffectParams) => {
 				setAppTheme,
 				setAppUiStyle,
 				setCursorPosition,
+				setAppBrand,
 			);
 
 			const _peer = new PeerConnection(

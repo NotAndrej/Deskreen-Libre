@@ -35,6 +35,14 @@ export default async (
 		peerConnection.UIHandler.setAppUiStyleCallback(
 			message.payload.uiStyle === 'modern' ? 'modern' : 'legacy',
 		);
+		if (
+			typeof message.payload.brand === 'string' &&
+			message.payload.brand !== ''
+		) {
+			peerConnection.UIHandler.setAppBrandCallback(
+				message.payload.brand.slice(0, 64),
+			);
+		}
 	}
 	if (message.type === 'CURSOR_POSITION') {
 		const { x, y } = message.payload;

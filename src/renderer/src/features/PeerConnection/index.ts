@@ -92,12 +92,17 @@ export default class PeerConnection {
 		}, 1000);
 	}
 
-	notifyClientWithNewTheme(isDarkMode: boolean, uiStyle: string): void {
+	notifyClientWithNewTheme(
+		isDarkMode: boolean,
+		uiStyle: string,
+		brand: string,
+	): void {
 		this.sendEncryptedMessage({
 			type: 'APP_THEME',
 			payload: {
 				value: isDarkMode ? 'dark' : 'light',
 				uiStyle,
+				brand,
 			},
 		});
 	}

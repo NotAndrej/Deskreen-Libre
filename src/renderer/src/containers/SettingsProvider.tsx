@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Classes } from '@blueprintjs/core';
 import { SettingsContext } from '@renderer/contexts/SettingsContext';
 import type { ThemeSource, UIStyle } from '@renderer/contexts/SettingsContext';
+import { BRAND_DEFAULT } from '../../../common/brandNames';
 import { IpcEvents } from '../../../common/IpcEvents.enum';
 
 // TODO: move to 'constants' tsx file ?
@@ -20,6 +21,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [themeSource, setThemeSource] = useState<ThemeSource>('system');
 	const [isDarkMode, setIsDarkMode] = useState(false);
 	const [uiStyle, setUIStyle] = useState<UIStyle>('modern');
+	const [brandName, setBrandName] = useState(BRAND_DEFAULT);
 
 	const setCurrentLanguageHook = (newLang: string): void => {
 		setCurrentLanguage(newLang);
@@ -47,6 +49,17 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 			});
 	};
 
+	const setBrandNameHook = (newBrand: string): void => {
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.SetBrandName, newBrand)
+			.then((normalized: string) => {
+				setBrandName(normalized);
+			})
+			.catch((error) => {
+				console.error('Error setting brand name:', error);
+			});
+	};
+
 	useEffect(() => {
 		window.electron.ipcRenderer
 			.invoke(IpcEvents.GetThemeSource)
@@ -65,6 +78,15 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 			})
 			.catch((error) => {
 				console.error('Error getting UI style:', error);
+			});
+
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetBrandName)
+			.then((result: string) => {
+				setBrandName(result);
+			})
+			.catch((error) => {
+				console.error('Error getting brand name:', error);
 			});
 
 		const handleThemeUpdated = (
@@ -110,6 +132,8 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 		setThemeSourceHook,
 		uiStyle,
 		setUIStyleHook,
+		brandName,
+		setBrandNameHook,
 		effectiveDarkMode,
 	};
 

@@ -28,6 +28,10 @@ export function isPreventAccidentalQuitEnabled(): boolean {
 	);
 }
 
+export function getBrandName(): BrandName {
+	return normalizeBrandName(store.get(ElectronStoreKeys.BrandName));
+}
+
 // function createWindow(): void {
 //   // Create the browser window.
 //   const mainWindow = new BrowserWindow({
@@ -110,6 +114,10 @@ import getNewVersionTag from './utils/getNewVersionTag';
 import { initIpcMainHandlers } from './helpers/ipcMainHandlers';
 import { initGlobals } from './helpers/initGlobals';
 import { ElectronStoreKeys } from '../common/ElectronStoreKeys.enum';
+import {
+	normalizeBrandName,
+	type BrandName,
+} from '../common/brandNames';
 import { getDeskreenGlobal } from './helpers/getDeskreenGlobal';
 import { startLogBufferCleanup } from './utils/LoggerWithFilePrefix';
 
@@ -173,7 +181,7 @@ export default class DeskreenApp {
 					buttons: [i18n.t('cancel'), i18n.t('quit')],
 					defaultId: 0,
 					cancelId: 0,
-					title: 'Deskreen Libre',
+					title: getBrandName(),
 					message: i18n.t('quit-deskreen-libre-confirm'),
 					detail: i18n.t('quit-confirm-detail'),
 				})
@@ -258,7 +266,7 @@ export default class DeskreenApp {
 			titleBarStyle: 'hiddenInset',
 			frame: process.platform === 'darwin' ? false : true,
 			useContentSize: true,
-			title: 'Deskreen Libre',
+			title: getBrandName(),
 			// useContentSize: true,
 			autoHideMenuBar: true,
 			...(process.platform === 'linux' ? { icon } : {}),

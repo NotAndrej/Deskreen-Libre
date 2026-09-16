@@ -62,7 +62,7 @@ function ConnectionPropmpts(props: ConnectionPropmptsProps) {
 	} = props;
 
 	const { t } = useTranslation();
-	const { appTheme, appUiStyle } = useContext(AppContext);
+	const { appTheme, appUiStyle, appBrand } = useContext(AppContext);
 	const backgroundColor =
 		appUiStyle === 'modern'
 			? appTheme === 'dark'
@@ -123,7 +123,7 @@ function ConnectionPropmpts(props: ConnectionPropmptsProps) {
 								/>
 							</Row>
 							<Row center="xs">
-								<H3>Deskreen Libre Viewer</H3>
+								<H3>{`${appBrand} Viewer`}</H3>
 							</Row>
 							<Row center="xs" style={{ width: '100%', margin: '0 auto' }}>
 								<Col md={6} xl={4}>

@@ -103,11 +103,12 @@ export function handleIpcRenderer(): void {
 
 		window.electron.ipcRenderer.on(
 			'app-theme-changed',
-			(_, payload: { isDarkMode: boolean; uiStyle: string }) => {
+			(_, payload: { isDarkMode: boolean; uiStyle: string; brand: string }) => {
 				if (peerConnection) {
 					peerConnection.notifyClientWithNewTheme(
 						payload.isDarkMode,
 						payload.uiStyle,
+						payload.brand,
 					);
 				}
 			},

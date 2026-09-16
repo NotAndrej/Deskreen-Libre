@@ -17,6 +17,7 @@ import LanguageSelector from '../LanguageSelector';
 import ToggleThemeBtnGroup from '../ToggleThemeBtnGroup';
 import ToggleUIStyleBtnGroup from '../ToggleUIStyleBtnGroup';
 import { IpcEvents } from '../../../../common/IpcEvents.enum';
+import { BRAND_DEFAULT, BRAND_OPTIONS } from '../../../../common/brandNames';
 import { useTranslation } from 'react-i18next';
 
 interface SettingsOverlayProps {
@@ -73,6 +74,7 @@ export default function SettingsOverlay(
 		{ name: string; address: string }[]
 	>([]);
 	const [networkInterfaceIP, setNetworkInterfaceIP] = useState('');
+	const [brandName, setBrandName] = useState(BRAND_DEFAULT);
 
 	const { t } = useTranslation();
 
@@ -144,6 +146,10 @@ export default function SettingsOverlay(
 			.invoke(IpcEvents.GetNetworkInterfaceIP)
 			.then((ip: string) => setNetworkInterfaceIP(String(ip ?? '')))
 			.catch((error) => console.error(error));
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetBrandName)
+			.then((brand: string) => setBrandName(brand))
+			.catch((error) => console.error(error));
 	}, []);
 
 	const handleAutoStartChange = useCallback(
@@ -181,6 +187,17 @@ export default function SettingsOverlay(
 			setNetworkInterfaceIP(ip);
 			window.electron.ipcRenderer
 				.invoke(IpcEvents.SetNetworkInterfaceIP, ip)
+				.catch((error) => console.error(error));
+		},
+		[],
+	);
+
+	const handleBrandChange = useCallback(
+		(event: React.ChangeEvent<HTMLSelectElement>) => {
+			const brand = event.currentTarget.value;
+			window.electron.ipcRenderer
+				.invoke(IpcEvents.SetBrandName, brand)
+				.then((normalized: string) => setBrandName(normalized))
 				.catch((error) => console.error(error));
 		},
 		[],
@@ -310,6 +327,21 @@ export default function SettingsOverlay(
 							<Text className="bp3-text-muted">
 								{t('restart-required-for-port')}
 							</Text>
+						</div>
+						<div style={{ marginTop: '24px' }}>
+							<SettingRowLabelAndInput
+								icon="tag"
+								label={t('brand-name')}
+								input={
+									<HTMLSelect value={brandName} onChange={handleBrandChange}>
+										{BRAND_OPTIONS.map((option) => (
+											<option key={option} value={option}>
+												{option}
+											</option>
+										))}
+									</HTMLSelect>
+								}
+							/>
 						</div>
 						<div style={{ marginTop: '24px' }}>
 							<SettingRowLabelAndInput

@@ -57,4 +57,6 @@ export enum IpcEvents {
 	GetDeviceMacByIp = 'get-device-mac-by-ip',
 	GetCursorScreenPoint = 'get-cursor-screen-point',
 	SetDesktopCapturerSourceIdBySharingSessionId = 'set-desktop-capturer-source-id-by-sharing-session-id',
+	GetBrandName = 'get-brand-name',
+	SetBrandName = 'set-brand-name',
 }

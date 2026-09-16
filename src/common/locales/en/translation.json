@@ -104,6 +104,7 @@
 	"device-mac-address": "MAC address",
 	"device-alias": "Alias",
 	"switch-source": "Switch source",
+	"brand-name": "App name",
 	"on": "On",
 	"off": "Off",
 	"edit": "Edit",

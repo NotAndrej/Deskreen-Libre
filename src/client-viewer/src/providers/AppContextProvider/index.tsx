@@ -11,6 +11,8 @@ interface AppContextInterface {
 	setAppThemeHook: (val: ViewerAppTheme) => void;
 	appUiStyle: ViewerAppUiStyle;
 	setAppUiStyleHook: (val: ViewerAppUiStyle) => void;
+	appBrand: string;
+	setAppBrandHook: (val: string) => void;
 }
 
 const defaultAppContextValue = {
@@ -26,6 +28,10 @@ const defaultAppContextValue = {
 	setAppUiStyleHook: () => {
 		// noop default
 	},
+	appBrand: 'Deskreen Libre',
+	setAppBrandHook: () => {
+		// noop default
+	},
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -39,6 +45,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [appLanguage, setAppLanguage] = useState('en');
 	const [appTheme, setAppTheme] = useState<ViewerAppTheme>('light');
 	const [appUiStyle, setAppUiStyle] = useState<ViewerAppUiStyle>('legacy');
+	const [appBrand, setAppBrand] = useState('Deskreen Libre');
 
 	const setAppLanguageHook = (newLang: string) => {
 		setAppLanguage(newLang);
@@ -50,6 +57,10 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const setAppUiStyleHook = (newUiStyle: ViewerAppUiStyle) => {
 		setAppUiStyle(newUiStyle);
+	};
+
+	const setAppBrandHook = (newBrand: string) => {
+		setAppBrand(newBrand);
 	};
 
 	useEffect(() => {
@@ -67,6 +78,8 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
 		setAppThemeHook,
 		appUiStyle,
 		setAppUiStyleHook,
+		appBrand,
+		setAppBrandHook,
 	};
 
 	return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

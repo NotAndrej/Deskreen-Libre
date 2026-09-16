@@ -11,6 +11,8 @@ export interface SettingsContextInterface {
 	setThemeSourceHook: (newTheme: ThemeSource) => void;
 	uiStyle: UIStyle;
 	setUIStyleHook: (newStyle: UIStyle) => void;
+	brandName: string;
+	setBrandNameHook: (newBrand: string) => void;
 	/** Resolved dark mode from the Color Theme setting (Light / Dark / OS
 	 * Auto). Both Legacy and Modern have full light and dark variants.
 	 * Use this (not isDarkMode) for anything that needs to match what's
@@ -30,6 +32,10 @@ export const defaultSettingsContextValue: SettingsContextInterface = {
 	},
 	uiStyle: 'modern',
 	setUIStyleHook: () => {
+		// noop default
+	},
+	brandName: 'Deskreen Libre',
+	setBrandNameHook: () => {
 		// noop default
 	},
 	effectiveDarkMode: false,

@@ -50,6 +50,7 @@ export type AppThemeMessageWithPayload = {
 	payload: {
 		value: string;
 		uiStyle?: string;
+		brand?: string;
 	};
 };
 
@@ -163,6 +164,7 @@ export const handleRecieveEncryptedMessage = async (
 			payload: {
 				value: appTheme.isDarkMode ? 'dark' : 'light',
 				uiStyle: appTheme.uiStyle,
+				brand: appTheme.brand,
 			},
 		});
 	}

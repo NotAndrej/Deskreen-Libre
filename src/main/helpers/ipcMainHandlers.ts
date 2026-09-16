@@ -36,6 +36,8 @@ import {
 	getDeviceAliasOverrides,
 	setDeviceAliasOverride,
 } from './deviceAliases';
+import { normalizeBrandName } from '../../common/brandNames';
+import { getBrandName } from '../index';
 
 export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 	const persistedTheme = store.has(ElectronStoreKeys.Theme)
@@ -58,9 +60,10 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 	const notifySharingSessionsOfAppTheme = (): void => {
 		const isDarkMode = getEffectiveDarkMode();
 		const uiStyle = getUiStyle();
+		const brand = getBrandName();
 		getDeskreenGlobal().sharingSessionService.sharingSessions.forEach(
 			(sharingSession) => {
-				sharingSession?.appThemeChanged(isDarkMode, uiStyle);
+				sharingSession?.appThemeChanged(isDarkMode, uiStyle, brand);
 			},
 		);
 	};
@@ -649,7 +652,22 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		return {
 			isDarkMode: getEffectiveDarkMode(),
 			uiStyle: getUiStyle(),
+			brand: getBrandName(),
 		};
+	});
+
+	ipcMain.handle(IpcEvents.GetBrandName, () => {
+		return getBrandName();
+	});
+
+	ipcMain.handle(IpcEvents.SetBrandName, (_, brand: string) => {
+		const normalized = normalizeBrandName(brand);
+		store.set(ElectronStoreKeys.BrandName, normalized);
+		if (mainWindow && !mainWindow.isDestroyed()) {
+			mainWindow.setTitle(normalized);
+		}
+		notifySharingSessionsOfAppTheme();
+		return normalized;
 	});
 
 	ipcMain.handle(IpcEvents.DestroySharingSessionById, (_, id) => {
