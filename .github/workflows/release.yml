@@ -43,42 +43,42 @@ jobs:
             platform: linux
             build_name: linux-x64
             build_command: build:linux
-            artifact_name: 'dist/{*.AppImage,*.rpm,*.deb,*.yml}'
+            artifact_name: 'dist/{*.AppImage,*.rpm,*.deb,latest*.yml}'
           - os: ubuntu-latest
             platform: linux
             build_name: linux-arm64
             build_command: build:linux:arm64
-            artifact_name: 'dist/{*.AppImage,*.rpm,*.deb,*.yml}'
+            artifact_name: 'dist/{*.AppImage,*.rpm,*.deb,latest*.yml}'
           - os: ubuntu-latest
             platform: linux
             build_name: linux-arm32
             build_command: build:linux:armv7l
-            artifact_name: 'dist/{*.AppImage,*.rpm,*.deb,*.yml}'
+            artifact_name: 'dist/{*.AppImage,*.rpm,*.deb,latest*.yml}'
           - os: windows-latest
             platform: windows
             build_name: windows-amd64
             build_command: build:win
-            artifact_name: 'dist/{*.msi,*.exe,*.blockmap,*.yml}'
+            artifact_name: 'dist/{*.msi,*.exe,*.blockmap,latest*.yml}'
           - os: windows-latest
             platform: windows
             build_name: windows-amd32
             build_command: build:win:ia32
-            artifact_name: 'dist/{*.msi,*.exe,*.blockmap,*.yml}'
+            artifact_name: 'dist/{*.msi,*.exe,*.blockmap,latest*.yml}'
           - os: windows-latest
             platform: windows
             build_name: windows-arm64
             build_command: build:win:arm64
-            artifact_name: 'dist/{*.msi,*.exe,*.blockmap,*.yml}'
+            artifact_name: 'dist/{*.msi,*.exe,*.blockmap,latest*.yml}'
           - os: macos-latest
             platform: macos
             build_name: macos-arm64
             build_command: build:mac:arm64
-            artifact_name: 'dist/{*.dmg,*.blockmap,*.yml}'
+            artifact_name: 'dist/{*.dmg,*.blockmap,latest*.yml}'
           - os: macos-15-intel
             platform: macos
             build_name: macos-intel
             build_command: build:mac:x64
-            artifact_name: 'dist/{*.dmg,*.blockmap,*.yml}'
+            artifact_name: 'dist/{*.dmg,*.blockmap,latest*.yml}'
 
     steps:
       - name: Checkout code
