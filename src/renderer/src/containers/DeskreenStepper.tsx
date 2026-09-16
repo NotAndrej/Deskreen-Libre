@@ -32,6 +32,7 @@ import ColorlibStepIcon, {
 	StepIconPropsDeskreen,
 } from '@renderer/components/StepperPanel/ColorlibStepIcon';
 import LanguageSelector from '@renderer/components/LanguageSelector';
+import ToggleThemeBtnGroup from '@renderer/components/ToggleThemeBtnGroup';
 import { getShuffledArrayOfHello } from '@renderer/configs/i18next.config.client';
 import { IpcEvents } from '../../../common/IpcEvents.enum';
 import DeviceConnectedInfoButton from '@renderer/components/StepperPanel/DeviceConnectedInfoButton';
@@ -387,17 +388,17 @@ const DeskreenStepper = ({
 									<LanguageSelector />
 								</Row>
 							</Col>
-							{/*<Col xs>*/}
-							{/*  <Row center="xs" style={{ marginTop: '20px' }}>*/}
-							{/*    <Icon icon="style" size={50} color="#8A9BA8" />*/}
-							{/*  </Row>*/}
-							{/*  <Row center="xs" style={{ marginTop: '20px' }}>*/}
-							{/*    <H5>{t('color-theme')}</H5>*/}
-							{/*  </Row>*/}
-							{/*  <Row center="xs" style={{ marginTop: '10px' }}>*/}
-							{/*    <ToggleThemeBtnGroup />*/}
-							{/*  </Row>*/}
-							{/*</Col>*/}
+							<Col xs>
+								<Row center="xs" style={{ marginTop: '20px' }}>
+									<Icon icon="contrast" size={50} color="#8A9BA8" />
+								</Row>
+								<Row center="xs" style={{ marginTop: '20px' }}>
+									<H5>{t('color-theme')}</H5>
+								</Row>
+								<Row center="xs" style={{ marginTop: '10px' }}>
+									<ToggleThemeBtnGroup />
+								</Row>
+							</Col>
 						</Row>
 						<Row center="xs" style={{ marginTop: '20px' }}>
 							<Button

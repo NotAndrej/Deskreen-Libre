@@ -3,11 +3,14 @@ import {
 	Overlay2,
 	Classes,
 	H3,
+	H4,
 	Text,
 	Callout,
 	Switch,
 	NumericInput,
 	HTMLSelect,
+	Alert,
+	Button,
 } from '@blueprintjs/core';
 import { Row } from 'react-flexbox-grid';
 import { makeStyles } from 'tss-react/mui';
@@ -76,6 +79,8 @@ export default function SettingsOverlay(
 	>([]);
 	const [networkInterfaceIP, setNetworkInterfaceIP] = useState('');
 	const { brandName, setBrandNameHook } = useContext(SettingsContext);
+	const [isFactoryResetAlertOpen, setIsFactoryResetAlertOpen] =
+		useState(false);
 
 	const { t } = useTranslation();
 
@@ -336,6 +341,22 @@ export default function SettingsOverlay(
 								}
 							/>
 						</div>
+						<div style={{ marginTop: '32px' }}>
+							<SettingRowLabelAndInput
+								icon="reset"
+								label={t('factory-reset')}
+								input={
+									<Button
+										intent="danger"
+										icon="reset"
+										style={{ borderRadius: '100px' }}
+										onClick={() => setIsFactoryResetAlertOpen(true)}
+									>
+										{t('factory-reset')}
+									</Button>
+								}
+							/>
+						</div>
 						<div style={{ marginTop: '24px' }}>
 							<SettingRowLabelAndInput
 								icon="globe"
@@ -363,6 +384,27 @@ export default function SettingsOverlay(
 					</div>
 				</div>
 			</div>
+			<Alert
+				isOpen={isFactoryResetAlertOpen}
+				onClose={() => setIsFactoryResetAlertOpen(false)}
+				icon="warning-sign"
+				cancelButtonText={t('cancel')}
+				confirmButtonText={t('confirm-button-text')}
+				intent="danger"
+				canEscapeKeyCancel
+				canOutsideClickCancel
+				onCancel={() => setIsFactoryResetAlertOpen(false)}
+				onConfirm={() => {
+					setIsFactoryResetAlertOpen(false);
+					void window.electron.ipcRenderer.invoke(
+						IpcEvents.FactoryResetApp,
+					);
+				}}
+				transitionDuration={0}
+			>
+				<H4>{t('factory-reset-confirm')}</H4>
+				<Text>{t('this-step-can-not-be-undone')}</Text>
+			</Alert>
 		</Overlay2>
 	);
 }

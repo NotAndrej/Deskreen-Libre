@@ -110,6 +110,8 @@
 	"device-alias": "Alias",
 	"switch-source": "Switch source",
 	"brand-name": "App name",
+	"factory-reset": "Factory reset",
+	"factory-reset-confirm": "Reset all settings, trusted devices, and aliases?",
 	"on": "On",
 	"off": "Off",
 	"edit": "Edit",

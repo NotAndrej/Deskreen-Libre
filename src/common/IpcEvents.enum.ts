@@ -59,4 +59,5 @@ export enum IpcEvents {
 	SetDesktopCapturerSourceIdBySharingSessionId = 'set-desktop-capturer-source-id-by-sharing-session-id',
 	GetBrandName = 'get-brand-name',
 	SetBrandName = 'set-brand-name',
+	FactoryResetApp = 'factory-reset-app',
 }

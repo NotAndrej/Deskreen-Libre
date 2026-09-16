@@ -705,5 +705,13 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		app.exit(0);
 	});
 
+	ipcMain.handle(IpcEvents.FactoryResetApp, () => {
+		store.clear();
+		nativeTheme.themeSource = 'system';
+		app.setLoginItemSettings({ openAtLogin: false });
+		app.relaunch();
+		app.exit(0);
+	});
+
 	void createWaitingForConnectionSharingSession();
 };
