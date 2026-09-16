@@ -34,9 +34,12 @@ type SettingsOverlayClassKey =
 type SettingsOverlayClassMap = Record<SettingsOverlayClassKey, string>;
 
 const useStyles = makeStyles()(() => ({
-	overlayInnerRoot: { width: '90%' },
+	overlayInnerRoot: { width: '100%', height: '100%' },
 	overlayInsideFade: {
 		padding: '20px',
+		height: '100%',
+		boxSizing: 'border-box',
+		overflowY: 'auto',
 	},
 	absoluteCloseButton: { position: 'absolute', left: 'calc(100% - 65px)' },
 	updateCalloutWrapper: {
@@ -206,7 +209,8 @@ export default function SettingsOverlay(
 					id="settings-overlay-inner"
 					className={`${classes.overlayInsideFade} ${Classes.CARD}`}
 					style={{
-						borderRadius: '8px',
+						borderRadius: '0',
+						height: '100%',
 					}}
 				>
 					<CloseOverlayButton
