@@ -52,7 +52,7 @@ You will need to have `node>=v23` `npm>=10` installed.
 
 1. git clone this repo
 2. `npm i`
-3. `cd ./src/client-viewer && npm i && cd ../..` (the web viewer is a separate package — don't skip this)
+3. `cd ./src/client-viewer && npm i && cd ../..` (the web viewer is a separate package, don't skip this)
 4. `npm run clean && npm run build && npm run start` -- run in prod like mode
 
 Commit before testing: files that have never been committed are invisible to git's safety net.
