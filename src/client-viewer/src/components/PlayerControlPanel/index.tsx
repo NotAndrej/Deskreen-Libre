@@ -48,6 +48,8 @@ interface PlayerControlPanelProps {
 	screenSharingSourceType: ScreenSharingSourceType;
 	isFlipped: boolean;
 	onToggleFlip: () => void;
+	rotationDegrees: number;
+	onRotateClockwise: () => void;
 }
 
 function PlayerControlPanel(props: PlayerControlPanelProps) {
@@ -63,6 +65,8 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 		screenSharingSourceType,
 		isFlipped,
 		onToggleFlip,
+		rotationDegrees,
+		onRotateClockwise,
 	} = props;
 
 	const isFullScreenAPIAvailable = screenfull.isEnabled;
@@ -214,6 +218,28 @@ function PlayerControlPanel(props: PlayerControlPanelProps) {
 															onClick={onToggleFlip}
 														>
 															{t('Flip')}
+														</Button>
+													</span>
+												</Tooltip>
+												<Tooltip
+													content={t('Rotate')}
+													position={Position.TOP}
+												>
+													<span
+														style={{
+															display: 'block',
+															width: '100%',
+															textAlign: 'center',
+														}}
+													>
+														<Button
+															icon="refresh"
+															minimal
+															active={rotationDegrees !== 0}
+															style={videoQualityButtonStyle}
+															onClick={onRotateClockwise}
+														>
+															{t('Rotate')}
 														</Button>
 													</span>
 												</Tooltip>

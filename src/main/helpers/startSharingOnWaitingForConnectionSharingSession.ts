@@ -1,5 +1,6 @@
 import SharingSessionStatusEnum from '../../features/SharingSessionService/SharingSessionStatusEnum';
 import { getDeskreenGlobal } from './getDeskreenGlobal';
+import { refreshDisplaySleepBlocker } from './displaySleepBlocker';
 
 /**
  * Runs the allow-chain for the pending device: occupies a viewer slot with
@@ -54,4 +55,5 @@ export default function startSharingOnWaitingForConnectionSharingSession(): void
 	}
 
 	connectedDevicesService.resetPendingConnectionDevice();
+	refreshDisplaySleepBlocker();
 }

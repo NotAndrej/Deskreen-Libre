@@ -23,6 +23,8 @@ import getStore from './store';
 import { getDeskreenGlobal } from '../main/helpers/getDeskreenGlobal';
 import getMyLocalIpV4 from '../main/helpers/getMyLocalIpV4';
 import { getClientViewerDistPath } from './getClientViewerDistPath';
+import { store } from '../common/deskreen-electron-store';
+import { ElectronStoreKeys } from '../common/ElectronStoreKeys.enum';
 
 const { hostname, primaryPort, backupPort } = config;
 
@@ -96,7 +98,15 @@ class DeskreenSignalingServer {
 		this.primaryPort = parseInt(primaryPort as unknown as string, 10);
 		this.backupPort = parseInt(backupPort as unknown as string, 10);
 
-		this.port = this.primaryPort;
+		// User-configured port (Settings) wins over the default primary port.
+		const customPort = Number.parseInt(
+			store.get(ElectronStoreKeys.CustomServerPort) ?? '',
+			10,
+		);
+		this.port =
+			Number.isInteger(customPort) && customPort >= 1 && customPort <= 65535
+				? customPort
+				: this.primaryPort;
 		this.clientDistDirectory = getClientViewerDistPath();
 
 		if (!this.clientDistDirectory) {

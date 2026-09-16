@@ -30,6 +30,8 @@ import {
 	trustDeviceId,
 	untrustDeviceId,
 } from './trustedDevices';
+import { refreshDisplaySleepBlocker } from './displaySleepBlocker';
+import { getMacForIp, listLanInterfaces } from './networkDevices';
 
 export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 	const persistedTheme = store.has(ElectronStoreKeys.Theme)
@@ -164,6 +166,10 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 
 	ipcMain.handle('get-local-lan-ip', async () => {
 		const deskreenGlobal = getDeskreenGlobal();
+		const storedInterfaceIP = store.get(ElectronStoreKeys.NetworkInterfaceIP);
+		if (storedInterfaceIP) {
+			return storedInterfaceIP;
+		}
 		if (deskreenGlobal.cliLocalIp) {
 			return deskreenGlobal.cliLocalIp;
 		}
@@ -311,6 +317,7 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 			getDeskreenGlobal().sharingSessionService.sharingSessions.delete(
 				sessionId,
 			);
+			refreshDisplaySleepBlocker();
 		},
 	);
 
@@ -333,10 +340,12 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 
 	ipcMain.handle(IpcEvents.DisconnectDeviceById, (_, id) => {
 		getDeskreenGlobal().connectedDevicesService.disconnectDeviceByID(id);
+		refreshDisplaySleepBlocker();
 	});
 
 	ipcMain.handle(IpcEvents.DisconnectAllDevices, () => {
 		getDeskreenGlobal().connectedDevicesService.disconnectAllDevices();
+		refreshDisplaySleepBlocker();
 	});
 
 	ipcMain.handle(IpcEvents.AppLanguageChanged, (_, newLang) => {
@@ -429,6 +438,73 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 			untrustDeviceId(trustedDeviceId);
 		},
 	);
+
+	ipcMain.handle(IpcEvents.GetAutoStartOnLogin, () => {
+		return store.get(ElectronStoreKeys.AutoStartOnLogin) === 'true';
+	});
+
+	ipcMain.handle(IpcEvents.SetAutoStartOnLogin, (_, enabled: boolean) => {
+		store.set(ElectronStoreKeys.AutoStartOnLogin, enabled ? 'true' : 'false');
+		app.setLoginItemSettings({ openAtLogin: enabled });
+		return enabled;
+	});
+
+	ipcMain.handle(IpcEvents.GetPreventAccidentalQuit, () => {
+		return (
+			store.get(ElectronStoreKeys.PreventAccidentalQuit) !== 'false'
+		);
+	});
+
+	ipcMain.handle(
+		IpcEvents.SetPreventAccidentalQuit,
+		(_, enabled: boolean) => {
+			store.set(
+				ElectronStoreKeys.PreventAccidentalQuit,
+				enabled ? 'true' : 'false',
+			);
+			return enabled;
+		},
+	);
+
+	ipcMain.handle(IpcEvents.GetCustomServerPort, () => {
+		return store.get(ElectronStoreKeys.CustomServerPort) ?? '';
+	});
+
+	ipcMain.handle(IpcEvents.SetCustomServerPort, (_, port: string) => {
+		const trimmed = String(port ?? '').trim();
+		if (trimmed === '') {
+			store.delete(ElectronStoreKeys.CustomServerPort);
+			return '';
+		}
+		const parsed = Number.parseInt(trimmed, 10);
+		if (!Number.isInteger(parsed) || parsed < 1 || parsed > 65535) {
+			throw new Error('Port must be an integer between 1 and 65535');
+		}
+		store.set(ElectronStoreKeys.CustomServerPort, String(parsed));
+		return String(parsed);
+	});
+
+	ipcMain.handle(IpcEvents.GetNetworkInterfaces, () => {
+		return listLanInterfaces();
+	});
+
+	ipcMain.handle(IpcEvents.GetNetworkInterfaceIP, () => {
+		return store.get(ElectronStoreKeys.NetworkInterfaceIP) ?? '';
+	});
+
+	ipcMain.handle(IpcEvents.SetNetworkInterfaceIP, (_, ip: string) => {
+		const value = String(ip ?? '');
+		if (value === '') {
+			store.delete(ElectronStoreKeys.NetworkInterfaceIP);
+		} else {
+			store.set(ElectronStoreKeys.NetworkInterfaceIP, value);
+		}
+		return value;
+	});
+
+	ipcMain.handle(IpcEvents.GetDeviceMacByIp, async (_, ip: string) => {
+		return getMacForIp(String(ip ?? ''));
+	});
 
 	ipcMain.handle(IpcEvents.GetWaitingForConnectionSharingSessionRoomId, () => {
 		if (

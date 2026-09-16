@@ -1,5 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Overlay2, Classes, H3, Text, Callout } from '@blueprintjs/core';
+import {
+	Overlay2,
+	Classes,
+	H3,
+	Text,
+	Callout,
+	Switch,
+	NumericInput,
+	HTMLSelect,
+} from '@blueprintjs/core';
 import { Row } from 'react-flexbox-grid';
 import { makeStyles } from 'tss-react/mui';
 import CloseOverlayButton from '../CloseOverlayButton';
@@ -54,6 +63,13 @@ export default function SettingsOverlay(
 	const { handleClose, isSettingsOpen } = props;
 	const [latestVersion, setLatestVersion] = useState('');
 	const [currentVersion, setCurrentVersion] = useState('');
+	const [autoStartOnLogin, setAutoStartOnLogin] = useState(false);
+	const [preventAccidentalQuit, setPreventAccidentalQuit] = useState(true);
+	const [customServerPort, setCustomServerPort] = useState('');
+	const [networkInterfaces, setNetworkInterfaces] = useState<
+		{ name: string; address: string }[]
+	>([]);
+	const [networkInterfaceIP, setNetworkInterfaceIP] = useState('');
 
 	const { t } = useTranslation();
 
@@ -103,7 +119,69 @@ export default function SettingsOverlay(
 			}
 		};
 		getCurrentVersion();
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetAutoStartOnLogin)
+			.then((enabled: boolean) => setAutoStartOnLogin(Boolean(enabled)))
+			.catch((error) => console.error(error));
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetPreventAccidentalQuit)
+			.then((enabled: boolean) => setPreventAccidentalQuit(Boolean(enabled)))
+			.catch((error) => console.error(error));
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetCustomServerPort)
+			.then((port: string) => setCustomServerPort(String(port ?? '')))
+			.catch((error) => console.error(error));
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetNetworkInterfaces)
+			.then((interfaces: { name: string; address: string }[]) =>
+				setNetworkInterfaces(interfaces ?? []),
+			)
+			.catch((error) => console.error(error));
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetNetworkInterfaceIP)
+			.then((ip: string) => setNetworkInterfaceIP(String(ip ?? '')))
+			.catch((error) => console.error(error));
 	}, []);
+
+	const handleAutoStartChange = useCallback(
+		(event: React.FormEvent<HTMLInputElement>) => {
+			const enabled = event.currentTarget.checked;
+			setAutoStartOnLogin(enabled);
+			window.electron.ipcRenderer
+				.invoke(IpcEvents.SetAutoStartOnLogin, enabled)
+				.catch((error) => console.error(error));
+		},
+		[],
+	);
+
+	const handlePreventQuitChange = useCallback(
+		(event: React.FormEvent<HTMLInputElement>) => {
+			const enabled = event.currentTarget.checked;
+			setPreventAccidentalQuit(enabled);
+			window.electron.ipcRenderer
+				.invoke(IpcEvents.SetPreventAccidentalQuit, enabled)
+				.catch((error) => console.error(error));
+		},
+		[],
+	);
+
+	const handlePortBlur = useCallback(() => {
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.SetCustomServerPort, customServerPort.trim())
+			.then((saved: string) => setCustomServerPort(String(saved ?? '')))
+			.catch((error) => console.error(error));
+	}, [customServerPort]);
+
+	const handleInterfaceChange = useCallback(
+		(event: React.ChangeEvent<HTMLSelectElement>) => {
+			const ip = event.currentTarget.value;
+			setNetworkInterfaceIP(ip);
+			window.electron.ipcRenderer
+				.invoke(IpcEvents.SetNetworkInterfaceIP, ip)
+				.catch((error) => console.error(error));
+		},
+		[],
+	);
 
 	const hasUpdate =
 		latestVersion !== '' &&
@@ -178,6 +256,79 @@ export default function SettingsOverlay(
 								icon="layout-grid"
 								label={t('ui-style')}
 								input={<ToggleUIStyleBtnGroup />}
+							/>
+						</div>
+						<div style={{ marginTop: '24px' }}>
+							<SettingRowLabelAndInput
+								icon="power"
+								label={t('auto-start-on-login')}
+								input={
+									<Switch
+										checked={autoStartOnLogin}
+										onChange={handleAutoStartChange}
+										innerLabel={autoStartOnLogin ? t('on') : t('off')}
+									/>
+								}
+							/>
+						</div>
+						<div style={{ marginTop: '24px' }}>
+							<SettingRowLabelAndInput
+								icon="warning-sign"
+								label={t('prevent-accidental-quit')}
+								input={
+									<Switch
+										checked={preventAccidentalQuit}
+										onChange={handlePreventQuitChange}
+										innerLabel={preventAccidentalQuit ? t('on') : t('off')}
+									/>
+								}
+							/>
+						</div>
+						<div style={{ marginTop: '24px' }}>
+							<SettingRowLabelAndInput
+								icon="link"
+								label={t('custom-server-port')}
+								input={
+									<NumericInput
+										placeholder="3131"
+										min={1}
+										max={65535}
+										buttonPosition="none"
+										value={customServerPort}
+										onValueChange={(_value, valueString) =>
+											setCustomServerPort(valueString)
+										}
+										onBlur={handlePortBlur}
+										style={{ width: '120px' }}
+									/>
+								}
+							/>
+							<Text className="bp3-text-muted">
+								{t('restart-required-for-port')}
+							</Text>
+						</div>
+						<div style={{ marginTop: '24px' }}>
+							<SettingRowLabelAndInput
+								icon="globe"
+								label={t('network-interface')}
+								input={
+									<HTMLSelect
+										value={networkInterfaceIP}
+										onChange={handleInterfaceChange}
+									>
+										<option value="">
+											{t('network-interface-auto')}
+										</option>
+										{networkInterfaces.map((iface) => (
+											<option
+												key={`${iface.name}-${iface.address}`}
+												value={iface.address}
+											>
+												{`${iface.name} (${iface.address})`}
+											</option>
+										))}
+									</HTMLSelect>
+								}
 							/>
 						</div>
 					</div>

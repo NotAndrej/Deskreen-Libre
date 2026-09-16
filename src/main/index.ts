@@ -6,11 +6,29 @@ import {
 overrideGlobalConsole();
 startConsoleRateLimiting();
 
-import { app, shell, BrowserWindow, Notification } from 'electron';
+import { app, shell, BrowserWindow, Notification, dialog } from 'electron';
 import { join } from 'path';
 import { is, optimizer } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 import { existsSync } from 'node:fs';
+import { store } from '../common/deskreen-electron-store';
+import { ElectronStoreKeys } from '../common/ElectronStoreKeys.enum';
+
+export function isAutoStartOnLoginEnabled(): boolean {
+	return store.get(ElectronStoreKeys.AutoStartOnLogin) === 'true';
+}
+
+export function applyAutoStartOnLoginSetting(): void {
+	app.setLoginItemSettings({
+		openAtLogin: isAutoStartOnLoginEnabled(),
+	});
+}
+
+export function isPreventAccidentalQuitEnabled(): boolean {
+	return (
+		store.get(ElectronStoreKeys.PreventAccidentalQuit) !== 'false'
+	);
+}
 
 // function createWindow(): void {
 //   // Create the browser window.
@@ -136,12 +154,37 @@ export default class DeskreenApp {
 				app.setActivationPolicy('regular');
 			}
 
+			applyAutoStartOnLoginSetting();
+
 			// start log buffer cleanup to prevent memory bloat
 			startLogBufferCleanup();
 
 			await this.createWindow();
 
 			void this.checkForLatestVersionAndNotify();
+		});
+
+		let isQuitConfirmed = false;
+		app.on('before-quit', (event) => {
+			if (isQuitConfirmed) return;
+			if (!isPreventAccidentalQuitEnabled()) return;
+			event.preventDefault();
+			void dialog
+				.showMessageBox({
+					type: 'question',
+					buttons: [i18n.t('cancel'), i18n.t('quit')],
+					defaultId: 0,
+					cancelId: 0,
+					title: 'Deskreen Libre',
+					message: i18n.t('quit-deskreen-libre-confirm'),
+					detail: i18n.t('quit-confirm-detail'),
+				})
+				.then(({ response }) => {
+					if (response === 1) {
+						isQuitConfirmed = true;
+						app.quit();
+					}
+				});
 		});
 
 		app.on('browser-window-created', (_, window) => {

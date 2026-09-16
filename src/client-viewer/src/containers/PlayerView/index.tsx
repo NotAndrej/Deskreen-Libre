@@ -50,11 +50,12 @@ function PlayerView(props: PlayerViewProps) {
 	// no external player ref needed for video.js variant
 
 	const [isFlipped, setIsFlipped] = useState(false);
+	const [rotationDegrees, setRotationDegrees] = useState(0);
 
-	// Mirror the live video element horizontally when flipped. Covers both
-	// the native <video> and the one video.js creates imperatively.
+	// Mirror/rotate the live video element(s). Covers both the native
+	// <video> and the one video.js creates imperatively.
 	useEffect(() => {
-		const transform = isFlipped ? 'scaleX(-1)' : '';
+		const transform = `rotate(${rotationDegrees}deg)${isFlipped ? ' scaleX(-1)' : ''}`;
 		if (videoRef.current) {
 			videoRef.current.style.transform = transform;
 		}
@@ -62,10 +63,14 @@ function PlayerView(props: PlayerViewProps) {
 		container?.querySelectorAll('video').forEach((video) => {
 			video.style.transform = transform;
 		});
-	}, [isFlipped, streamUrl, isWithControls]);
+	}, [isFlipped, rotationDegrees, streamUrl, isWithControls]);
 
 	const handleToggleFlip = useCallback(() => {
 		setIsFlipped((prev) => !prev);
+	}, []);
+
+	const handleRotateClockwise = useCallback(() => {
+		setRotationDegrees((prev) => (prev + 90) % 360);
 	}, []);
 
 	useEffect(() => {
@@ -244,6 +249,8 @@ function PlayerView(props: PlayerViewProps) {
 				screenSharingSourceType={screenSharingSourceType}
 				isFlipped={isFlipped}
 				onToggleFlip={handleToggleFlip}
+				rotationDegrees={rotationDegrees}
+				onRotateClockwise={handleRotateClockwise}
 			/>
 			<div
 				id="video-container"
