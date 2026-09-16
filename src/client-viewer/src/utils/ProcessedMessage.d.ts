@@ -16,11 +16,17 @@ type DeviceDetailsMessageWithPayload = {
 		deviceScreenHeight: number;
 		deviceId?: string;
 		alias?: string;
+		password?: string;
 	};
 };
 
 type DenyToConnectMessageWithPayload = {
 	type: 'DENY_TO_CONNECT';
+	payload: {};
+};
+
+type DenyWrongPasswordMessageWithPayload = {
+	type: 'DENY_WRONG_PASSWORD';
 	payload: {};
 };
 
@@ -62,6 +68,7 @@ type ProcessedMessage =
 	| CallUserMessageWithPayload
 	| DeviceDetailsMessageWithPayload
 	| DenyToConnectMessageWithPayload
+	| DenyWrongPasswordMessageWithPayload
 	| DisconnectByHostMachineUserMessageWithPayload
 	| AllowedToConnectMessageWithPayload
 	| AppLanguageMessageWithPayload

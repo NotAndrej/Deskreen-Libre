@@ -36,6 +36,12 @@ import {
 	getDeviceAliasOverrides,
 	setDeviceAliasOverride,
 } from './deviceAliases';
+import { deskreenApp, isUseSystemTrayEnabled } from '../index';
+import { getBannedIPs, banIp, unbanIp } from './ipBans';
+import {
+	getConnectionPassword,
+	setConnectionPassword,
+} from './connectionPassword';
 import { normalizeBrandName } from '../../common/brandNames';
 import { getBrandName } from '../index';
 
@@ -202,10 +208,11 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		deskreenGlobal.roomIDService.unmarkRoomIDAsTaken(roomID);
 	});
 
-	// Last screen source the host user picked. Every freshly minted waiting
-	// session inherits it, so viewers 2..10 share the same source without
-	// the host having to re-pick it for each of them.
-	let lastChosenDesktopCapturerSourceID = '';
+	// Last screen source the host user picked. Persisted so restarts keep
+	// auto-sharing it, and every freshly minted waiting session inherits it,
+	// so viewers 2..N share the same source without re-picking.
+	let lastChosenDesktopCapturerSourceID =
+		store.get(ElectronStoreKeys.LastDesktopCapturerSourceID) ?? '';
 
 	async function createWaitingForConnectionSharingSession(
 		roomID?: string,
@@ -580,6 +587,7 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 
 	ipcMain.handle(IpcEvents.SetDesktopCapturerSourceId, (_, id) => {
 		lastChosenDesktopCapturerSourceID = id;
+		store.set(ElectronStoreKeys.LastDesktopCapturerSourceID, id);
 		getDeskreenGlobal().sharingSessionService.waitingForConnectionSharingSession?.setDesktopCapturerSourceID(
 			id,
 		);
@@ -711,6 +719,39 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 		app.setLoginItemSettings({ openAtLogin: false });
 		app.relaunch();
 		app.exit(0);
+	});
+
+	ipcMain.handle(IpcEvents.GetBannedIPs, () => {
+		return getBannedIPs();
+	});
+
+	ipcMain.handle(IpcEvents.BanIp, (_, ip: string) => {
+		banIp(String(ip ?? ''));
+	});
+
+	ipcMain.handle(IpcEvents.UnbanIp, (_, ip: string) => {
+		unbanIp(String(ip ?? ''));
+	});
+
+	ipcMain.handle(IpcEvents.GetConnectionPassword, () => {
+		return getConnectionPassword();
+	});
+
+	ipcMain.handle(IpcEvents.SetConnectionPassword, (_, password: string) => {
+		return setConnectionPassword(String(password ?? ''));
+	});
+
+	ipcMain.handle(IpcEvents.GetUseSystemTray, () => {
+		return isUseSystemTrayEnabled();
+	});
+
+	ipcMain.handle(IpcEvents.SetUseSystemTray, (_, enabled: boolean) => {
+		store.set(
+			ElectronStoreKeys.UseSystemTray,
+			enabled ? 'true' : 'false',
+		);
+		deskreenApp.applyUseSystemTraySetting();
+		return enabled;
 	});
 
 	void createWaitingForConnectionSharingSession();

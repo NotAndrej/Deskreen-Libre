@@ -12,6 +12,7 @@ import {
 	Button,
 	Tabs,
 	Tab,
+	InputGroup,
 } from '@blueprintjs/core';
 import { makeStyles } from 'tss-react/mui';
 import CloseOverlayButton from '../CloseOverlayButton';
@@ -83,10 +84,20 @@ export default function SettingsOverlay(
 		{ name: string; address: string }[]
 	>([]);
 	const [networkInterfaceIP, setNetworkInterfaceIP] = useState('');
+	const [useSystemTray, setUseSystemTray] = useState(false);
+	const [connectionPassword, setConnectionPassword] = useState('');
 	const { brandName, setBrandNameHook } = useContext(SettingsContext);
 	const [isFactoryResetAlertOpen, setIsFactoryResetAlertOpen] =
 		useState(false);
 	const [selectedTabId, setSelectedTabId] = useState('general');
+	const [bannedIps, setBannedIps] = useState<string[]>([]);
+
+	const refreshBannedIps = useCallback(() => {
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetBannedIPs)
+			.then((ips: string[]) => setBannedIps(ips ?? []))
+			.catch((error) => console.error(error));
+	}, []);
 
 	useEffect(() => {
 		if (!isSettingsOpen) return;
@@ -171,7 +182,14 @@ export default function SettingsOverlay(
 			.invoke(IpcEvents.GetNetworkInterfaceIP)
 			.then((ip: string) => setNetworkInterfaceIP(String(ip ?? '')))
 			.catch((error) => console.error(error));
-	}, []);
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetConnectionPassword)
+			.then((password: string) =>
+				setConnectionPassword(String(password ?? '')),
+			)
+			.catch((error) => console.error(error));
+		refreshBannedIps();
+	}, [refreshBannedIps]);
 
 	const handleAutoStartChange = useCallback(
 		(event: React.FormEvent<HTMLInputElement>) => {
@@ -202,6 +220,13 @@ export default function SettingsOverlay(
 			.catch((error) => console.error(error));
 	}, [customServerPort]);
 
+	const handlePasswordBlur = useCallback(() => {
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.SetConnectionPassword, connectionPassword)
+			.then((saved: string) => setConnectionPassword(String(saved ?? '')))
+			.catch((error) => console.error(error));
+	}, [connectionPassword]);
+
 	const handleInterfaceChange = useCallback(
 		(event: React.ChangeEvent<HTMLSelectElement>) => {
 			const ip = event.currentTarget.value;
@@ -218,6 +243,17 @@ export default function SettingsOverlay(
 			setBrandNameHook(event.currentTarget.value);
 		},
 		[setBrandNameHook],
+	);
+
+	const handleUseSystemTrayChange = useCallback(
+		(event: React.FormEvent<HTMLInputElement>) => {
+			const enabled = event.currentTarget.checked;
+			setUseSystemTray(enabled);
+			window.electron.ipcRenderer
+				.invoke(IpcEvents.SetUseSystemTray, enabled)
+				.catch((error) => console.error(error));
+		},
+		[],
 	);
 
 	const hasUpdate =
@@ -383,6 +419,27 @@ export default function SettingsOverlay(
 												}
 											/>
 										</div>
+										<div style={{ marginTop: '24px' }}>
+											<SettingRowLabelAndInput
+												icon="lock"
+												label={t('connection-password')}
+												input={
+													<InputGroup
+														type="password"
+														value={connectionPassword}
+														placeholder="••••••"
+														onChange={(
+															event: React.ChangeEvent<HTMLInputElement>,
+														) => setConnectionPassword(event.target.value)}
+														onBlur={handlePasswordBlur}
+														style={{ width: '200px' }}
+													/>
+												}
+											/>
+											<Text className="bp3-text-muted">
+												{t('connection-password-hint')}
+											</Text>
+										</div>
 									</>
 								}
 							/>
@@ -419,6 +476,19 @@ export default function SettingsOverlay(
 												}
 											/>
 										</div>
+										<div style={{ marginTop: '24px' }}>
+											<SettingRowLabelAndInput
+												icon="inbox"
+												label={t('use-system-tray')}
+												input={
+													<Switch
+														checked={useSystemTray}
+														onChange={handleUseSystemTrayChange}
+														innerLabel={useSystemTray ? t('on') : t('off')}
+													/>
+												}
+											/>
+										</div>
 										<div style={{ marginTop: '32px' }}>
 											<SettingRowLabelAndInput
 												icon="reset"
@@ -434,6 +504,49 @@ export default function SettingsOverlay(
 													</Button>
 												}
 											/>
+										</div>
+										<div style={{ marginTop: '24px' }}>
+											<SettingRowLabelAndInput
+												icon="ban-circle"
+												label={t('banned-ips')}
+												input={
+													<Button
+														minimal
+														icon="refresh"
+														onClick={refreshBannedIps}
+													/>
+												}
+											/>
+											{bannedIps.length === 0 ? null : (
+												<div style={{ marginTop: '8px' }}>
+													{bannedIps.map((ip) => (
+														<div
+															key={ip}
+															style={{
+																display: 'flex',
+																alignItems: 'center',
+																gap: '8px',
+																marginTop: '4px',
+															}}
+														>
+															<Text className="bp3-text-monospace">{ip}</Text>
+															<Button
+																small
+																intent="warning"
+																style={{ borderRadius: '100px' }}
+																onClick={() => {
+																	window.electron.ipcRenderer
+																		.invoke(IpcEvents.UnbanIp, ip)
+																		.then(() => refreshBannedIps())
+																		.catch((error) => console.error(error));
+																}}
+															>
+																{t('unban')}
+															</Button>
+														</div>
+													))}
+												</div>
+											)}
 										</div>
 									</>
 								}

@@ -83,11 +83,18 @@ export function handleIpcRenderer(): void {
 			},
 		);
 
-		window.electron.ipcRenderer.on('deny-connection-for-partner', () => {
-			if (peerConnection) {
-				peerConnection.denyConnectionForPartner();
-			}
-		});
+		window.electron.ipcRenderer.on(
+			'deny-connection-for-partner',
+			(_, reason?: string) => {
+				if (peerConnection) {
+					peerConnection.denyConnectionForPartner(
+						reason === 'DENY_WRONG_PASSWORD'
+							? 'DENY_WRONG_PASSWORD'
+							: 'DENY_TO_CONNECT',
+					);
+				}
+			},
+		);
 
 		window.electron.ipcRenderer.on('send-user-allowed-to-connect', () => {
 			if (peerConnection) {

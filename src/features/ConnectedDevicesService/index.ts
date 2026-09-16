@@ -12,6 +12,7 @@ export const nullDevice: Device = {
 	deviceRoomId: '',
 	trustedDeviceId: '',
 	alias: '',
+	password: '',
 };
 
 type ViewerConnectionAvailability = 'available' | 'occupied';

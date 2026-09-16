@@ -1,4 +1,4 @@
-import { Callout, Card, H3, Text, Tooltip, Position, EditableText } from '@blueprintjs/core';
+import { Callout, Card, H3, Text, Tooltip, Position, EditableText, InputGroup } from '@blueprintjs/core';
 import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -9,6 +9,7 @@ import {
 } from '../../constants/styleConstants';
 import { AppContext } from '../../providers/AppContextProvider';
 import { getViewerAlias, setViewerAlias } from '../../utils/viewerAlias';
+import { getViewerPassword, setViewerPassword } from '../../utils/viewerPassword';
 
 interface MyDeviceDetailsCardProps {
 	deviceDetails: DeviceDetails;
@@ -18,6 +19,7 @@ function MyDeviceInfoCard(props: MyDeviceDetailsCardProps) {
 	const { t } = useTranslation();
 	const { appTheme, appUiStyle } = useContext(AppContext);
 	const [alias, setAlias] = useState(getViewerAlias());
+	const [password, setPassword] = useState(getViewerPassword());
 	const backgroundColor =
 		appUiStyle === 'modern'
 			? appTheme === 'dark'
@@ -50,6 +52,20 @@ function MyDeviceInfoCard(props: MyDeviceDetailsCardProps) {
 							setViewerAlias(value);
 							setAlias(getViewerAlias());
 						}}
+					/>
+				</Text>
+				<Text>
+					{`${t('Connection Password')}: `}
+					<InputGroup
+						type="password"
+						small
+						value={password}
+						placeholder={t('Host password if required')}
+						onChange={(event) => {
+							setPassword(event.target.value);
+							setViewerPassword(event.target.value);
+						}}
+						style={{ maxWidth: '220px', display: 'inline-flex' }}
 					/>
 				</Text>
 				<Text>{`${t('Device Type')}: ${myDeviceType}`}</Text>

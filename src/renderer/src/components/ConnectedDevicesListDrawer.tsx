@@ -356,6 +356,27 @@ export default function ConnectedDevicesListDrawer(
 														deviceAlias={resolveAlias(device)}
 														deviceMAC={deviceMacs[device.id] ?? ''}
 													/>
+													<div
+														style={{
+															marginTop: '8px',
+															display: 'flex',
+															alignItems: 'center',
+															gap: '6px',
+														}}
+													>
+														<span
+															style={{
+																width: '8px',
+																height: '8px',
+																borderRadius: '50%',
+																backgroundColor: '#3dcc91',
+																display: 'inline-block',
+															}}
+														/>
+														<Text className="bp3-text-muted">
+															{t('device-status-sharing')}
+														</Text>
+													</div>
 													{device.trustedDeviceId !== '' && (
 														<div
 															style={{
@@ -469,6 +490,28 @@ export default function ConnectedDevicesListDrawer(
 												>
 													{t('disconnect')}
 												</Button>
+												{device.deviceIP !== '' && (
+													<Button
+														intent="warning"
+														onClick={(): void => {
+															void window.electron.ipcRenderer
+																.invoke(IpcEvents.BanIp, device.deviceIP)
+																.then(() => {
+																	handleDisconnectAndHideOneDevice(
+																		device.id,
+																	);
+																})
+																.catch((e) => console.error(e));
+														}}
+														icon="ban-circle"
+														style={{
+															borderRadius: '100px',
+															marginLeft: '8px',
+														}}
+													>
+														{t('ban-ip')}
+													</Button>
+												)}
 											</Row>
 										</Card>
 									</div>

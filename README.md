@@ -25,6 +25,9 @@ Deskreen turns any device with a web browser into a secondary screen for your co
 | Prevent sleep while sharing | — | ✅ (automatic) | ✅ | ✅ |
 | Auto-reconnect after sleep / network drop | Basic retry | ✅ (wake + online triggers) | ✅ | ✅ |
 | Auto-start on login | — | ✅ (toggle in Settings) | ✅ | ✅ |
+| Connection password | — | ✅ (Settings, viewers enter it once and it persists) | — | — |
+| IP ban list | — | ✅ (per device + managed list in Settings) | — | — |
+| System tray mode | — | ✅ (toggle in Settings) | — | — |
 | Team seats and shared management | — | — (no accounts by design) | — | ✅ |
 | Support | Community | Community | Priority | Priority |
 | Trackers / upsells | Google Analytics + Pro upsell | None. Ever. | — | — |

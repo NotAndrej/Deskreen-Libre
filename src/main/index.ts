@@ -6,7 +6,7 @@ import {
 overrideGlobalConsole();
 startConsoleRateLimiting();
 
-import { app, shell, BrowserWindow, Notification, dialog } from 'electron';
+import { app, shell, BrowserWindow, Notification, dialog, Tray, Menu, nativeImage } from 'electron';
 import { join } from 'path';
 import { is, optimizer } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
@@ -30,6 +30,10 @@ export function isPreventAccidentalQuitEnabled(): boolean {
 
 export function getBrandName(): BrandName {
 	return normalizeBrandName(store.get(ElectronStoreKeys.BrandName));
+}
+
+export function isUseSystemTrayEnabled(): boolean {
+	return store.get(ElectronStoreKeys.UseSystemTray) === 'true';
 }
 
 // function createWindow(): void {
@@ -140,6 +144,65 @@ export default class DeskreenApp {
 
 	latestAppVersion = '';
 
+	tray: Tray | null = null;
+
+	isQuitConfirmed = false;
+
+	setupSystemTray(): void {
+		if (this.tray || this.mainWindow === null) return;
+		try {
+			const trayIcon = nativeImage.createFromPath(icon);
+			this.tray = new Tray(trayIcon.resize({ width: 16, height: 16 }));
+			this.tray.setToolTip(getBrandName());
+			this.tray.setContextMenu(
+				Menu.buildFromTemplate([
+					{
+						label: i18n.t('tray-open-window'),
+						click: () => {
+							this.mainWindow?.show();
+							this.mainWindow?.focus();
+						},
+					},
+					{
+						label: i18n.t('quit'),
+						click: () => {
+							this.isQuitConfirmed = true;
+							app.quit();
+						},
+					},
+				]),
+			);
+			this.tray.on('click', () => {
+				if (this.mainWindow?.isVisible()) {
+					this.mainWindow.hide();
+				} else {
+					this.mainWindow?.show();
+					this.mainWindow?.focus();
+				}
+			});
+		} catch (error) {
+			console.error('Failed to create system tray icon:', error);
+			this.tray = null;
+		}
+	}
+
+	destroySystemTray(): void {
+		try {
+			this.tray?.destroy();
+		} catch {
+			// already gone — nothing to do
+		}
+		this.tray = null;
+	}
+
+	applyUseSystemTraySetting(): void {
+		if (isUseSystemTrayEnabled()) {
+			this.setupSystemTray();
+		} else {
+			this.destroySystemTray();
+		}
+	}
+
 	initElectronAppObject(): void {
 		/**
 		 * Add event listeners...
@@ -161,6 +224,7 @@ export default class DeskreenApp {
 			}
 
 			applyAutoStartOnLoginSetting();
+			this.applyUseSystemTraySetting();
 
 			// start log buffer cleanup to prevent memory bloat
 			startLogBufferCleanup();
@@ -170,9 +234,8 @@ export default class DeskreenApp {
 			void this.checkForLatestVersionAndNotify();
 		});
 
-		let isQuitConfirmed = false;
 		app.on('before-quit', (event) => {
-			if (isQuitConfirmed) return;
+			if (this.isQuitConfirmed) return;
 			if (!isPreventAccidentalQuitEnabled()) return;
 			event.preventDefault();
 			void dialog
@@ -187,7 +250,7 @@ export default class DeskreenApp {
 				})
 				.then(({ response }) => {
 					if (response === 1) {
-						isQuitConfirmed = true;
+						this.isQuitConfirmed = true;
 						app.quit();
 					}
 				});
@@ -306,6 +369,19 @@ export default class DeskreenApp {
 		} else {
 			this.mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
 		}
+
+		this.mainWindow.on('close', (event) => {
+			// With tray mode on, closing the window hides it instead of
+			// quitting — the app keeps sharing from the tray.
+			if (
+				!this.isQuitConfirmed &&
+				this.tray !== null &&
+				!this.mainWindow?.isDestroyed()
+			) {
+				event.preventDefault();
+				this.mainWindow?.hide();
+			}
+		});
 
 		this.mainWindow.on('closed', () => {
 			this.mainWindow = null;

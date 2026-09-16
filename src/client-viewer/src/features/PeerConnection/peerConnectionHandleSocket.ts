@@ -8,6 +8,7 @@ import PeerConnectionSocketNotDefined from './errors/PeerConnectionSocketNotDefi
 import setAndShowErrorDialogMessage from './setAndShowErrorDialogMessage';
 import getPersistentViewerDeviceId from '../../utils/persistentViewerDeviceId';
 import { getViewerAlias } from '../../utils/viewerAlias';
+import { getViewerPassword } from '../../utils/viewerPassword';
 
 export function getMyIPCallback(
 	peerConnection: PeerConnection,
@@ -113,6 +114,7 @@ export default (peerConnection: PeerConnection) => {
 				deviceScreenHeight: window.screen.height,
 				deviceId: getPersistentViewerDeviceId(),
 				alias: getViewerAlias(),
+				password: getViewerPassword(),
 			},
 		});
 

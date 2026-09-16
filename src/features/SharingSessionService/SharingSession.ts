@@ -110,9 +110,12 @@ export default class SharingSession {
 		);
 	}
 
-	denyConnectionForPartner(): void {
+	denyConnectionForPartner(
+		reason: 'DENY_TO_CONNECT' | 'DENY_WRONG_PASSWORD' = 'DENY_TO_CONNECT',
+	): void {
 		this.peerConnectionHelperRenderer?.webContents.send(
 			'deny-connection-for-partner',
+			reason,
 		);
 	}
 

@@ -60,4 +60,11 @@ export enum IpcEvents {
 	GetBrandName = 'get-brand-name',
 	SetBrandName = 'set-brand-name',
 	FactoryResetApp = 'factory-reset-app',
+	GetBannedIPs = 'get-banned-ips',
+	BanIp = 'ban-ip',
+	UnbanIp = 'unban-ip',
+	GetConnectionPassword = 'get-connection-password',
+	SetConnectionPassword = 'set-connection-password',
+	GetUseSystemTray = 'get-use-system-tray',
+	SetUseSystemTray = 'set-use-system-tray',
 }

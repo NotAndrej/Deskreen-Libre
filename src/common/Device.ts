@@ -13,4 +13,6 @@ export interface Device {
 	trustedDeviceId: string;
 	/** Viewer-chosen name, empty when unset. */
 	alias: string;
+	/** Password supplied by the viewer at handshake (compared, never stored). */
+	password: string;
 }

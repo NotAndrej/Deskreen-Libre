@@ -19,6 +19,9 @@ export default async (
 	if (message.type === 'DENY_TO_CONNECT') {
 		setAndShowErrorDialogMessage(peerConnection, ErrorMessage.DENY_TO_CONNECT);
 	}
+	if (message.type === 'DENY_WRONG_PASSWORD') {
+		setAndShowErrorDialogMessage(peerConnection, ErrorMessage.WRONG_PASSWORD);
+	}
 	if (message.type === 'DISCONNECT_BY_HOST_MACHINE_USER') {
 		setAndShowErrorDialogMessage(peerConnection, ErrorMessage.DISCONNECTED);
 	}

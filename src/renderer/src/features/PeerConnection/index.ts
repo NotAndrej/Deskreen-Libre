@@ -267,9 +267,11 @@ export default class PeerConnection {
 		this.onDeviceConnectedCallback = callback;
 	}
 
-	async denyConnectionForPartner(): Promise<void> {
+	async denyConnectionForPartner(
+		reason: 'DENY_TO_CONNECT' | 'DENY_WRONG_PASSWORD' = 'DENY_TO_CONNECT',
+	): Promise<void> {
 		await this.sendEncryptedMessage({
-			type: 'DENY_TO_CONNECT',
+			type: reason,
 			payload: {},
 		});
 		this.disconnectPartner();

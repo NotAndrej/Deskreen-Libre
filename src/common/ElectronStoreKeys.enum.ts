@@ -10,4 +10,8 @@ export enum ElectronStoreKeys {
 	CustomServerPort = 'customServerPort',
 	NetworkInterfaceIP = 'networkInterfaceIP',
 	BrandName = 'brandName',
+	BannedIPs = 'bannedIPs',
+	ConnectionPassword = 'connectionPassword',
+	UseSystemTray = 'useSystemTray',
+	LastDesktopCapturerSourceID = 'lastDesktopCapturerSourceID',
 }
