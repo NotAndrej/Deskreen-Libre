@@ -137,6 +137,8 @@ Electron Builder MIT License © [electron-builder contributors](https://github.c
 
 Apache 2.0 © [blueprintjs](https://github.com/palantir/blueprint)
 
+Font Awesome Free (CC BY 4.0) © [Fonticons, Inc.](https://fontawesome.com/)
+
 simple-peer MIT. Copyright © [Feross Aboukhadijeh](http://feross.org/)
 
 tweetnacl ISC License © Dmitry Chestnykh, Devi Mandiri, and contributors (https://github.com/dchest/tweetnacl-js)
