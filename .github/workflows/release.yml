@@ -151,9 +151,10 @@ jobs:
         if: ${{ matrix.platform == 'macos' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # certificate for signing (base64-encoded .p12) and its password
-          CSC_LINK: ${{ secrets.MAC_CERTS }}
-          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+          # No Apple signing certs in this fork: disable identity discovery
+          # so electron-builder produces an unsigned dmg instead of choking
+          # on an empty CSC_LINK. (Gatekeeper will warn on first open.)
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
         run: npm run ${{ matrix.build_command }}
 
       - name: npm build on Linux
