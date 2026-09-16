@@ -4,6 +4,7 @@ import { makeStyles } from 'tss-react/mui';
 import { Col, Row } from 'react-flexbox-grid';
 import SettingsOverlay from './SettingsOverlay/SettingsOverlay';
 import AboutOverlay from './AboutOverlay';
+import RemovedFeaturesOverlay from './RemovedFeaturesOverlay';
 import ConnectedDevicesListDrawer from './ConnectedDevicesListDrawer';
 import { useTranslation } from 'react-i18next';
 import { IpcEvents } from '../../../common/IpcEvents.enum';
@@ -130,6 +131,8 @@ export default function TopPanel({
 
 	const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
 	const [isAboutOpen, setIsAboutOpen] = React.useState(false);
+	const [isRemovedFeaturesOpen, setIsRemovedFeaturesOpen] =
+		React.useState(false);
 	const [isConnectedDevicesDrawerOpen, setIsConnectedDevicesDrawerOpen] =
 		React.useState(false);
 	const [latestVersion, setLatestVersion] = React.useState('');
@@ -150,6 +153,14 @@ export default function TopPanel({
 
 	const handleAboutClose = React.useCallback(() => {
 		setIsAboutOpen(false);
+	}, []);
+
+	const handleRemovedFeaturesOpen = React.useCallback(() => {
+		setIsRemovedFeaturesOpen(true);
+	}, []);
+
+	const handleRemovedFeaturesClose = React.useCallback(() => {
+		setIsRemovedFeaturesOpen(false);
 	}, []);
 
 	const handleToggleConnectedDevicesListDrawer = React.useCallback(() => {
@@ -321,6 +332,24 @@ export default function TopPanel({
 		</div>
 	);
 
+	const renderRemovedFeaturesButton = (
+		<div className={classes.topPanelControlButtonMargin}>
+			<Tooltip content={t('removed-features')} position={Position.BOTTOM}>
+				<Button
+					id="top-panel-removed-features-button"
+					onClick={handleRemovedFeaturesOpen}
+					className={classes.topPanelControlButton}
+				>
+					<Icon
+						className={classes.topPanelIconOfControlButton}
+						icon="history"
+						size={22}
+					/>
+				</Button>
+			</Tooltip>
+		</div>
+	);
+
 	const renderLogoWithAppName = (
 		<div
 			id="logo-with-popover-visit-website"
@@ -404,6 +433,19 @@ export default function TopPanel({
 						<Icon icon="info-sign" size={18} />
 					</Button>
 				</Tooltip>
+				<Tooltip content={t('removed-features')} position={Position.BOTTOM}>
+					<Button
+						id="top-panel-removed-features-button"
+						minimal
+						className={cx(
+								classes.modernHeaderIconButton,
+								isModernLight && classes.modernHeaderIconButtonLight,
+							)}
+						onClick={handleRemovedFeaturesOpen}
+					>
+						<Icon icon="history" size={18} />
+					</Button>
+				</Tooltip>
 				<Tooltip content={t('settings')} position={Position.BOTTOM}>
 					<Button
 						id="top-panel-settings-button"
@@ -450,6 +492,7 @@ export default function TopPanel({
 					{renderHelpButton}
 					{renderTutorialButton}
 					{renderAboutButton}
+					{renderRemovedFeaturesButton}
 					{renderSettingsButton}
 				</div>
 				{hasUpdate ? (
@@ -489,6 +532,14 @@ export default function TopPanel({
 			)}
 			{isAboutOpen ? (
 				<AboutOverlay isAboutOpen={isAboutOpen} handleClose={handleAboutClose} />
+			) : (
+				<></>
+			)}
+			{isRemovedFeaturesOpen ? (
+				<RemovedFeaturesOverlay
+					isOpen={isRemovedFeaturesOpen}
+					handleClose={handleRemovedFeaturesClose}
+				/>
 			) : (
 				<></>
 			)}
