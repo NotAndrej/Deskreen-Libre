@@ -16,6 +16,16 @@ code {
 		source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+/* No visible scrollbars anywhere in the viewer either. */
+* {
+	scrollbar-width: none !important;
+	-ms-overflow-style: none !important;
+}
+
+*::-webkit-scrollbar {
+	display: none !important;
+}
+
 /* Blueprint's .bp6-dark only themes Blueprint components — the page
    background itself needs an explicit rule, same as the host app. */
 body.bp6-dark {

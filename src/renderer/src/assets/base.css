@@ -124,6 +124,17 @@ body {
 	background-color: var(--light-bg-color);
 }
 
+/* No visible scrollbars anywhere in the host app — scrollable areas keep
+   working, they just don't show chrome. */
+* {
+	scrollbar-width: none !important;
+	-ms-overflow-style: none !important;
+}
+
+*::-webkit-scrollbar {
+	display: none !important;
+}
+
 /* Blueprint's .bp6-dark class only sets CSS custom properties and themes its
    own components via descendant selectors — it never touches raw body/html
    background, so the app has to supply its own dark counterpart here. */

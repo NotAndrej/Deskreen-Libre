@@ -312,6 +312,11 @@ export default function SettingsOverlay(
 													<HTMLSelect
 														value={brandName}
 														onChange={handleBrandChange}
+														style={{
+															fontSize: '17px',
+															padding: '6px 10px',
+															minWidth: '220px',
+														}}
 													>
 														{BRAND_OPTIONS.map((option) => (
 															<option key={option} value={option}>
