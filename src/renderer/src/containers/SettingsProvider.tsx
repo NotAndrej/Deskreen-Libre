@@ -125,6 +125,13 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 		document.body.classList.toggle('ui-classic', uiStyle === 'classic');
 	}, [uiStyle]);
 
+	useEffect(() => {
+		// The HTML <title> wins over the BrowserWindow title option, so sync
+		// it here: covers both startup (after the stored brand loads) and
+		// live changes.
+		document.title = brandName;
+	}, [brandName]);
+
 	const value = {
 		currentLanguage,
 		setCurrentLanguageHook,
