@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
 	Overlay2,
 	Classes,
@@ -17,7 +17,8 @@ import LanguageSelector from '../LanguageSelector';
 import ToggleThemeBtnGroup from '../ToggleThemeBtnGroup';
 import ToggleUIStyleBtnGroup from '../ToggleUIStyleBtnGroup';
 import { IpcEvents } from '../../../../common/IpcEvents.enum';
-import { BRAND_DEFAULT, BRAND_OPTIONS } from '../../../../common/brandNames';
+import { BRAND_OPTIONS } from '../../../../common/brandNames';
+import { SettingsContext } from '../../contexts/SettingsContext';
 import { useTranslation } from 'react-i18next';
 
 interface SettingsOverlayProps {
@@ -74,7 +75,7 @@ export default function SettingsOverlay(
 		{ name: string; address: string }[]
 	>([]);
 	const [networkInterfaceIP, setNetworkInterfaceIP] = useState('');
-	const [brandName, setBrandName] = useState(BRAND_DEFAULT);
+	const { brandName, setBrandNameHook } = useContext(SettingsContext);
 
 	const { t } = useTranslation();
 
@@ -146,10 +147,6 @@ export default function SettingsOverlay(
 			.invoke(IpcEvents.GetNetworkInterfaceIP)
 			.then((ip: string) => setNetworkInterfaceIP(String(ip ?? '')))
 			.catch((error) => console.error(error));
-		window.electron.ipcRenderer
-			.invoke(IpcEvents.GetBrandName)
-			.then((brand: string) => setBrandName(brand))
-			.catch((error) => console.error(error));
 	}, []);
 
 	const handleAutoStartChange = useCallback(
@@ -194,13 +191,9 @@ export default function SettingsOverlay(
 
 	const handleBrandChange = useCallback(
 		(event: React.ChangeEvent<HTMLSelectElement>) => {
-			const brand = event.currentTarget.value;
-			window.electron.ipcRenderer
-				.invoke(IpcEvents.SetBrandName, brand)
-				.then((normalized: string) => setBrandName(normalized))
-				.catch((error) => console.error(error));
+			setBrandNameHook(event.currentTarget.value);
 		},
-		[],
+		[setBrandNameHook],
 	);
 
 	const hasUpdate =
