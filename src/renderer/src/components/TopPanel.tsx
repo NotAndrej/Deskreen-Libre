@@ -5,6 +5,7 @@ import { Col, Row } from 'react-flexbox-grid';
 import SettingsOverlay from './SettingsOverlay/SettingsOverlay';
 import AboutOverlay from './AboutOverlay';
 import RemovedFeaturesOverlay from './RemovedFeaturesOverlay';
+import UkraineSupportDialog from './UkraineSupportDialog';
 import ConnectedDevicesListDrawer from './ConnectedDevicesListDrawer';
 import { useTranslation } from 'react-i18next';
 import { IpcEvents } from '../../../common/IpcEvents.enum';
@@ -133,6 +134,7 @@ export default function TopPanel({
 	const [isAboutOpen, setIsAboutOpen] = React.useState(false);
 	const [isRemovedFeaturesOpen, setIsRemovedFeaturesOpen] =
 		React.useState(false);
+	const [isUkraineDialogOpen, setIsUkraineDialogOpen] = React.useState(false);
 	const [isConnectedDevicesDrawerOpen, setIsConnectedDevicesDrawerOpen] =
 		React.useState(false);
 	const [latestVersion, setLatestVersion] = React.useState('');
@@ -161,6 +163,15 @@ export default function TopPanel({
 
 	const handleRemovedFeaturesClose = React.useCallback(() => {
 		setIsRemovedFeaturesOpen(false);
+	}, []);
+
+	const handleShowUkraineDialog = React.useCallback(() => {
+		setIsRemovedFeaturesOpen(false);
+		setIsUkraineDialogOpen(true);
+	}, []);
+
+	const handleUkraineDialogClose = React.useCallback(() => {
+		setIsUkraineDialogOpen(false);
 	}, []);
 
 	const handleToggleConnectedDevicesListDrawer = React.useCallback(() => {
@@ -545,6 +556,15 @@ export default function TopPanel({
 				<RemovedFeaturesOverlay
 					isOpen={isRemovedFeaturesOpen}
 					handleClose={handleRemovedFeaturesClose}
+					onShowUkraine={handleShowUkraineDialog}
+				/>
+			) : (
+				<></>
+			)}
+			{isUkraineDialogOpen ? (
+				<UkraineSupportDialog
+					isOpen={isUkraineDialogOpen}
+					handleClose={handleUkraineDialogClose}
 				/>
 			) : (
 				<></>

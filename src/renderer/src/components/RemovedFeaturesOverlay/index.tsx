@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
 	Overlay2,
 	Classes,
@@ -10,12 +10,12 @@ import {
 import { Row, Col } from 'react-flexbox-grid';
 import { makeStyles } from 'tss-react/mui';
 import CloseOverlayButton from '../CloseOverlayButton';
-import UkraineSupportDialog from '../UkraineSupportDialog';
 import { useTranslation } from 'react-i18next';
 
 interface RemovedFeaturesOverlayProps {
 	isOpen: boolean;
 	handleClose: () => void;
+	onShowUkraine: () => void;
 }
 
 const useStyles = makeStyles()(() => ({
@@ -42,10 +42,9 @@ const useStyles = makeStyles()(() => ({
 export default function RemovedFeaturesOverlay(
 	props: RemovedFeaturesOverlayProps,
 ): React.ReactElement {
-	const { isOpen, handleClose } = props;
+	const { isOpen, handleClose, onShowUkraine } = props;
 	const { t } = useTranslation();
 	const { classes } = useStyles();
-	const [isUkraineDialogOpen, setIsUkraineDialogOpen] = useState(false);
 
 	return (
 		<>
@@ -90,7 +89,7 @@ export default function RemovedFeaturesOverlay(
 								<Button
 									intent="primary"
 									style={{ borderRadius: '100px' }}
-									onClick={() => setIsUkraineDialogOpen(true)}
+									onClick={onShowUkraine}
 								>
 									{t('show')}
 								</Button>
@@ -100,10 +99,6 @@ export default function RemovedFeaturesOverlay(
 				</div>
 			</div>
 			</Overlay2>
-			<UkraineSupportDialog
-				isOpen={isUkraineDialogOpen}
-				handleClose={() => setIsUkraineDialogOpen(false)}
-			/>
 		</>
 	);
 }
