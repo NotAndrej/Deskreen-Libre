@@ -27,7 +27,7 @@ Deskreen turns any device with a web browser into a secondary screen for your co
 - **No "Pro" upsell.** No upgrade buttons, no "available only in Pro version" screens. Every feature in the app is the whole app.
 - **Unlimited viewers.** CE allows one viewing device at a time; Libre lets you connect as many as you like. Each viewer gets its own session and shares the same selected screen source.
 - **Color Theme: Light / Dark / Auto.** Auto follows your OS theme live, including changes while the app is open.
-- **UI Styles: Legacy / Modern.** Modern is a refined reskin (purple accent, rounder surfaces) with full light **and** dark variants — same layout, both themes.
+- **UI Styles: Legacy / Modern.** Modern is a refined reskin (purple accent, rounder surfaces) with full light **and** dark variants, same layout, both themes.
 - **The web viewer follows the host.** Dark/light mode and Legacy/Modern styling sync live from the app to every connected viewer, including mid-session changes.
 - **Fresh branding.** New icon everywhere: desktop app, installer, viewer, favicon, and the logo embedded in the QR code.
 - **Modernized dependencies.** Unmaintained `@material-ui/core` v4 replaced with `@mui/material` + `tss-react`; `npm audit` reports 0 production vulnerabilities in both packages.
