@@ -207,18 +207,19 @@ export default function SettingsOverlay(
 		latestVersion !== currentVersion;
 
 	return (
-		<Overlay2
-			onClose={handleClose}
-			className={`${Classes.OVERLAY_SCROLL_CONTAINER} bp3-overlay-settings`}
-			autoFocus
-			canEscapeKeyClose
-			canOutsideClickClose
-			enforceFocus
-			hasBackdrop
-			isOpen={isSettingsOpen}
-			usePortal
-			transitionDuration={0}
-		>
+		<>
+			<Overlay2
+				onClose={handleClose}
+				className={`${Classes.OVERLAY_SCROLL_CONTAINER} bp3-overlay-settings`}
+				autoFocus
+				canEscapeKeyClose
+				canOutsideClickClose
+				enforceFocus
+				hasBackdrop
+				isOpen={isSettingsOpen}
+				usePortal
+				transitionDuration={0}
+			>
 			<div className={classes.overlayInnerRoot}>
 				<div
 					id="settings-overlay-inner"
@@ -392,6 +393,7 @@ export default function SettingsOverlay(
 					</div>
 				</div>
 			</div>
+			</Overlay2>
 			<Alert
 				isOpen={isFactoryResetAlertOpen}
 				onClose={() => setIsFactoryResetAlertOpen(false)}
@@ -413,6 +415,6 @@ export default function SettingsOverlay(
 				<H4>{t('factory-reset-confirm')}</H4>
 				<Text>{t('this-step-can-not-be-undone')}</Text>
 			</Alert>
-		</Overlay2>
+		</>
 	);
 }

@@ -48,18 +48,19 @@ export default function RemovedFeaturesOverlay(
 	const [isUkraineDialogOpen, setIsUkraineDialogOpen] = useState(false);
 
 	return (
-		<Overlay2
-			onClose={handleClose}
-			className={Classes.OVERLAY_SCROLL_CONTAINER}
-			autoFocus
-			canEscapeKeyClose
-			canOutsideClickClose
-			enforceFocus
-			hasBackdrop
-			isOpen={isOpen}
-			usePortal
-			transitionDuration={0}
-		>
+		<>
+			<Overlay2
+				onClose={handleClose}
+				className={Classes.OVERLAY_SCROLL_CONTAINER}
+				autoFocus
+				canEscapeKeyClose
+				canOutsideClickClose
+				enforceFocus
+				hasBackdrop
+				isOpen={isOpen}
+				usePortal
+				transitionDuration={0}
+			>
 			<div className={classes.overlayInnerRoot}>
 				<div
 					className={`${classes.overlayInsideFade} ${Classes.CARD}`}
@@ -98,10 +99,11 @@ export default function RemovedFeaturesOverlay(
 					</Card>
 				</div>
 			</div>
+			</Overlay2>
 			<UkraineSupportDialog
 				isOpen={isUkraineDialogOpen}
 				handleClose={() => setIsUkraineDialogOpen(false)}
 			/>
-		</Overlay2>
+		</>
 	);
 }
