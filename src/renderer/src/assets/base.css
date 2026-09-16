@@ -417,9 +417,10 @@ body.bp6-dark #settings-overlay-inner > div > div.bp6-tab-list {
 	background-color: rgba(255, 255, 255, 0.06);
 }
 
-/* settings inner 100% height regardless tab content height */
+/* settings inner sizes to its content; the tabbed layout must not inherit
+   a forced full height (that pushed empty space below short tab panels). */
 #settings-overlay-inner > div {
-	height: 100%;
+	height: auto;
 }
 
 .bp3-overlay-settings {

@@ -18,6 +18,7 @@ import translationJA from '../../common/locales/ja/translation.json';
 import translationNL from '../../common/locales/nl/translation.json';
 import translationFR from '../../common/locales/fr/translation.json';
 import translationSV from '../../common/locales/sv/translation.json';
+import translationSK from '../../common/locales/sk/translation.json';
 import { store } from '../../common/deskreen-electron-store';
 import { ElectronStoreKeys } from '../../common/ElectronStoreKeys.enum';
 
@@ -82,6 +83,9 @@ const i18nextOptions = {
 		},
 		sv: {
 			translation: translationSV,
+		},
+		sk: {
+			translation: translationSK,
 		},
 	},
 };

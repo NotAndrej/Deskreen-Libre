@@ -16,6 +16,7 @@ import translationJA from '../../../common/locales/ja/translation.json';
 import translationNL from '../../../common/locales/nl/translation.json';
 import translationFR from '../../../common/locales/fr/translation.json';
 import translationSV from '../../../common/locales/sv/translation.json';
+import translationSK from '../../../common/locales/sk/translation.json';
 import { IpcEvents } from '../../../common/IpcEvents.enum';
 // import { store } from '../../../common/deskreen-electron-store';
 // import { ElectronStoreKeys } from '../../../common/ElectronStoreKeys.enum';
@@ -70,6 +71,7 @@ export const getShuffledArrayOfHello = (): string[] => {
 	res.push(translationNL.hello);
 	res.push(translationFR.hello);
 	res.push(translationSV.hello);
+	res.push(translationSK.hello);
 
 	shuffleArray(res);
 
@@ -139,6 +141,9 @@ async function initI18NextOptions(): Promise<void> {
 			},
 			sv: {
 				translation: translationSV,
+			},
+			sk: {
+				translation: translationSK,
 			},
 		},
 	};
