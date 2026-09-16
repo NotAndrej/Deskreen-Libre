@@ -53,19 +53,44 @@ function PlayerView(props: PlayerViewProps) {
 
 	const [isFlipped, setIsFlipped] = useState(false);
 	const [rotationDegrees, setRotationDegrees] = useState(0);
+	const [viewportVersion, setViewportVersion] = useState(0);
+
+	useEffect(() => {
+		const handleResize = () => {
+			setViewportVersion((prev) => prev + 1);
+		};
+		window.addEventListener('resize', handleResize);
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, []);
 
 	// Mirror/rotate the live video element(s). Covers both the native
-	// <video> and the one video.js creates imperatively.
+	// <video> and the one video.js creates imperatively. At 90°/270° the
+	// frame is scaled to fit so it can't overflow into the control bar.
 	useEffect(() => {
-		const transform = `rotate(${rotationDegrees}deg)${isFlipped ? ' scaleX(-1)' : ''}`;
+		const container = document.getElementById(PLAYER_WRAPPER_ID);
+		const rect = container?.getBoundingClientRect();
+		let fitScale = 1;
+		if (
+			rect &&
+			rect.width > 0 &&
+			rect.height > 0 &&
+			rotationDegrees % 180 !== 0
+		) {
+			fitScale = Math.min(
+				rect.width / rect.height,
+				rect.height / rect.width,
+			);
+		}
+		const transform = `scale(${fitScale}) rotate(${rotationDegrees}deg)${isFlipped ? ' scaleX(-1)' : ''}`;
 		if (videoRef.current) {
 			videoRef.current.style.transform = transform;
 		}
-		const container = document.getElementById(PLAYER_WRAPPER_ID);
 		container?.querySelectorAll('video').forEach((video) => {
 			video.style.transform = transform;
 		});
-	}, [isFlipped, rotationDegrees, streamUrl, isWithControls]);
+	}, [isFlipped, rotationDegrees, streamUrl, isWithControls, viewportVersion]);
 
 	const handleToggleFlip = useCallback(() => {
 		setIsFlipped((prev) => !prev);
@@ -310,8 +335,11 @@ function PlayerView(props: PlayerViewProps) {
 		>
 			<div
 				style={{
+					maxHeight: areControlsHidden && streamUrl ? '0px' : '160px',
 					opacity: areControlsHidden && streamUrl ? 0 : 1,
-					transition: 'opacity 300ms ease-in-out',
+					overflow: 'hidden',
+					transition:
+						'max-height 300ms ease-in-out, opacity 300ms ease-in-out',
 					pointerEvents:
 						areControlsHidden && streamUrl ? 'none' : 'auto',
 				}}
