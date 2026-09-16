@@ -14,10 +14,18 @@ Deskreen turns any device with a web browser into a secondary screen for your co
 |---|---|---|---|---|
 | Connected viewing devices | 1 | Unlimited | Up to 5 | Unlimited |
 | Dark theme | — | ✅ (Light / Dark / OS Auto, Legacy + Modern) | ✅ | ✅ |
-| Advanced viewer controls | — (Flip is Pro-gated) | ✅ (quality, fullscreen, flip) | ✅ | ✅ |
+| Advanced viewer controls | — (Flip is Pro-gated) | ✅ (quality, fullscreen, flip, rotate, auto-hiding bar) | ✅ | ✅ |
 | Trusted devices + stronger security | — | ✅ (trust per device, auto-allow on reconnect) | ✅ | ✅ |
-| Team seats and shared management | — | — | — | ✅ |
-| Switch streams without reconnecting | — | — | — | ✅ |
+| Device aliases + client MAC display | — | ✅ | ✅ | ✅ |
+| Presenter cursor highlight | — | ✅ | — | ✅ |
+| Switch streams without reconnecting | — | ✅ (per viewer, from the devices drawer) | — | ✅ |
+| Custom server port | — | ✅ (Settings, restart to apply) | ✅ | ✅ |
+| Network interface picker | — (CLI flag only) | ✅ (Settings dropdown) | ✅ | ✅ |
+| Prevent accidental quit | — | ✅ (on by default, toggle in Settings) | ✅ | ✅ |
+| Prevent sleep while sharing | — | ✅ (automatic) | ✅ | ✅ |
+| Auto-reconnect after sleep / network drop | Basic retry | ✅ (wake + online triggers) | ✅ | ✅ |
+| Auto-start on login | — | ✅ (toggle in Settings) | ✅ | ✅ |
+| Team seats and shared management | — | — (no accounts by design) | — | ✅ |
 | Support | Community | Community | Priority | Priority |
 | Trackers / upsells | Google Analytics + Pro upsell | None. Ever. | — | — |
 

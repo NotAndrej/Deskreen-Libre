@@ -31,7 +31,7 @@ import {
 	untrustDeviceId,
 } from './trustedDevices';
 import { refreshDisplaySleepBlocker } from './displaySleepBlocker';
-import { getMacForIp, listLanInterfaces } from './networkDevices';
+import getMacForIp, { listLanInterfaces } from './networkDevices';
 import {
 	getDeviceAliasOverrides,
 	setDeviceAliasOverride,
@@ -509,6 +509,26 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 	ipcMain.handle(IpcEvents.GetDeviceMacByIp, async (_, ip: string) => {
 		return getMacForIp(String(ip ?? ''));
 	});
+
+	ipcMain.handle(IpcEvents.GetCursorScreenPoint, () => {
+		const point = screen.getCursorScreenPoint();
+		const display = screen.getDisplayNearestPoint(point);
+		const { x, y, width, height } = display.bounds;
+		if (width <= 0 || height <= 0) return null;
+		return {
+			x: Math.min(1, Math.max(0, (point.x - x) / width)),
+			y: Math.min(1, Math.max(0, (point.y - y) / height)),
+		};
+	});
+
+	ipcMain.handle(
+		IpcEvents.SetDesktopCapturerSourceIdBySharingSessionId,
+		(_, sessionId: string, sourceId: string) => {
+			getDeskreenGlobal().sharingSessionService.sharingSessions
+				.get(String(sessionId))
+				?.setDesktopCapturerSourceID(String(sourceId));
+		},
+	);
 
 	ipcMain.handle(IpcEvents.GetDeviceAliasOverrides, () => {
 		return getDeviceAliasOverrides();

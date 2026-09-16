@@ -55,4 +55,6 @@ export enum IpcEvents {
 	GetNetworkInterfaceIP = 'get-network-interface-ip',
 	SetNetworkInterfaceIP = 'set-network-interface-ip',
 	GetDeviceMacByIp = 'get-device-mac-by-ip',
+	GetCursorScreenPoint = 'get-cursor-screen-point',
+	SetDesktopCapturerSourceIdBySharingSessionId = 'set-desktop-capturer-source-id-by-sharing-session-id',
 }

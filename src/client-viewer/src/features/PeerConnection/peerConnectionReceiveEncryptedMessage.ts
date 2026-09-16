@@ -36,4 +36,10 @@ export default async (
 			message.payload.uiStyle === 'modern' ? 'modern' : 'legacy',
 		);
 	}
+	if (message.type === 'CURSOR_POSITION') {
+		const { x, y } = message.payload;
+		if (typeof x === 'number' && typeof y === 'number') {
+			peerConnection.UIHandler.setCursorPositionCallback({ x, y });
+		}
+	}
 };

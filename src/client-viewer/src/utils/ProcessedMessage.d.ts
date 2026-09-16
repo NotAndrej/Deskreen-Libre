@@ -49,6 +49,14 @@ type AppThemeMessageWithPayload = {
 	};
 };
 
+type CursorPositionMessageWithPayload = {
+	type: 'CURSOR_POSITION';
+	payload: {
+		x: number;
+		y: number;
+	};
+};
+
 type ProcessedMessage =
 	| CallUserMessageWithPayload
 	| DeviceDetailsMessageWithPayload
@@ -56,4 +64,5 @@ type ProcessedMessage =
 	| DisconnectByHostMachineUserMessageWithPayload
 	| AllowedToConnectMessageWithPayload
 	| AppLanguageMessageWithPayload
-	| AppThemeMessageWithPayload;
+	| AppThemeMessageWithPayload
+	| CursorPositionMessageWithPayload;

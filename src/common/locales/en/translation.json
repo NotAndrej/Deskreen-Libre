@@ -103,6 +103,7 @@
 	"restart-required-for-port": "Restart the app to apply a new port.",
 	"device-mac-address": "MAC address",
 	"device-alias": "Alias",
+	"switch-source": "Switch source",
 	"on": "On",
 	"off": "Off",
 	"edit": "Edit",

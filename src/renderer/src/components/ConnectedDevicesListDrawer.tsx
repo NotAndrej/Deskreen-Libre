@@ -9,6 +9,7 @@ import {
 	H4,
 	DrawerSize,
 	EditableText,
+	HTMLSelect,
 } from '@blueprintjs/core';
 import { Row, Col } from 'react-flexbox-grid';
 import { makeStyles } from 'tss-react/mui';
@@ -60,6 +61,9 @@ export default function ConnectedDevicesListDrawer(
 		{},
 	);
 	const [deviceMacs, setDeviceMacs] = useState<Record<string, string>>({});
+	const [availableSources, setAvailableSources] = useState<
+		{ id: string; name: string }[]
+	>([]);
 
 	const refreshDeviceMacs = useCallback(
 		(devices: DeviceWithDesktopCapturerSourceId[]) => {
@@ -128,6 +132,20 @@ export default function ConnectedDevicesListDrawer(
 			})
 			.catch((e) => console.error(e));
 
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetDesktopCapturerServiceSourcesMap)
+			.then(
+				(map: Record<string, { source: { name: string } }>) => {
+					setAvailableSources(
+						Object.entries(map ?? {}).map(([id, entry]) => ({
+							id,
+							name: entry?.source?.name ?? id,
+						})),
+					);
+				},
+			)
+			.catch((e) => console.error(e));
+
 		const connectedDevicesInterval = setInterval(
 			getConnectedDevicesCallback,
 			4000,
@@ -173,6 +191,25 @@ export default function ConnectedDevicesListDrawer(
 				}
 				return next;
 			});
+		},
+		[],
+	);
+
+	const handleSwitchDeviceSource = useCallback(
+		async (sharingSessionID: string, sourceId: string) => {
+			if (!sharingSessionID || !sourceId) return;
+			await window.electron.ipcRenderer.invoke(
+				IpcEvents.SetDesktopCapturerSourceIdBySharingSessionId,
+				sharingSessionID,
+				sourceId,
+			);
+			setConnectedDevices((prev) =>
+				prev.map((device) =>
+					device.sharingSessionID === sharingSessionID
+						? { ...device, desktopCapturerSourceId: sourceId }
+						: device,
+				),
+			);
 		},
 		[],
 	);
@@ -353,6 +390,33 @@ export default function ConnectedDevicesListDrawer(
 													/>
 												</Col>
 											</Row>
+											{availableSources.length > 0 && (
+												<Row
+													center="xs"
+													middle="xs"
+													style={{ marginTop: '8px' }}
+												>
+													<Text className="bp3-text-muted">
+														{t('switch-source')}:
+													</Text>
+													<HTMLSelect
+														value={device.desktopCapturerSourceId ?? ''}
+														onChange={(event) => {
+															void handleSwitchDeviceSource(
+																device.sharingSessionID,
+																event.currentTarget.value,
+															);
+														}}
+														style={{ marginLeft: '8px', maxWidth: '60%' }}
+													>
+														{availableSources.map((source) => (
+															<option key={source.id} value={source.id}>
+																{source.name}
+															</option>
+														))}
+													</HTMLSelect>
+												</Row>
+											)}
 											<Row center="xs">
 												{device.trustedDeviceId !== '' &&
 													(trustedDeviceIds.includes(

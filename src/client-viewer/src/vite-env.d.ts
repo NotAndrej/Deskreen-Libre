@@ -8,6 +8,10 @@ type LoadingSharingIconType =
 type ScreenSharingSourceType =
 	| ScreenSharingSourceEnum.SCREEN
 	| ScreenSharingSourceEnum.WINDOW;
+type CursorPosition = {
+	x: number;
+	y: number;
+};
 type CreatePeerConnectionUseEffectParams = {
 	connectionRoomId: string;
 	peer: undefined | PeerConnection;
@@ -22,6 +26,7 @@ type CreatePeerConnectionUseEffectParams = {
 	setPeer: (_: undefined | PeerConnection) => void;
 	setAppTheme: (_: 'dark' | 'light') => void;
 	setAppUiStyle: (_: 'legacy' | 'modern') => void;
+	setCursorPosition: (_: CursorPosition | null) => void;
 };
 type handleDisplayingLoadingSharingIconLoopParams = {
 	promptStep: number;

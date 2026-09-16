@@ -19,6 +19,7 @@ export default (params: CreatePeerConnectionUseEffectParams) => {
 		setPeer,
 		setAppTheme,
 		setAppUiStyle,
+		setCursorPosition,
 	} = params;
 
 	// return the effect function
@@ -48,6 +49,7 @@ export default (params: CreatePeerConnectionUseEffectParams) => {
 				setIsErrorDialogOpen,
 				setAppTheme,
 				setAppUiStyle,
+				setCursorPosition,
 			);
 
 			const _peer = new PeerConnection(

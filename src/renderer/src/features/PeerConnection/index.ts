@@ -45,6 +45,7 @@ export default class PeerConnection {
 	} as Device;
 	signalsDataToCallUser: string[];
 	isCallStarted: boolean;
+	cursorBroadcastInterval: NodeJS.Timeout | null = null;
 	onDeviceConnectedCallback: (device: Device) => void;
 	displayID: string;
 	sourceDisplaySize: DisplaySize | undefined;
@@ -99,6 +100,38 @@ export default class PeerConnection {
 				uiStyle,
 			},
 		});
+	}
+
+	startCursorBroadcast(): void {
+		if (this.cursorBroadcastInterval !== null) return;
+		this.cursorBroadcastInterval = setInterval(() => {
+			void (async () => {
+				try {
+					const position = await window.electron.ipcRenderer.invoke(
+						IpcEvents.GetCursorScreenPoint,
+					);
+					if (
+						position &&
+						typeof position.x === 'number' &&
+						typeof position.y === 'number'
+					) {
+						this.sendEncryptedMessage({
+							type: 'CURSOR_POSITION',
+							payload: { x: position.x, y: position.y },
+						});
+					}
+				} catch {
+					// cursor polling is best-effort only
+				}
+			})();
+		}, 100);
+	}
+
+	stopCursorBroadcast(): void {
+		if (this.cursorBroadcastInterval !== null) {
+			clearInterval(this.cursorBroadcastInterval);
+			this.cursorBroadcastInterval = null;
+		}
 	}
 
 	async setDesktopCapturerSourceID(id: string): Promise<void> {
@@ -257,6 +290,7 @@ export default class PeerConnection {
 	}
 
 	disconnectPartner(): void {
+		this.stopCursorBroadcast();
 		this.socket.emit('DISCONNECT_SOCKET_BY_DEVICE_IP', {
 			ip: this.partnerDeviceDetails.deviceIP,
 		});
@@ -265,6 +299,7 @@ export default class PeerConnection {
 	}
 
 	selfDestroy(): void {
+		this.stopCursorBroadcast();
 		handleSelfDestroy(this);
 	}
 
@@ -292,6 +327,7 @@ export default class PeerConnection {
 
 	callPeer(): void {
 		if (process.env.RUN_MODE === 'test') return;
+		this.startCursorBroadcast();
 		if (this.isCallStarted) return;
 		this.isCallStarted = true;
 

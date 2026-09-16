@@ -53,6 +53,8 @@ function MainView() {
 	);
 	const [peer, setPeer] = useState<undefined | PeerConnection>();
 	const [connectionRoomId, setConnectionRoomId] = useState<string>('');
+	const [cursorPosition, setCursorPosition] =
+		useState<CursorPosition | null>(null);
 
 	useEffect(() => {
 		const { pathname } = window.location;
@@ -119,6 +121,7 @@ function MainView() {
 			setPeer,
 			setAppTheme: setAppThemeHook,
 			setAppUiStyle: setAppUiStyleHook,
+			setCursorPosition,
 		}),
 		[connectionRoomId],
 	);
@@ -155,6 +158,7 @@ function MainView() {
 				streamUrl={url}
 				screenSharingSourceType={screenSharingSourceType}
 				setIsWithControls={setIsWithControls}
+				cursorPosition={cursorPosition}
 				isWithControls={isWithControls}
 				handlePlayPause={handlePlayPause}
 				isPlaying={playing}

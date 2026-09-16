@@ -53,6 +53,14 @@ export type AppThemeMessageWithPayload = {
 	};
 };
 
+export type CursorPositionMessageWithPayload = {
+	type: 'CURSOR_POSITION';
+	payload: {
+		x: number;
+		y: number;
+	};
+};
+
 export type DenyToConnectMessageWithPayload = {
 	type: 'DENY_TO_CONNECT';
 	payload: Record<string, unknown>;
@@ -76,6 +84,7 @@ export type ProcessedMessage =
 	| AppLanguageMessageWithPayload
 	| GetAppThemeMessageWithPayload
 	| AppThemeMessageWithPayload
+	| CursorPositionMessageWithPayload
 	| DenyToConnectMessageWithPayload
 	| AllowedToConnectMessageWithPayload
 	| DisconnectByHostMachineUserMessageWithPayload;

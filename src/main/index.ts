@@ -11,8 +11,6 @@ import { join } from 'path';
 import { is, optimizer } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 import { existsSync } from 'node:fs';
-import { store } from '../common/deskreen-electron-store';
-import { ElectronStoreKeys } from '../common/ElectronStoreKeys.enum';
 
 export function isAutoStartOnLoginEnabled(): boolean {
 	return store.get(ElectronStoreKeys.AutoStartOnLogin) === 'true';

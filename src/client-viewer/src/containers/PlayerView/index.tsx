@@ -20,6 +20,7 @@ interface PlayerViewProps {
 	videoQuality: VideoQualityType;
 	screenSharingSourceType: ScreenSharingSourceType;
 	streamUrl: MediaStream | null;
+	cursorPosition: CursorPosition | null;
 }
 
 type IOSVideoElement = HTMLVideoElement & {
@@ -41,6 +42,7 @@ function PlayerView(props: PlayerViewProps) {
 		setVideoQuality,
 		videoQuality,
 		streamUrl,
+		cursorPosition,
 	} = props;
 
 	// const player = useRef(null);
@@ -72,6 +74,52 @@ function PlayerView(props: PlayerViewProps) {
 	const handleRotateClockwise = useCallback(() => {
 		setRotationDegrees((prev) => (prev + 90) % 360);
 	}, []);
+
+	// Presenter cursor highlight: map the host-relative cursor position onto
+	// the displayed video (contain-fit), hide it when updates stop arriving.
+	const [cursorPx, setCursorPx] = useState<{
+		left: number;
+		top: number;
+	} | null>(null);
+	const cursorHideTimer = useRef<number | null>(null);
+
+	useEffect(() => {
+		if (cursorHideTimer.current !== null) {
+			window.clearTimeout(cursorHideTimer.current);
+			cursorHideTimer.current = null;
+		}
+		if (!cursorPosition || !streamUrl) {
+			setCursorPx(null);
+			return;
+		}
+		const container = document.getElementById(PLAYER_WRAPPER_ID);
+		if (!container) return;
+		const rect = container.getBoundingClientRect();
+		if (rect.width <= 0 || rect.height <= 0) return;
+		const video = container.querySelector('video');
+		const sourceWidth = video?.videoWidth || rect.width;
+		const sourceHeight = video?.videoHeight || rect.height;
+		const scale = Math.min(
+			rect.width / sourceWidth,
+			rect.height / sourceHeight,
+		);
+		const drawnWidth = sourceWidth * scale;
+		const drawnHeight = sourceHeight * scale;
+		setCursorPx({
+			left: (rect.width - drawnWidth) / 2 + cursorPosition.x * drawnWidth,
+			top:
+				(rect.height - drawnHeight) / 2 + cursorPosition.y * drawnHeight,
+		});
+		cursorHideTimer.current = window.setTimeout(() => {
+			setCursorPx(null);
+		}, 1500);
+		return () => {
+			if (cursorHideTimer.current !== null) {
+				window.clearTimeout(cursorHideTimer.current);
+				cursorHideTimer.current = null;
+			}
+		};
+	}, [cursorPosition, streamUrl]);
 
 	// Auto-hide the control bar after 3s idle while streaming; any pointer
 	// activity brings it back.
@@ -330,6 +378,26 @@ function PlayerView(props: PlayerViewProps) {
 							stream={streamUrl}
 							playing={isPlaying}
 							containerEl={document.getElementById(PLAYER_WRAPPER_ID)}
+						/>
+					)}
+					{cursorPx && streamUrl && (
+						<div
+							style={{
+								position: 'absolute',
+								left: `${cursorPx.left}px`,
+								top: `${cursorPx.top}px`,
+								width: '28px',
+								height: '28px',
+								marginLeft: '-14px',
+								marginTop: '-14px',
+								borderRadius: '50%',
+								border: '3px solid #a89bf5',
+								boxShadow:
+									'0 0 12px rgba(168, 155, 245, 0.9), inset 0 0 6px rgba(168, 155, 245, 0.5)',
+								pointerEvents: 'none',
+								zIndex: 5,
+								transition: 'left 100ms linear, top 100ms linear',
+							}}
 						/>
 					)}
 				</div>
