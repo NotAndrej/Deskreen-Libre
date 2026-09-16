@@ -18,9 +18,9 @@ export default function ToggleUIStyleBtnGroup(): React.ReactElement {
 				value={uiStyle}
 				onValueChange={handleValueChange}
 				options={[
+					{ label: t('ui-style-classic'), value: 'classic' },
 					{ label: t('ui-style-legacy'), value: 'legacy' },
 					{ label: t('ui-style-modern'), value: 'modern' },
-					{ label: t('ui-style-classic'), value: 'classic' },
 				]}
 				small
 				fill

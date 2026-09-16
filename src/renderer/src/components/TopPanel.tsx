@@ -355,7 +355,13 @@ export default function TopPanel({
 			id="logo-with-popover-visit-website"
 			className={classes.logoWithAppName}
 		>
-			<H3 className={classes.appNameHeader}>{brandName}</H3>
+			<H3
+				className={
+					uiStyle === 'classic' ? classes.appNameHeader : undefined
+				}
+			>
+				{brandName}
+			</H3>
 		</div>
 	);
 
