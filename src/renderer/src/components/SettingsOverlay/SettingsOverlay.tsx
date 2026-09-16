@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
 	Overlay2,
 	Classes,
-	H3,
 	H4,
 	Text,
 	Callout,
@@ -11,8 +10,9 @@ import {
 	HTMLSelect,
 	Alert,
 	Button,
+	Tabs,
+	Tab,
 } from '@blueprintjs/core';
-import { Row } from 'react-flexbox-grid';
 import { makeStyles } from 'tss-react/mui';
 import CloseOverlayButton from '../CloseOverlayButton';
 import SettingRowLabelAndInput from './SettingRowLabelAndInput';
@@ -46,7 +46,12 @@ const useStyles = makeStyles()(() => ({
 		boxSizing: 'border-box',
 		overflowY: 'auto',
 	},
-	absoluteCloseButton: { position: 'absolute', left: 'calc(100% - 65px)' },
+	absoluteCloseButton: {
+		position: 'fixed',
+		top: '24px',
+		right: '24px',
+		zIndex: 50,
+	},
 	updateCalloutWrapper: {
 		display: 'flex',
 		justifyContent: 'center',
@@ -81,6 +86,20 @@ export default function SettingsOverlay(
 	const { brandName, setBrandNameHook } = useContext(SettingsContext);
 	const [isFactoryResetAlertOpen, setIsFactoryResetAlertOpen] =
 		useState(false);
+	const [selectedTabId, setSelectedTabId] = useState('general');
+
+	useEffect(() => {
+		if (!isSettingsOpen) return;
+		const handleEscapeKey = (event: KeyboardEvent): void => {
+			if (event.key === 'Escape') {
+				handleClose();
+			}
+		};
+		window.addEventListener('keydown', handleEscapeKey);
+		return () => {
+			window.removeEventListener('keydown', handleEscapeKey);
+		};
+	}, [isSettingsOpen, handleClose]);
 
 	const { t } = useTranslation();
 
@@ -254,142 +273,166 @@ export default function SettingsOverlay(
 								</Callout>
 							</div>
 						) : null}
-						<Row middle="xs">
-							<H3 className="bp3-text-muted">{t('general-settings')}</H3>
-						</Row>
-						<div style={{ marginTop: '24px' }}>
-							<SettingRowLabelAndInput
-								icon="translate"
-								label={t('language')}
-								input={<LanguageSelector />}
-							/>
-						</div>
-						<div style={{ marginTop: '24px' }}>
-							<SettingRowLabelAndInput
-								icon="contrast"
-								label={t('color-theme')}
-								input={<ToggleThemeBtnGroup />}
-							/>
-						</div>
-						<div style={{ marginTop: '24px' }}>
-							<SettingRowLabelAndInput
-								icon="layout-grid"
-								label={t('ui-style')}
-								input={<ToggleUIStyleBtnGroup />}
-							/>
-						</div>
-						<div style={{ marginTop: '24px' }}>
-							<SettingRowLabelAndInput
-								icon="power"
-								label={t('auto-start-on-login')}
-								input={
-									<Switch
-										checked={autoStartOnLogin}
-										onChange={handleAutoStartChange}
-										innerLabel={autoStartOnLogin ? t('on') : t('off')}
-									/>
+						<Tabs
+							selectedTabId={selectedTabId}
+							onChange={(tabId) => setSelectedTabId(String(tabId))}
+							renderActiveTabPanelOnly
+						>
+							<Tab
+								id="general"
+								title={t('settings-general')}
+								panel={
+									<>
+										<div style={{ marginTop: '24px' }}>
+											<SettingRowLabelAndInput
+												icon="translate"
+												label={t('language')}
+												input={<LanguageSelector />}
+											/>
+										</div>
+										<div style={{ marginTop: '24px' }}>
+											<SettingRowLabelAndInput
+												icon="contrast"
+												label={t('color-theme')}
+												input={<ToggleThemeBtnGroup />}
+											/>
+										</div>
+										<div style={{ marginTop: '24px' }}>
+											<SettingRowLabelAndInput
+												icon="layout-grid"
+												label={t('ui-style')}
+												input={<ToggleUIStyleBtnGroup />}
+											/>
+										</div>
+										<div style={{ marginTop: '24px' }}>
+											<SettingRowLabelAndInput
+												icon="tag"
+												label={t('brand-name')}
+												input={
+													<HTMLSelect
+														value={brandName}
+														onChange={handleBrandChange}
+													>
+														{BRAND_OPTIONS.map((option) => (
+															<option key={option} value={option}>
+																{option}
+															</option>
+														))}
+													</HTMLSelect>
+												}
+											/>
+										</div>
+									</>
 								}
 							/>
-						</div>
-						<div style={{ marginTop: '24px' }}>
-							<SettingRowLabelAndInput
-								icon="warning-sign"
-								label={t('prevent-accidental-quit')}
-								input={
-									<Switch
-										checked={preventAccidentalQuit}
-										onChange={handlePreventQuitChange}
-										innerLabel={preventAccidentalQuit ? t('on') : t('off')}
-									/>
+							<Tab
+								id="connection"
+								title={t('settings-connection')}
+								panel={
+									<>
+										<div style={{ marginTop: '24px' }}>
+											<SettingRowLabelAndInput
+												icon="link"
+												label={t('custom-server-port')}
+												input={
+													<NumericInput
+														placeholder="3131"
+														min={1}
+														max={65535}
+														buttonPosition="none"
+														value={customServerPort}
+														onValueChange={(_value, valueString) =>
+															setCustomServerPort(valueString)
+														}
+														onBlur={handlePortBlur}
+														style={{ width: '120px' }}
+													/>
+												}
+											/>
+											<Text className="bp3-text-muted">
+												{t('restart-required-for-port')}
+											</Text>
+										</div>
+										<div style={{ marginTop: '24px' }}>
+											<SettingRowLabelAndInput
+												icon="globe"
+												label={t('network-interface')}
+												input={
+													<HTMLSelect
+														value={networkInterfaceIP}
+														onChange={handleInterfaceChange}
+													>
+														<option value="">
+															{t('network-interface-auto')}
+														</option>
+														{networkInterfaces.map((iface) => (
+															<option
+																key={`${iface.name}-${iface.address}`}
+																value={iface.address}
+															>
+																{`${iface.name} (${iface.address})`}
+															</option>
+														))}
+													</HTMLSelect>
+												}
+											/>
+										</div>
+									</>
 								}
 							/>
-						</div>
-						<div style={{ marginTop: '24px' }}>
-							<SettingRowLabelAndInput
-								icon="link"
-								label={t('custom-server-port')}
-								input={
-									<NumericInput
-										placeholder="3131"
-										min={1}
-										max={65535}
-										buttonPosition="none"
-										value={customServerPort}
-										onValueChange={(_value, valueString) =>
-											setCustomServerPort(valueString)
-										}
-										onBlur={handlePortBlur}
-										style={{ width: '120px' }}
-									/>
+							<Tab
+								id="system"
+								title={t('settings-system')}
+								panel={
+									<>
+										<div style={{ marginTop: '24px' }}>
+											<SettingRowLabelAndInput
+												icon="power"
+												label={t('auto-start-on-login')}
+												input={
+													<Switch
+														checked={autoStartOnLogin}
+														onChange={handleAutoStartChange}
+														innerLabel={autoStartOnLogin ? t('on') : t('off')}
+													/>
+												}
+											/>
+										</div>
+										<div style={{ marginTop: '24px' }}>
+											<SettingRowLabelAndInput
+												icon="warning-sign"
+												label={t('prevent-accidental-quit')}
+												input={
+													<Switch
+														checked={preventAccidentalQuit}
+														onChange={handlePreventQuitChange}
+														innerLabel={
+															preventAccidentalQuit ? t('on') : t('off')
+														}
+													/>
+												}
+											/>
+										</div>
+										<div style={{ marginTop: '32px' }}>
+											<SettingRowLabelAndInput
+												icon="reset"
+												label={t('factory-reset')}
+												input={
+													<Button
+														intent="danger"
+														icon="reset"
+														style={{ borderRadius: '100px' }}
+														onClick={() => setIsFactoryResetAlertOpen(true)}
+													>
+														{t('factory-reset')}
+													</Button>
+												}
+											/>
+										</div>
+									</>
 								}
 							/>
-							<Text className="bp3-text-muted">
-								{t('restart-required-for-port')}
-							</Text>
-						</div>
-						<div style={{ marginTop: '24px' }}>
-							<SettingRowLabelAndInput
-								icon="tag"
-								label={t('brand-name')}
-								input={
-									<HTMLSelect value={brandName} onChange={handleBrandChange}>
-										{BRAND_OPTIONS.map((option) => (
-											<option key={option} value={option}>
-												{option}
-											</option>
-										))}
-									</HTMLSelect>
-								}
-							/>
-						</div>
-						<div style={{ marginTop: '32px' }}>
-							<SettingRowLabelAndInput
-								icon="reset"
-								label={t('factory-reset')}
-								input={
-									<Button
-										intent="danger"
-										icon="reset"
-										style={{ borderRadius: '100px' }}
-										onClick={() => setIsFactoryResetAlertOpen(true)}
-									>
-										{t('factory-reset')}
-									</Button>
-								}
-							/>
-						</div>
-						<Row center="xs" style={{ marginTop: '32px' }}>
-							<Button
-								style={{ borderRadius: '100px', minWidth: '200px' }}
-								onClick={handleClose}
-							>
-								{t('close')}
-							</Button>
-						</Row>
-						<div style={{ marginTop: '24px' }}>
-							<SettingRowLabelAndInput
-								icon="globe"
-								label={t('network-interface')}
-								input={
-									<HTMLSelect
-										value={networkInterfaceIP}
-										onChange={handleInterfaceChange}
-									>
-										<option value="">
-											{t('network-interface-auto')}
-										</option>
-										{networkInterfaces.map((iface) => (
-											<option
-												key={`${iface.name}-${iface.address}`}
-												value={iface.address}
-											>
-												{`${iface.name} (${iface.address})`}
-											</option>
-										))}
-									</HTMLSelect>
-								}
-							/>
-						</div>
+						</Tabs>
 					</div>
 				</div>
 			</div>
