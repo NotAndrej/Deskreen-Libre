@@ -49,7 +49,6 @@
 	"Session ID": "ID relácie",
 	"Click to boost video stream if it is lagging": "Kliknutím zosilníte video stream, ak je oneskorený",
 	"re-initiate-connection": "Znova spustite pripojenie",
-	"Privacy Notice: Analytics in Deskreen Libre Viewer": "Oznámenie o ochrane osobných údajov: Analytics v aplikácii Deskreen Libre Viewer",
 	"Analytics Reference": "Referenčná príručka služby Analytics",
 	"This app uses Google Analytics (a free service by Google) to anonymously track basic usage data. This helps us understand how people use the app so we can improve it for everyone.": "Táto aplikácia využíva Google Analytics (bezplatná služba od spoločnosti Google) na anonymné sledovanie základných údajov o používaní. To nám pomáha pochopiť, ako ľudia používajú aplikáciu, aby sme ju mohli vylepšiť pre všetkých.",
 	"What we collect:": "Čo zbierame:",
@@ -67,17 +66,6 @@
 	"Continue:": "Pokračovať:",
 	"We'll track anonymized usage to help improve the app.": "Budeme sledovať anonymizované používanie, aby sme pomohli vylepšiť aplikáciu.",
 	"Opt out:": "Odhlásiť sa:",
-	"Click the Deny button below to disable tracking. (We'll respect this choice, but you might miss out on future improvements based on collective feedback.)": "Kliknutím na tlačidlo Zamietnuť nižšie zakážete sledovanie. (Túto voľbu budeme rešpektovať, ale môžete prísť o budúce vylepšenia založené na kolektívnej spätnej väzbe.)",
 	"Data goes to: Google Analytics. See their privacy policy.": "Údaje idú do: Google Analytics. Pozrite si ich zásady ochrany osobných údajov.",
-	"Accept": "Prijať",
-	"Allow": "Povoliť",
-	"Deny": "Odmietnuť",
-	"Privacy Settings": "Nastavenia ochrany osobných údajov",
-	"Change your preference:": "Zmeňte svoje preferencie:",
-	"Enable analytics:": "Povoliť analýzu:",
-	"Disable analytics:": "Zakázať analýzu:",
-	"Enable Analytics": "Povoliť službu Analytics",
-	"Disable Analytics": "Zakázať službu Analytics",
-	"Click the Disable button below to stop tracking. (We'll respect this choice, but you might miss out on future improvements based on collective feedback.)": "Kliknutím na tlačidlo Zakázať nižšie zastavíte sledovanie. (Túto voľbu budeme rešpektovať, ale môžete prísť o budúce vylepšenia založené na kolektívnej spätnej väzbe.)",
-	"their privacy policy": "ich zásady ochrany osobných údajov"
+	"Accept": "Prijať"
 }
