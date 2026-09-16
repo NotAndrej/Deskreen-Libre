@@ -6,7 +6,7 @@
 
 Deskreen turns any device with a web browser into a secondary screen for your computer
 
-**A fork of [Deskreen CE](https://github.com/pavlobu/deskreen) with trackers and Pro upsells removed (and alot more), in active development.**
+**A fork of [Deskreen CE](https://github.com/pavlobu/deskreen) with trackers and Pro upsells removed (and a lot of new features), in active development.**
 
 ## Deskreen CE vs Deskreen Pro vs Teams vs Deskreen Libre
 
