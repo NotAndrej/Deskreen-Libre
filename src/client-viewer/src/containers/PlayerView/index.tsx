@@ -73,6 +73,32 @@ function PlayerView(props: PlayerViewProps) {
 		setRotationDegrees((prev) => (prev + 90) % 360);
 	}, []);
 
+	// Auto-hide the control bar after 3s idle while streaming; any pointer
+	// activity brings it back.
+	const [areControlsHidden, setAreControlsHidden] = useState(false);
+	const hideControlsTimer = useRef<number | null>(null);
+
+	const pokeControlsVisible = useCallback(() => {
+		setAreControlsHidden(false);
+		if (hideControlsTimer.current !== null) {
+			window.clearTimeout(hideControlsTimer.current);
+			hideControlsTimer.current = null;
+		}
+		hideControlsTimer.current = window.setTimeout(() => {
+			setAreControlsHidden(true);
+		}, 3000);
+	}, []);
+
+	useEffect(() => {
+		pokeControlsVisible();
+		return () => {
+			if (hideControlsTimer.current !== null) {
+				window.clearTimeout(hideControlsTimer.current);
+				hideControlsTimer.current = null;
+			}
+		};
+	}, [pokeControlsVisible, streamUrl]);
+
 	useEffect(() => {
 		if (!streamUrl) return;
 
@@ -220,6 +246,8 @@ function PlayerView(props: PlayerViewProps) {
 	// @ts-ignore
 	return (
 		<div
+			onMouseMove={pokeControlsVisible}
+			onTouchStart={pokeControlsVisible}
 			style={{
 				position: 'absolute',
 				zIndex: 1,
@@ -232,7 +260,15 @@ function PlayerView(props: PlayerViewProps) {
 				overflow: 'hidden',
 			}}
 		>
-			<PlayerControlPanel
+			<div
+				style={{
+					opacity: areControlsHidden && streamUrl ? 0 : 1,
+					transition: 'opacity 300ms ease-in-out',
+					pointerEvents:
+						areControlsHidden && streamUrl ? 'none' : 'auto',
+				}}
+			>
+				<PlayerControlPanel
 				onSwitchChangedCallback={(isEnabled) => setIsWithControls(isEnabled)}
 				isDefaultPlayerTurnedOn={isWithControls}
 				handleClickFullscreen={() => {
@@ -251,7 +287,8 @@ function PlayerView(props: PlayerViewProps) {
 				onToggleFlip={handleToggleFlip}
 				rotationDegrees={rotationDegrees}
 				onRotateClockwise={handleRotateClockwise}
-			/>
+				/>
+			</div>
 			<div
 				id="video-container"
 				style={{

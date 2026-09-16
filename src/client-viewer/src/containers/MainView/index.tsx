@@ -76,6 +76,34 @@ function MainView() {
 		myDeviceDetails,
 	]);
 
+	// Hardened reconnect: when the machine wakes up or the network returns,
+	// re-establish a dropped socket instead of waiting for the next retry loop.
+	useEffect(() => {
+		const reconnectIfDown = () => {
+			const socket = peer?.socket;
+			if (socket && !socket.connected) {
+				socket.connect();
+			}
+		};
+		const handleOnline = () => {
+			reconnectIfDown();
+		};
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === 'visible') {
+				reconnectIfDown();
+			}
+		};
+		window.addEventListener('online', handleOnline);
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+		return () => {
+			window.removeEventListener('online', handleOnline);
+			document.removeEventListener(
+				'visibilitychange',
+				handleVisibilityChange,
+			);
+		};
+	}, [peer]);
+
 	useEffect(
 		handleCreatePeerConnection({
 			peer,
