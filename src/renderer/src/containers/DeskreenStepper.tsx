@@ -33,6 +33,7 @@ import ColorlibStepIcon, {
 } from '@renderer/components/StepperPanel/ColorlibStepIcon';
 import LanguageSelector from '@renderer/components/LanguageSelector';
 import ToggleThemeBtnGroup from '@renderer/components/ToggleThemeBtnGroup';
+import ToggleUIStyleBtnGroup from '@renderer/components/ToggleUIStyleBtnGroup';
 import { getShuffledArrayOfHello } from '@renderer/configs/i18next.config.client';
 import { IpcEvents } from '../../../common/IpcEvents.enum';
 import DeviceConnectedInfoButton from '@renderer/components/StepperPanel/DeviceConnectedInfoButton';
@@ -370,7 +371,12 @@ const DeskreenStepper = ({
 					</div>
 				</Grid>
 			</Dialog>
-			<Dialog isOpen={isSelectLanguageDialogOpen} autoFocus usePortal>
+			<Dialog
+				isOpen={isSelectLanguageDialogOpen}
+				autoFocus
+				usePortal
+				style={{ width: '720px', maxWidth: '95%' }}
+			>
 				<Grid>
 					<div style={{ padding: '10px' }}>
 						<Row center="xs" style={{ marginTop: '10px' }}>
@@ -397,6 +403,17 @@ const DeskreenStepper = ({
 								</Row>
 								<Row center="xs" style={{ marginTop: '10px' }}>
 									<ToggleThemeBtnGroup />
+								</Row>
+							</Col>
+							<Col xs>
+								<Row center="xs" style={{ marginTop: '20px' }}>
+									<Icon icon="layout-grid" size={50} color="#8A9BA8" />
+								</Row>
+								<Row center="xs" style={{ marginTop: '20px' }}>
+									<H5>{t('ui-style')}</H5>
+								</Row>
+								<Row center="xs" style={{ marginTop: '10px' }}>
+									<ToggleUIStyleBtnGroup />
 								</Row>
 							</Col>
 						</Row>

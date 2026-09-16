@@ -357,6 +357,14 @@ export default function SettingsOverlay(
 								}
 							/>
 						</div>
+						<Row center="xs" style={{ marginTop: '32px' }}>
+							<Button
+								style={{ borderRadius: '100px', minWidth: '200px' }}
+								onClick={handleClose}
+							>
+								{t('close')}
+							</Button>
+						</Row>
 						<div style={{ marginTop: '24px' }}>
 							<SettingRowLabelAndInput
 								icon="globe"
