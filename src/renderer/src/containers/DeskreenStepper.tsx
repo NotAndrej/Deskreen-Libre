@@ -375,7 +375,7 @@ const DeskreenStepper = ({
 				isOpen={isSelectLanguageDialogOpen}
 				autoFocus
 				usePortal
-				style={{ width: '720px', maxWidth: '95%' }}
+				style={{ width: '880px', maxWidth: '95%' }}
 			>
 				<Grid>
 					<div style={{ padding: '10px' }}>

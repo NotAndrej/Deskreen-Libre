@@ -13,7 +13,7 @@ export default function ToggleThemeBtnGroup(): React.ReactElement {
 	};
 
 	return (
-		<div style={{ width: '100%', minWidth: '200px', maxWidth: '300px' }}>
+		<div style={{ width: '100%', minWidth: '240px', maxWidth: '360px' }}>
 			<SegmentedControl
 				value={themeSource}
 				onValueChange={handleValueChange}
@@ -22,7 +22,6 @@ export default function ToggleThemeBtnGroup(): React.ReactElement {
 					{ label: t('dark'), value: 'dark', icon: 'moon' },
 					{ label: t('auto'), value: 'system', icon: 'desktop' },
 				]}
-				small
 				fill
 			/>
 		</div>
