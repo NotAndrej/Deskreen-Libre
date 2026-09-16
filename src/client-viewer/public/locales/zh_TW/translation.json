@@ -76,5 +76,8 @@
 	"Enable Analytics": "啟用分析",
 	"Disable Analytics": "停用分析",
 	"Click the Disable button below to stop tracking. (We'll respect this choice, but you might miss out on future improvements based on collective feedback.)": "點擊下面的停用按鈕以停止追蹤。（我們會尊重您的選擇，但您可能會錯過基於集體反饋的未來改進。）",
-	"their privacy policy": "其隱私權政策"
+	"their privacy policy": "其隱私權政策",
+	"Rotate": "旋轉",
+	"Device Alias": "裝置別名",
+	"Name this device": "命名該設備"
 }

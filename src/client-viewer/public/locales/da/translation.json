@@ -76,5 +76,8 @@
 	"Enable Analytics": "Aktivér analyse",
 	"Disable Analytics": "Deaktivér analyse",
 	"Click the Disable button below to stop tracking. (We'll respect this choice, but you might miss out on future improvements based on collective feedback.)": "Klik på knappen Deaktivér nedenfor for at stoppe sporing. (Vi respekterer dette valg, men du kan gå glip af fremtidige forbedringer baseret på kollektiv feedback.)",
-	"their privacy policy": "deres privatlivspolitik"
+	"their privacy policy": "deres privatlivspolitik",
+	"Rotate": "Rotere",
+	"Device Alias": "Enhedsalias",
+	"Name this device": "Navngiv denne enhed"
 }

@@ -76,5 +76,8 @@
 	"Enable Analytics": "Analytik aktivieren",
 	"Disable Analytics": "Analytik deaktivieren",
 	"Click the Disable button below to stop tracking. (We'll respect this choice, but you might miss out on future improvements based on collective feedback.)": "Klicke auf den Button Deaktivieren unten, um das Tracking zu stoppen. (Wir respektieren diese Entscheidung, aber du könntest zukünftige Verbesserungen verpassen, die auf kollektivem Feedback basieren.)",
-	"their privacy policy": "deren Datenschutzerklärung"
+	"their privacy policy": "deren Datenschutzerklärung",
+	"Rotate": "Drehen",
+	"Device Alias": "Gerätealias",
+	"Name this device": "Benennen Sie dieses Gerät"
 }

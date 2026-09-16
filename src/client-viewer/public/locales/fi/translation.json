@@ -76,5 +76,8 @@
 	"Enable Analytics": "Ota analytiikka käyttöön",
 	"Disable Analytics": "Poista analytiikka käytöstä",
 	"Click the Disable button below to stop tracking. (We'll respect this choice, but you might miss out on future improvements based on collective feedback.)": "Klikkaa alla olevaa Poista käytöstä -painiketta seurannan lopettamiseksi. (Kunnioitamme tätä valintaa, mutta saatat jäädä paitsi tulevista parannuksista, jotka perustuvat kollektiiviseen palautteeseen.)",
-	"their privacy policy": "heidän tietosuojakäytäntönsä"
+	"their privacy policy": "heidän tietosuojakäytäntönsä",
+	"Rotate": "Kiertää",
+	"Device Alias": "Laitteen alias",
+	"Name this device": "Nimeä tämä laite"
 }

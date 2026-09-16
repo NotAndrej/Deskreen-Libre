@@ -76,5 +76,8 @@
 	"Enable Analytics": "分析を有効にする",
 	"Disable Analytics": "分析を無効にする",
 	"Click the Disable button below to stop tracking. (We'll respect this choice, but you might miss out on future improvements based on collective feedback.)": "下の無効ボタンをクリックして追跡を停止します。（この選択を尊重しますが、集団フィードバックに基づく将来の改善を見逃す可能性があります。）",
-	"their privacy policy": "プライバシーポリシー"
+	"their privacy policy": "プライバシーポリシー",
+	"Rotate": "回転",
+	"Device Alias": "デバイスエイリアス",
+	"Name this device": "このデバイスに名前を付けます"
 }

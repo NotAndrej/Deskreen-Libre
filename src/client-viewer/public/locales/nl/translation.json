@@ -76,5 +76,8 @@
 	"Enable Analytics": "Analytics inschakelen",
 	"Disable Analytics": "Analytics uitschakelen",
 	"Click the Disable button below to stop tracking. (We'll respect this choice, but you might miss out on future improvements based on collective feedback.)": "Klik op de knop Uitschakelen hieronder om tracking te stoppen. (We respecteren deze keuze, maar u kunt toekomstige verbeteringen missen op basis van collectieve feedback.)",
-	"their privacy policy": "hun privacybeleid"
+	"their privacy policy": "hun privacybeleid",
+	"Rotate": "Draaien",
+	"Device Alias": "Apparaatalias",
+	"Name this device": "Geef dit apparaat een naam"
 }

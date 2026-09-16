@@ -76,5 +76,8 @@
 	"Enable Analytics": "Abilita analisi",
 	"Disable Analytics": "Disabilita analisi",
 	"Click the Disable button below to stop tracking. (We'll respect this choice, but you might miss out on future improvements based on collective feedback.)": "Fai clic sul pulsante Disabilita qui sotto per interrompere il tracciamento. (Rispetteremo questa scelta, ma potresti perdere miglioramenti futuri basati su feedback collettivo.)",
-	"their privacy policy": "la loro informativa sulla privacy"
+	"their privacy policy": "la loro informativa sulla privacy",
+	"Rotate": "Ruotare",
+	"Device Alias": "Alias ​​del dispositivo",
+	"Name this device": "Assegna un nome a questo dispositivo"
 }

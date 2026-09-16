@@ -76,5 +76,8 @@
 	"Enable Analytics": "Включить аналитику",
 	"Disable Analytics": "Отключить аналитику",
 	"Click the Disable button below to stop tracking. (We'll respect this choice, but you might miss out on future improvements based on collective feedback.)": "Нажмите кнопку Отключить ниже, чтобы остановить отслеживание. (Мы уважаем этот выбор, но вы можете пропустить будущие улучшения, основанные на коллективной обратной связи.)",
-	"their privacy policy": "их политику конфиденциальности"
+	"their privacy policy": "их политику конфиденциальности",
+	"Rotate": "Поворот",
+	"Device Alias": "Псевдоним устройства",
+	"Name this device": "Назовите это устройство"
 }

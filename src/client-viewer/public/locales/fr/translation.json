@@ -76,5 +76,8 @@
 	"Enable Analytics": "Activer les analyses",
 	"Disable Analytics": "Désactiver les analyses",
 	"Click the Disable button below to stop tracking. (We'll respect this choice, but you might miss out on future improvements based on collective feedback.)": "Cliquez sur le bouton Désactiver ci-dessous pour arrêter le suivi. (Nous respecterons ce choix, mais vous pourriez manquer des améliorations futures basées sur les retours collectifs.)",
-	"their privacy policy": "leur politique de confidentialité"
+	"their privacy policy": "leur politique de confidentialité",
+	"Rotate": "Tourner",
+	"Device Alias": "Alias ​​de l'appareil",
+	"Name this device": "Nommez cet appareil"
 }
