@@ -4,7 +4,6 @@ import { makeStyles } from 'tss-react/mui';
 import { Col, Row } from 'react-flexbox-grid';
 import SettingsOverlay from './SettingsOverlay/SettingsOverlay';
 import AboutOverlay from './AboutOverlay';
-import RemovedFeaturesOverlay from './RemovedFeaturesOverlay';
 import UkraineSupportDialog from './UkraineSupportDialog';
 import ConnectedDevicesListDrawer from './ConnectedDevicesListDrawer';
 import { useTranslation } from 'react-i18next';
@@ -132,8 +131,6 @@ export default function TopPanel({
 
 	const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
 	const [isAboutOpen, setIsAboutOpen] = React.useState(false);
-	const [isRemovedFeaturesOpen, setIsRemovedFeaturesOpen] =
-		React.useState(false);
 	const [isUkraineDialogOpen, setIsUkraineDialogOpen] = React.useState(false);
 	const [isConnectedDevicesDrawerOpen, setIsConnectedDevicesDrawerOpen] =
 		React.useState(false);
@@ -157,16 +154,7 @@ export default function TopPanel({
 		setIsAboutOpen(false);
 	}, []);
 
-	const handleRemovedFeaturesOpen = React.useCallback(() => {
-		setIsRemovedFeaturesOpen(true);
-	}, []);
-
-	const handleRemovedFeaturesClose = React.useCallback(() => {
-		setIsRemovedFeaturesOpen(false);
-	}, []);
-
-	const handleShowUkraineDialog = React.useCallback(() => {
-		setIsRemovedFeaturesOpen(false);
+	const handleUkraineDialogOpen = React.useCallback(() => {
 		setIsUkraineDialogOpen(true);
 	}, []);
 
@@ -343,17 +331,17 @@ export default function TopPanel({
 		</div>
 	);
 
-	const renderRemovedFeaturesButton = (
+	const renderUkraineButton = (
 		<div className={classes.topPanelControlButtonMargin}>
-			<Tooltip content={t('removed-features')} position={Position.BOTTOM}>
+			<Tooltip content={t('ukraine-support')} position={Position.BOTTOM}>
 				<Button
-					id="top-panel-removed-features-button"
-					onClick={handleRemovedFeaturesOpen}
+					id="top-panel-ukraine-button"
+					onClick={handleUkraineDialogOpen}
 					className={classes.topPanelControlButton}
 				>
 					<Icon
 						className={classes.topPanelIconOfControlButton}
-						icon="history"
+						icon="heart"
 						size={22}
 					/>
 				</Button>
@@ -450,17 +438,17 @@ export default function TopPanel({
 						<Icon icon="info-sign" size={18} />
 					</Button>
 				</Tooltip>
-				<Tooltip content={t('removed-features')} position={Position.BOTTOM}>
+				<Tooltip content={t('ukraine-support')} position={Position.BOTTOM}>
 					<Button
-						id="top-panel-removed-features-button"
+						id="top-panel-ukraine-button"
 						minimal
 						className={cx(
 								classes.modernHeaderIconButton,
 								isModernLight && classes.modernHeaderIconButtonLight,
 							)}
-						onClick={handleRemovedFeaturesOpen}
+						onClick={handleUkraineDialogOpen}
 					>
-						<Icon icon="history" size={18} />
+						<Icon icon="heart" size={18} />
 					</Button>
 				</Tooltip>
 				<Tooltip content={t('settings')} position={Position.BOTTOM}>
@@ -509,7 +497,7 @@ export default function TopPanel({
 					{renderHelpButton}
 					{renderTutorialButton}
 					{renderAboutButton}
-					{renderRemovedFeaturesButton}
+					{renderUkraineButton}
 					{renderSettingsButton}
 				</div>
 				{hasUpdate ? (
@@ -549,15 +537,6 @@ export default function TopPanel({
 			)}
 			{isAboutOpen ? (
 				<AboutOverlay isAboutOpen={isAboutOpen} handleClose={handleAboutClose} />
-			) : (
-				<></>
-			)}
-			{isRemovedFeaturesOpen ? (
-				<RemovedFeaturesOverlay
-					isOpen={isRemovedFeaturesOpen}
-					handleClose={handleRemovedFeaturesClose}
-					onShowUkraine={handleShowUkraineDialog}
-				/>
 			) : (
 				<></>
 			)}
