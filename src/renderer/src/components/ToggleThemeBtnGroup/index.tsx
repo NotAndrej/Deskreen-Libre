@@ -13,7 +13,7 @@ export default function ToggleThemeBtnGroup(): React.ReactElement {
 	};
 
 	return (
-		<div style={{ width: '100%', minWidth: '240px', maxWidth: '360px' }}>
+		<div style={{ width: '100%', minWidth: '0', maxWidth: '100%' }}>
 			<SegmentedControl
 				value={themeSource}
 				onValueChange={handleValueChange}

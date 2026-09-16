@@ -382,7 +382,7 @@ const DeskreenStepper = ({
 						<Row center="xs" style={{ marginTop: '10px' }}>
 							<H1>{helloWord}</H1>
 						</Row>
-						<Row>
+						<Row between="xs">
 							<Col xs>
 								<Row center="xs" style={{ marginTop: '20px' }}>
 									<Icon icon="translate" size={50} color="#8A9BA8" />

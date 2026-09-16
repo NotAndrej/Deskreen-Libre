@@ -313,6 +313,7 @@ export default function SettingsOverlay(
 														value={brandName}
 														onChange={handleBrandChange}
 														style={{
+															borderRadius: '50px',
 															fontSize: '17px',
 															padding: '6px 10px',
 															minWidth: '220px',
