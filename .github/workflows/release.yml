@@ -186,25 +186,6 @@ jobs:
             mv dist/latest-mac.yml dist/latest-${{ matrix.build_name }}.yml
           fi
 
-      - name: Notarize and staple macOS DMG
-        if: ${{ matrix.platform == 'macos' }}
-        env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-        run: |
-          shopt -s nullglob
-          for dmg in dist/*.dmg; do
-            echo "Submitting $dmg for notarization"
-            xcrun notarytool submit "$dmg" \
-              --apple-id "$APPLE_ID" \
-              --team-id "$APPLE_TEAM_ID" \
-              --password "$APPLE_APP_SPECIFIC_PASSWORD" \
-              --wait
-            echo "Stapling ticket to $dmg"
-            xcrun stapler staple "$dmg"
-          done
-
       - name: Upload binaries to release
         uses: xresloader/upload-to-github-release@v1
         env:
