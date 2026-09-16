@@ -1,5 +1,5 @@
-import { Callout, Card, H3, Text, Tooltip, Position } from '@blueprintjs/core';
-import { useContext } from 'react';
+import { Callout, Card, H3, Text, Tooltip, Position, EditableText } from '@blueprintjs/core';
+import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
 	LIGHT_UI_BACKGROUND,
@@ -8,6 +8,7 @@ import {
 	MODERN_DARK_UI_BACKGROUND,
 } from '../../constants/styleConstants';
 import { AppContext } from '../../providers/AppContextProvider';
+import { getViewerAlias, setViewerAlias } from '../../utils/viewerAlias';
 
 interface MyDeviceDetailsCardProps {
 	deviceDetails: DeviceDetails;
@@ -16,6 +17,7 @@ interface MyDeviceDetailsCardProps {
 function MyDeviceInfoCard(props: MyDeviceDetailsCardProps) {
 	const { t } = useTranslation();
 	const { appTheme, appUiStyle } = useContext(AppContext);
+	const [alias, setAlias] = useState(getViewerAlias());
 	const backgroundColor =
 		appUiStyle === 'modern'
 			? appTheme === 'dark'
@@ -38,6 +40,18 @@ function MyDeviceInfoCard(props: MyDeviceDetailsCardProps) {
 		>
 			<H3>{`${t('My Device Info')}:`}</H3>
 			<Callout>
+				<Text>
+					{`${t('Device Alias')}: `}
+					<EditableText
+						value={alias}
+						placeholder={t('Name this device')}
+						onChange={(value) => setAlias(value)}
+						onConfirm={(value) => {
+							setViewerAlias(value);
+							setAlias(getViewerAlias());
+						}}
+					/>
+				</Text>
 				<Text>{`${t('Device Type')}: ${myDeviceType}`}</Text>
 				<Tooltip
 					content={t(

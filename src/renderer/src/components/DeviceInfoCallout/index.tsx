@@ -25,11 +25,21 @@ interface DeviceInfoCalloutProps {
 	deviceOS: string | undefined;
 	deviceBrowser: string | undefined;
 	deviceRoomId: string | undefined;
+	deviceAlias?: string | undefined;
+	deviceMAC?: string | undefined;
 }
 
 const DeviceInfoCallout: React.FC<DeviceInfoCalloutProps> = (props) => {
 	const { t } = useTranslation();
-	const { deviceType, deviceIP, deviceOS, deviceRoomId, deviceBrowser } = props;
+	const {
+		deviceType,
+		deviceIP,
+		deviceOS,
+		deviceRoomId,
+		deviceBrowser,
+		deviceAlias,
+		deviceMAC,
+	} = props;
 
 	return (
 		<>
@@ -67,6 +77,16 @@ const DeviceInfoCallout: React.FC<DeviceInfoCalloutProps> = (props) => {
 						<Text>
 							{t('device-connection-id')}: <span>{deviceRoomId}</span>
 						</Text>
+						{deviceAlias !== undefined && deviceAlias !== '' && (
+							<Text>
+								{t('device-alias')}: <span>{deviceAlias}</span>
+							</Text>
+						)}
+						{deviceMAC !== undefined && deviceMAC !== '' && (
+							<Text>
+								{t('device-mac-address')}: <span>{deviceMAC}</span>
+							</Text>
+						)}
 					</Col>
 				</Row>
 			</Callout>

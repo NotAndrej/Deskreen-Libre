@@ -11,4 +11,6 @@ export interface Device {
 	/** Stable viewer-generated ID (persisted in viewer localStorage).
 	 * Empty for viewers that predate it. Used for trusted-device auto-allow. */
 	trustedDeviceId: string;
+	/** Viewer-chosen name, empty when unset. */
+	alias: string;
 }

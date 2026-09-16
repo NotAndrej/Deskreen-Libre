@@ -15,6 +15,7 @@ type DeviceDetailsMessageWithPayload = {
 		deviceScreenWidth: number;
 		deviceScreenHeight: number;
 		deviceId?: string;
+		alias?: string;
 	};
 };
 

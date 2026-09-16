@@ -8,6 +8,7 @@ import {
 	Alert,
 	H4,
 	DrawerSize,
+	EditableText,
 } from '@blueprintjs/core';
 import { Row, Col } from 'react-flexbox-grid';
 import { makeStyles } from 'tss-react/mui';
@@ -55,6 +56,31 @@ export default function ConnectedDevicesListDrawer(
 	>([]);
 	const [devicesDisplayed, setDevicesDisplayed] = useState(new Map());
 	const [trustedDeviceIds, setTrustedDeviceIds] = useState<string[]>([]);
+	const [aliasOverrides, setAliasOverrides] = useState<Record<string, string>>(
+		{},
+	);
+	const [deviceMacs, setDeviceMacs] = useState<Record<string, string>>({});
+
+	const refreshDeviceMacs = useCallback(
+		(devices: DeviceWithDesktopCapturerSourceId[]) => {
+			for (const device of devices) {
+				if (!device.deviceIP || deviceMacs[device.id] !== undefined) continue;
+				window.electron.ipcRenderer
+					.invoke(IpcEvents.GetDeviceMacByIp, device.deviceIP)
+					.then((mac: string) => {
+						if (mac) {
+							setDeviceMacs((prev) =>
+								prev[device.id] !== undefined
+									? prev
+									: { ...prev, [device.id]: mac },
+							);
+						}
+					})
+					.catch((e) => console.error(e));
+			}
+		},
+		[deviceMacs],
+	);
 
 	useEffect(() => {
 		function getConnectedDevicesCallback() {
@@ -74,6 +100,7 @@ export default function ConnectedDevicesListDrawer(
 						});
 					}
 					setConnectedDevices(devicesWithSourceIds);
+					refreshDeviceMacs(devicesWithSourceIds);
 
 					const map = new Map();
 					devicesWithSourceIds.forEach((el) => {
@@ -91,6 +118,13 @@ export default function ConnectedDevicesListDrawer(
 			.invoke(IpcEvents.GetTrustedDeviceIds)
 			.then((ids: string[]) => {
 				setTrustedDeviceIds(ids ?? []);
+			})
+			.catch((e) => console.error(e));
+
+		window.electron.ipcRenderer
+			.invoke(IpcEvents.GetDeviceAliasOverrides)
+			.then((overrides: Record<string, string>) => {
+				setAliasOverrides(overrides ?? {});
 			})
 			.catch((e) => console.error(e));
 
@@ -119,6 +153,41 @@ export default function ConnectedDevicesListDrawer(
 			setConnectedDevices(connectedDevices.filter((d: Device) => d.id !== id));
 		},
 		[connectedDevices, setConnectedDevices],
+	);
+
+	const handleSaveAliasOverride = useCallback(
+		async (trustedDeviceId: string, alias: string) => {
+			if (!trustedDeviceId) return;
+			await window.electron.ipcRenderer.invoke(
+				IpcEvents.SetDeviceAliasOverride,
+				trustedDeviceId,
+				alias,
+			);
+			const trimmed = alias.trim().slice(0, 64);
+			setAliasOverrides((prev) => {
+				const next = { ...prev };
+				if (trimmed === '') {
+					delete next[trustedDeviceId];
+				} else {
+					next[trustedDeviceId] = trimmed;
+				}
+				return next;
+			});
+		},
+		[],
+	);
+
+	const resolveAlias = useCallback(
+		(device: DeviceWithDesktopCapturerSourceId): string => {
+			if (
+				device.trustedDeviceId !== '' &&
+				aliasOverrides[device.trustedDeviceId] !== undefined
+			) {
+				return aliasOverrides[device.trustedDeviceId];
+			}
+			return device.alias;
+		},
+		[aliasOverrides],
 	);
 
 	const handleToggleTrustDevice = useCallback(
@@ -247,7 +316,36 @@ export default function ConnectedDevicesListDrawer(
 														deviceIP={device.deviceIP}
 														deviceBrowser={device.deviceBrowser}
 														deviceRoomId={device.deviceRoomId}
+														deviceAlias={resolveAlias(device)}
+														deviceMAC={deviceMacs[device.id] ?? ''}
 													/>
+													{device.trustedDeviceId !== '' && (
+														<div
+															style={{
+																marginTop: '8px',
+																display: 'flex',
+																alignItems: 'center',
+																gap: '8px',
+															}}
+														>
+															<Text className="bp3-text-muted">
+																{t('device-alias')}:
+															</Text>
+															<EditableText
+																placeholder={device.alias}
+																value={
+																	aliasOverrides[device.trustedDeviceId] ??
+																	''
+																}
+																onConfirm={(value) => {
+																	void handleSaveAliasOverride(
+																		device.trustedDeviceId,
+																		value,
+																	);
+																}}
+															/>
+														</div>
+													)}
 												</Col>
 												<Col xs={6}>
 													<SharingSourcePreviewCard

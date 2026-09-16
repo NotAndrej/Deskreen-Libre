@@ -24,6 +24,7 @@ export type DeviceDetailsMessageWithPayload = {
 		deviceScreenWidth: number;
 		deviceScreenHeight: number;
 		deviceId?: string;
+		alias?: string;
 	};
 };
 
@@ -98,6 +99,10 @@ export function handleDeviceIPMessage(
 		trustedDeviceId:
 			typeof message.payload.deviceId === 'string'
 				? message.payload.deviceId
+				: '',
+		alias:
+			typeof message.payload.alias === 'string'
+				? message.payload.alias.slice(0, 64)
 				: '',
 	};
 	peerConnection.partnerDeviceDetails = device;

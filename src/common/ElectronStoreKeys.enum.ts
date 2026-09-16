@@ -4,6 +4,7 @@ export enum ElectronStoreKeys {
 	Theme = 'theme',
 	UIStyle = 'uiStyle',
 	TrustedDeviceIds = 'trustedDeviceIds',
+	DeviceAliasOverrides = 'deviceAliasOverrides',
 	AutoStartOnLogin = 'autoStartOnLogin',
 	PreventAccidentalQuit = 'preventAccidentalQuit',
 	CustomServerPort = 'customServerPort',

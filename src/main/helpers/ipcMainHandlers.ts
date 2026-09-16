@@ -32,6 +32,10 @@ import {
 } from './trustedDevices';
 import { refreshDisplaySleepBlocker } from './displaySleepBlocker';
 import { getMacForIp, listLanInterfaces } from './networkDevices';
+import {
+	getDeviceAliasOverrides,
+	setDeviceAliasOverride,
+} from './deviceAliases';
 
 export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 	const persistedTheme = store.has(ElectronStoreKeys.Theme)
@@ -505,6 +509,20 @@ export const initIpcMainHandlers = (mainWindow: BrowserWindow): void => {
 	ipcMain.handle(IpcEvents.GetDeviceMacByIp, async (_, ip: string) => {
 		return getMacForIp(String(ip ?? ''));
 	});
+
+	ipcMain.handle(IpcEvents.GetDeviceAliasOverrides, () => {
+		return getDeviceAliasOverrides();
+	});
+
+	ipcMain.handle(
+		IpcEvents.SetDeviceAliasOverride,
+		(_, trustedDeviceId: string, alias: string) => {
+			setDeviceAliasOverride(
+				String(trustedDeviceId ?? ''),
+				String(alias ?? ''),
+			);
+		},
+	);
 
 	ipcMain.handle(IpcEvents.GetWaitingForConnectionSharingSessionRoomId, () => {
 		if (

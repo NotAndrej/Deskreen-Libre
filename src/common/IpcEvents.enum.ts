@@ -5,6 +5,8 @@ export enum IpcEvents {
 	GetTrustedDeviceIds = 'get-trusted-device-ids',
 	TrustDeviceById = 'trust-device-by-id',
 	UntrustDeviceById = 'untrust-device-by-id',
+	GetDeviceAliasOverrides = 'get-device-alias-overrides',
+	SetDeviceAliasOverride = 'set-device-alias-override',
 	UnmarkRoomIDAsTaken = 'unmark-room-id-as-taken',
 	GetAppPath = 'get-app-path',
 	ResetWaitingForConnectionSharingSession = 'reset-waiting-for-connection-sharing-session',
